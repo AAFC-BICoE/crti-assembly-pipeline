@@ -15,7 +15,7 @@ use utf8;
 binmode(STDOUT, ":utf8"); # For e.g. degree symbols in input to render.
 
 sub setupOptions {
-    my  $url = 'http://biodiversity.agr.gc.ca/svn/sequencing/454_sample_summary.xls';
+    my  $url = 'http://biodiversity.agr.gc.ca/svn/sequencing/Illumina_sample_summary.xlsx';
     my $options = {};
     GetOptions($options,
         'url|u=s',
@@ -23,11 +23,16 @@ sub setupOptions {
         'tab_filename|t=s',
         );
     $options->{url} ||= $url;
-    if (!defined $options->{excel_filename} and $options->{url} =~ /\/([^\/]+)$/) { 
-        $options->{excel_filename} = $1; 
+    if (!defined $options->{excel_filename} and $options->{url} =~ /\/([^\/]+)$/) {
+        my $ename = $1;
+        if (-d "input_data") {
+            $ename = "input_data/" . $ename;
+        }
+        $options->{excel_filename} = $ename; 
     }
     if (!defined $options->{tab_filename} and $options->{excel_filename} =~ /^(.*)\.xlsx?$/) {
-        $options->{tab_filename} = $1 . ".tab";
+        my $tname = $1 . ".tab";
+        $options->{tab_filename} = $tname;
     }
     return $options;
 }
@@ -47,8 +52,9 @@ sub parseXLSX {
     my $excel = Spreadsheet::XLSX->new($xlsx_filename, $converter);
     open(FTAB, '>', $tab_filename) or die "Error: could not open file ${tab_filename} for writing.\n";
     binmode(FTAB, ":utf8");
-    #foreach my $sheet (@{$excel->{Worksheet}}) {
-    my $sheet = ${$excel->{Worksheet}}[0]; {
+    #foreach my $sheet (@{$excel->{Worksheet}})
+    {
+        my $sheet = ${$excel->{Worksheet}}[0]; 
         $sheet->{MaxRow} ||= $sheet->{MinRow};
         for my $row ($sheet->{MinRow} .. $sheet->{MaxRow}) {
             $sheet->{MaxCol} ||= $sheet->{MinRow};
@@ -122,8 +128,9 @@ sub parseFirstXLSWorksheet
 {
     my $FOUT = shift;
     my $workbook = shift;    
-    my @sheets = $workbook->worksheets();
-    my $worksheet = $sheets[0];
+    #my @sheets = $workbook->worksheets();
+    #my $worksheet = $sheets[0];
+    my $worksheet = $workbook->worksheet(0);
     parseXLSWorksheet($FOUT, $worksheet);
 }
 
