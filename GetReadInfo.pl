@@ -33,8 +33,8 @@ sub gather_opts
         'illumina_summary_table|s=s',
         'sample=s',
         'no_raw_stats',
-        'input_read_table',
-        'output_read_table',
+        'input_read_table=s',
+        'output_read_table=s',
         'verbose',
         
         );
@@ -65,8 +65,8 @@ sub get_illumina_stats
 sub record_read_info
 {
     my $fref = shift;
-    if (scalar @$fref == 5) {
-        my ($sample, $trdata, $direction, $read_length, $num_reads) = @$fref;
+    if (scalar @$fref == 6) {
+        my ($sample, $trdata, $direction, $data_file, $read_length, $num_reads) = @$fref;
         if (defined ($records->{$sample})) {
             my $ref = $records->{$sample};
             for my $key ("data_stats", $direction, $trdata) {
@@ -79,7 +79,8 @@ sub record_read_info
             print "No yaml records for sample $sample - referenced in the input read info table.\n";
         }
     } elsif ($options->{verbose}) {
-        print "Invalid number of entries in input read table line $.\n";
+        print "Invalid number of entries in input read table line $.:\n";
+        print join ("\t", @$fref) . "\n";
     }
 }
     
@@ -172,13 +173,31 @@ sub get_reads
     my $kref = shift;
     my $ref = $records;
     for my $key (@$kref) {
-        if (defined $ref->{$key}) {
+        if (exists $ref->{$key}) {
             $ref = $ref->{$key};
         } else {
             return ('','');
         }
     }
-    return ($ref->{read_length}, $ref->{num_reads});
+    if (defined ($ref->{read_length}) and defined ($ref->{num_reads})) {
+        return ($ref->{read_length}, $ref->{num_reads});
+    } else {
+        return ('','');
+    }
+}
+
+sub get_rec
+{
+    my $kref = shift;
+    my $ref = $records;
+    for my $key (@$kref) {
+        if (exists $ref->{$key}) {
+            $ref = $ref->{$key};
+        } else {
+            return '';
+        }
+    }
+    return $ref;
 }
 
 sub write_table_stats
@@ -186,15 +205,19 @@ sub write_table_stats
     my $outtable = ($options->{output_read_table} ? $options->{output_read_table} : '');
     if ($outtable) {
         open (FOUTTAB, '>', $outtable) or die "Error: couldn't open output file $outtable\n";
-        print FOUTTAB join("\t", qw(Sample Trim_or_Raw Direction Read_Length Num_Reads)) . "\n";
+        print FOUTTAB join("\t", qw(Sample Trim_or_Raw Direction Filename Read_Length Num_Reads)) . "\n";
         for my $sample (keys %$records) {
             for my $direction (qw(R1 R2)) {
                 for my $tr (qw(trim raw)) {
-                    my ($read_length, $num_reads) = get_reads([$sample, "data_stats", $direction, $tr]);
-                    print FOUTTAB join("\t", ($sample, $tr . "data", $direction, $read_length, $num_reads)) . "\n";
+                    my $trdata = $tr . "data";
+                    #print "sample $sample direct $direction tr $trdata\n";
+                    my ($read_length, $num_reads) = get_reads([$sample, "data_stats", $direction, $trdata]);
+                    my $data_file = get_rec([$sample, $direction, $trdata]);
+                    print FOUTTAB join("\t", ($sample, $trdata, $direction, $data_file, $read_length, $num_reads)) . "\n";
                 }
             }
         }
+        close (FOUTTAB);
     }
 }
 

@@ -16,6 +16,8 @@ sub check_opts
     unless ($options->{yaml_in} and $options->{yaml_out}) {
         die "Usage: $0 -i <yaml input file> -o <yaml output file> 
             Optional args:
+                --trim_params_table <file name>
+                --report_notrim <output html filename>
             	--sample <sample id>
                 --verbose
                 --testing
@@ -25,15 +27,17 @@ sub check_opts
                 --run_fastx
                 ";
     }
+    $options->{qsub_opts} = " -N fastx_trim " . $options->{qsub_opts};
 }
 
 sub gather_opts
 {
+    $options->{qsub_opts} = '';
     GetOptions($options,
             'yaml_in|i=s',
             'yaml_out|o=s',
             'trim_params_table|t=s',
-            'notrim_report|r=s',
+            'report_notrim|r=s',
             'verbose|v',
             'testing',
             'qsub_opts=s',
@@ -73,11 +77,9 @@ sub parse_trim_params
                 $sample = $1;
             }
             if (defined $records->{$sample}) {
-                print "Found valid sample $sample\n";
                 my $rec = $records->{$sample};
                 unless (defined $rec->{fastx_trimmer}) { $rec->{fastx_trimmer} = {}; }
                 $rec->{fastx_trimmer}->{$direction} = {};
-                print "fastx timer $direction $fval $Qval\n";
                 $rec->{fastx_trimmer}->{$direction}->{fval} = $fval;
                 $rec->{fastx_trimmer}->{$direction}->{Qval} = $Qval;
             }
@@ -151,7 +153,7 @@ sub apply_trim_params
                     print "Error: found fastx_trimmer record for $sample $direction but fval and qval are undefined!\n";
                 }
             }
-        } elsif ($options->{notrim_report}) {
+        } elsif ($options->{report_notrim}) {
             for my $direction (qw(R1 R2)) {
                 #my $html_report = $rec->{fastqc}->{$direction}->{raw_report_html};
                 my $html_report = get_subrecord($rec, ['fastqc', $direction, 'raw_report_html']);
@@ -167,9 +169,9 @@ sub apply_trim_params
 
 # Gather reports into output html file for
 # any raw files we find that have no trimmed counterpart.
-sub report_notrim
+sub write_notrim_report
 {
-    my $outfile = $options->{notrim_report};
+    my $outfile = $options->{report_notrim};
     open (FREP, '>', $outfile) or die "Error: could not open file $outfile\n";
     print FREP "<html><body><table>\n";
     print FREP join("\n", @html_lines) . "\n";
@@ -192,8 +194,8 @@ if ($options->{trim_params_table}) {
     parse_trim_params;
 }
 apply_trim_params;
-if ($options->{notrim_report}) {
-    report_notrim
+if ($options->{report_notrim}) {
+    write_notrim_report;
 }
 if ($options->{qsub_batch_file}) {
     write_batch;

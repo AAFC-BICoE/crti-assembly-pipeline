@@ -75,5 +75,64 @@ Optional args:
 
 4. 
 
+Parse trim parameters and generate trim commands/qsub scripts.
+
+Read in any available trim parameters in table form. Apply these to the input yaml file. Construct the fastx_trimmer commands and qsubs. Create a batch script of qsub jobs.
+
 Build some links to the fastqc reports for those files where we don't have manual trim parameters.
+
+./FastxTrim.pl -i yaml_files/02_rawqc.yml -o yaml_files/03_trim.yml --trim_params_table input_data/ManualTrimParams.tab --qsub_script qsub_script.sh --qsub_batch_file qsub_files/02_fastx_trim.sh --report_notrim output_files/01_qc_reports_notrim.html
+
+
+Optional args:
+    --trim_params_table <file name>
+    --sample <sample id>
+    --verbose
+    --testing
+    --qsub_opts <qsub options>
+    --qsub_script <qsub script name>
+    --qsub_batch_file
+    --run_fastx
+
+Note that the --report_notrim command is not mandatory but is used here. This file generates links to the raw fastqc report html file for any of our records where we did not find any trim parameters. After running FastxTrim.pl, load the file to quickly perform fastqc on those records and come up with trim values to apply to the input_data/ManualTrimParams.tab table and run again.
+
+Once trim commands/qsub commands have been generated for all samples, run:
+cat qsub_files/02_fastx_trim.sh | bash to submit all the jobs.
+
+5.
+
+Run post-trimming fastqc
+
+Simply use the FastQC.pl script again, this time using the --trim option instead of --raw.
+
+./FastQC.pl -i yaml_files/03_trim.yml -o yaml_files/04_trimqc.yml --trim --qsub_script qsub_script.sh --qsub_batch_file qsub_files/03_trim_fastqc.sh
+
+6.
+
+Go through raw/trimmed files to determine number of reads, read lengths.
+
+Determining the number of reads is a very slow step. And is compounded by the fact that we do it for R1 and R2 for both raw and trimmed data for each sample.
+
+Ideally, the raw/trimmed files should only actually be opened and parsed once; the outputs from the initial parsing should then be output to a table that can then be used as an input thereafter.
+
+Also load 'number of reads' column from Illumina_sample_summary.tab file.
+
+(Possibly compare the values obtained from each source in future?)
+
+
+
+Take an input 'estimated genome lengths' table and add this information to the records.
+
+7.
+
+(Step 1 Genome Assembly part)
+
+
+
+
+
+
+
+
+
 
