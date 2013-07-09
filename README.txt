@@ -32,7 +32,7 @@ For custom download, specify -u <url> -x <output xlsx download path> -t <output 
 Assume we're in specimen/processing/AssemblyPipeline/ dir and running a test run in dir specimen/processing_test/
 
 Example:
-./DirSetup.pl -s input_data/Illumina_sample_summary.tab -a input_data/SpeciesAbbreviations.tab --specimen_dir ../../processing_test/ --yaml_out yaml_files/Y01_dirsetup.yml --all_samples
+./DirSetup.pl -s input_data/Illumina_sample_summary.tab -a input_data/SpeciesAbbreviations.tab --specimen_dir ../../processing_test/ --yaml_out yaml_files/01_dirsetup.yml --all_samples
 
 Mandatory:
     -s -a -yaml_out
@@ -118,6 +118,8 @@ Ideally, the raw/trimmed files should only actually be opened and parsed once; t
 Also load 'number of reads' column from Illumina_sample_summary.tab file.
 
 (Possibly compare the values obtained from each source in future?)
+
+./GetAssemblyParams.pl -i yaml_files/04_trimqc.yml -o yaml_files/05_read_info.yml -s input_data/Illumina_sample_summary.tab --no_raw_stats --input_read_table input_data/ReadData.tab --verbose
 
 
 
