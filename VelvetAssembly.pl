@@ -88,6 +88,17 @@ sub get_genomic_records
     }
 }
 
+sub getExp { 
+    # nucCoverage, seq length, kmer size 
+    my $k = shift;
+    my $C = $options->{num_reads} * $options->{read_length} / $options->{genome_length} 
+    my $L = $options->{read_length};
+
+    my $exp_raw = $C * ($L - $k + 1)/$L;
+    my $exp_rnd = int($exp_raw + 0.5); # round expected coverage value.
+    return $exp_rnd;
+}
+
 sub build_assembly_cmds
 {
     for my $sample (@genomic_keys) {
