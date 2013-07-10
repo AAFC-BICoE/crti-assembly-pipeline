@@ -9,7 +9,6 @@ use File::Basename;
 
 my $fastqc_bin = "/opt/bio/FastQC/fastqc";
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
-my $qsub_opts = "";
 
 my $options = {};
 my $records = {};
@@ -29,6 +28,7 @@ sub check_opts
                 --qsub_opts <qsub options>
                 --qsub_script <qsub script name>
                 --qsub_batch_file
+                --submit
                 ";
     }
 }
@@ -46,6 +46,7 @@ sub gather_opts
 			'qsub_opts=s',
 			'qsub_script=s',
 			'qsub_batch_file=s',
+			'submit',
 			);
 	check_opts;
 }
@@ -109,14 +110,10 @@ sub get_qsub_cmd
     my $rval = shift;
     my $tr = shift;
     my $fastqc_cmd = shift;
-    my $qsub_cmd = '';
-    if ($options->{qsub_opts}) {
-        $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " '" . $fastqc_cmd . "'";
-    } elsif ($options->{qsub_script}) {
-        $qsub_cmd = $qsub_bin . " " . $options->{qsub_script} . " '" . $fastqc_cmd . "'";
-    } else {
-        $qsub_cmd = $qsub_bin . " " . $qsub_opts . " '" . $fastqc_cmd . "'";
-    }
+    $options->{qsub_opts} = ($options->{qsub_opts} ? $options->{qsub_opts} : '');
+    $options->{qsub_opts} .= " -N " . $tr . "_FastQC ";
+    $options->{qsub_script} = ($options->{qsub_script} ? $options->{qsub_script} : '');
+    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " " . $options->{qsub_script} . " '" . $fastqc_cmd . "'";
     my $key = $tr . "_qsub";
     $rec->{fastqc}->{$rval}->{$key} = $qsub_cmd;
     return $qsub_cmd;
@@ -144,7 +141,7 @@ sub submit_qsub
         if ($options->{qsub_batch_file}) {
             push (@qsub_cmd_list, $qsub_cmd);
         }
-        unless ($options->{testing}) {
+        if ($options->{submit}) {
             system($qsub_cmd);
         }
     }
