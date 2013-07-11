@@ -135,18 +135,19 @@ sub apply_trim_params
                     my $rawfile = $rec->{$direction}->{rawdata_symlink};
                     my $trimfile = '';
                     if ($rawfile =~ /(.*)_(R[12].fq)/) {
-                        $trimfile = $1 . "_trim_" . $fval . "-0-0_" . $2;
+                        my $trimval = $fval - 1; # The number of bases actually trimmed is f-1.
+                        $trimfile = $1 . "_trim_" . $trimval . "-0-0_" . $2;
                         $rec->{$direction}->{trimdata} = $trimfile;
                     } else {
                         die "Error: raw file $rawfile cannot be used to get a trim file. Aborting";
                     }
+                    my $trim_cmd = get_trim_cmd($rec, $direction);
+                    my $qsub_cmd = get_qsub_cmd($rec, $direction);
                     if (-e $trimfile) {
                         if ($options->{verbose}) {
                             print "Trimmed file $trimfile already exists\n";
                         }
                     } else {
-                        my $trim_cmd = get_trim_cmd($rec, $direction);
-                        my $qsub_cmd = get_qsub_cmd($rec, $direction);
                         push (@qsub_cmd_list, $qsub_cmd);
                     }
                 } else {
