@@ -29,6 +29,7 @@ sub check_options
 				--record_file <output records file>
 				--specimen_dir <path to specimen/ dir>
 				--yaml_out <yaml output file>
+				--g_rosto_file <filename>
 				";
 	}
 }
@@ -46,7 +47,9 @@ sub gather_options
 		'verbose|v',
 		'record_file|r=s',
 		'specimen_dir|p=s',
-		'yaml_out|y=s',);
+		'yaml_out|y=s',
+		'g_rosto_file=s',
+		);
 	check_options;
 }
 
@@ -139,6 +142,25 @@ sub print_rec
 	}
 }
 
+sub parse_line
+{
+    my $line = shift;
+    chomp $line;
+    my $rec = parse_record($line);
+    
+    if (defined $rec->{sample} and $rec->{sample} =~ /\S/) {
+        if ($options->{species}) {
+            check_add_species($rec);
+        } elsif ($options->{sample} or $options->{sample_file}) {
+            if ($rec->{sample} ~~ @search_samples) {
+                $records{$rec->{sample}} = $rec;
+            }
+        } elsif ($options->{all_samples} and $rec->{sample}) {
+            $records{$rec->{sample}} = $rec;
+        }
+    }
+}
+
 # Go through input file and build records array matching the latter part
 # (after last '_' char) of species name.
 sub build_records
@@ -146,22 +168,25 @@ sub build_records
 	open (FIN, '<', $options->{seq_sample_file}) or die "Error: could not open file " . $options->{seq_sample_file} . "\n";
 	<FIN>; # Skip the parsing the first line (col headers).
 	while (my $line = <FIN>) {
-		chomp $line;
-		my $rec = parse_record($line);
-		#print_rec($rec);
-		unless (defined $rec->{sample} and $rec->{sample} =~ /\S/) {
-			next
-		}
+        parse_line($line);
+	}
+	close FIN;  
+}
 
-		if ($options->{species}) {
-			check_add_species($rec);
-		} elsif ($options->{sample} or $options->{sample_file}) {
-			if ($rec->{sample} ~~ @search_samples) {
-				$records{$rec->{sample}} = $rec;
-			}
-		} elsif ($options->{all_samples} and $rec->{sample}) {
-			$records{$rec->{sample}} = $rec;
-		}
+sub build_rosto_records
+{
+    open (FIN, '<', $options->{g_rosto_file}) or die "Error: couldn't open file " . $options->{g_rosto_records} . "\n";
+    <FIN>; # Skip the parsing the first line (col headers).
+	%colno = qw(plate 0 species 1 bio_type 2 sample 3); # redefine the column #s for parse_line() fn
+	while (my $line = <FIN>) {
+        parse_line($line);
+        chomp $line;
+        my @fields = split(/\t/, $line);
+        if (scalar @fields == 5) {
+            my $sample = $fields[3];
+            my $raw_dir = $fields[4];
+            $records{$sample}->{rawdata_dir} = $raw_dir;
+        }
 	}
 	close FIN;
 }
@@ -234,6 +259,9 @@ sub find_rawdata_files
 	my $species = $rec->{species};
 	# Find any data files that go with the sample.
 	my $rawdata_dir = "/isilon/biodiversity/data/raw/illumina/PBI/Project_" . $plate;
+	if ($rec->{plate} =~ /G_ROSTO/) {
+	    $rawdata_dir = $rec->{rawdata_dir};
+	}
 	print "Looking for directory " . $rawdata_dir . "\n" if $options->{verbose};
 	my @rawfiles = ();
 	if (-d $rawdata_dir) {
@@ -260,10 +288,6 @@ sub add_rawdata_record
 		$rec->{$direction} = {};
 		$rec->{$direction}->{rawdata} = $rawfile;
 		$rec->{$direction}->{rawdata_symlink} = $destfile;
-		#my $raw_key = "rawdata_$direction";
-		#my $sym_key = "rawdata_symlink_${direction}";
-		#$rec->{$raw_key} = $rawfile;
-		#$rec->{$sym_key} = $destfile;
 	} else {
 		print "Warning: could not parse direction R1 or R2 from raw filename: $rawfile\n";
 	}
@@ -276,8 +300,7 @@ sub link_rawdata
 	my $datadir = shift;
 	my @rawdata = @{$rawref};
 	foreach my $rawfile (@rawdata) {
-		my $destfile = $datadir . "/";
-		$destfile .= basename($rawfile);
+		my $destfile = $datadir . "/" . basename($rawfile);
 		
 		add_rawdata_record($rec, $rawfile, $destfile);
 		if (-e $destfile) {
@@ -374,6 +397,9 @@ if ($options->{sample} or $options->{sample_file}) {
 	get_search_samples;
 }
 build_records;
+if ($options->{g_rosto_file}) {
+    build_rosto_records;
+}
 print_all_records if $options->{record_file};
 setup_all_dirs;
 write_yaml;
