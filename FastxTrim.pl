@@ -22,6 +22,7 @@ sub set_default_opts
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
     }
+    $options->{qsub_opts} = " -N fastx_trim " . $options->{qsub_opts};
 }
 
 sub check_opts
@@ -37,10 +38,9 @@ sub check_opts
                 --qsub_opts <qsub options>
                 --qsub_script <qsub script name>
                 --qsub_batch_file
-                --run_fastx
+                --submit
                 ";
     }
-    $options->{qsub_opts} = " -N fastx_trim " . $options->{qsub_opts};
 }
 
 sub gather_opts
@@ -56,7 +56,7 @@ sub gather_opts
             'qsub_opts=s',
             'qsub_script=s',
             'qsub_batch_file=s',
-            'run_fastx',
+            'submit',
             );
     set_default_opts;
     check_opts;
@@ -86,16 +86,21 @@ sub parse_trim_params
         <FTRIM>; # Skip header 1st line
         while (my $line = <FTRIM>) {
             chomp $line;
-            my ($sample, $type, $direction, $Qval, $fval) = split(/\s+/, $line);
-            if ($sample =~ /[A-Z][a-z]_(S00[A-Z0-9]+)/) {
-                $sample = $1;
-            }
-            if (defined $records->{$sample}) {
-                my $rec = $records->{$sample};
-                unless (defined $rec->{fastx_trimmer}) { $rec->{fastx_trimmer} = {}; }
-                $rec->{fastx_trimmer}->{$direction} = {};
-                $rec->{fastx_trimmer}->{$direction}->{fval} = $fval;
-                $rec->{fastx_trimmer}->{$direction}->{Qval} = $Qval;
+            my @fields = split(/\s+/, $line);
+            if (scalar @fields == 5) {
+                my ($sample, $type, $direction, $Qval, $fval) = @fields;
+                if ($sample =~ /[A-Z][a-z]_(S00[A-Z0-9]+)/) {
+                    $sample = $1;
+                }
+                if (defined $records->{$sample}) {
+                    my $rec = $records->{$sample};
+                    unless (defined $rec->{fastx_trimmer}) { $rec->{fastx_trimmer} = {}; }
+                    $rec->{fastx_trimmer}->{$direction} = {};
+                    $rec->{fastx_trimmer}->{$direction}->{fval} = $fval;
+                    $rec->{fastx_trimmer}->{$direction}->{Qval} = $Qval;
+                }
+            } elsif (scalar @fields > 0) {
+                print "Warning: wrong number of fields in file $ft line $.\n";
             }
         }
     } else {
@@ -163,6 +168,9 @@ sub apply_trim_params
                         }
                     } else {
                         push (@qsub_cmd_list, $qsub_cmd);
+                        if ($options->{submit}) {
+                            system($qsub_cmd);
+                        }
                     }
                 } else {
                     print "Error: found fastx_trimmer record for $sample $direction but fval and qval are undefined!\n";

@@ -172,6 +172,8 @@ sub get_coverage_vars
     if ($pass) {
         $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
         $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
+        $rec->{velvet}->{total_coverage} = $var->{total_coverage};
+        $rec->{velvet}->{average_read_length} = $var->{avg_readlen};
         return $var;
     } else {
         return '';
@@ -260,6 +262,16 @@ sub get_velvetg_cmd
     return $velvetg_cmd;
 }
 
+# keep a list of our common output dirs for each kmer of velvet assembly
+sub track_kmer_dirs
+{
+    my $rec = shift;
+    my $kmer = shift;
+    my $kmer_dir = shift;
+    $rec->{velvet}->{$tr}->{kmer_dirs} = {} unless ($rec->{velvet}->{$tr}->{kmer_dirs});
+    $rec->{velvet}->{$tr}->{kmer_dirs}->{$kmer} = $kmer_dir;
+}
+
 sub get_velvet_cmds
 {
     my $rec = shift;
@@ -269,6 +281,7 @@ sub get_velvet_cmds
     my $kmer_bin = get_kmer_bin($kmer);
     my $exp_cov = calc_exp_cov($cov_vars, $kmer);
     my $kdir = get_velvet_kdir($assembly_outdir, $kmer, $exp_cov);
+    track_kmer_dirs($rec, $kmer, $kdir);
     my $vh_cmd = get_velveth_cmd($rec, $kmer, $kmer_bin, $kdir);
     my $vg_cmd = get_velvetg_cmd($exp_cov, $kmer, $kmer_bin, $kdir);
     return ($vh_cmd, $vg_cmd);
@@ -300,6 +313,8 @@ sub get_vh_qsub
     my $batch_filename = write_batch_cmds($rec, $aref, "vh");
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
     push (@vh_qsub_list, $qsub_cmd);
+    $rec->{velveth}->{$tr}->{qsub_cmd} = $qsub_cmd;
+    $rec->{velveth}->{$tr}->{cmd_file} = $batch_filename;
 }
 
 sub get_vg_qsub
@@ -312,6 +327,17 @@ sub get_vg_qsub
     my $batch_filename = write_batch_cmds($rec, $aref, "vg");
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velvetg -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
     push (@vg_qsub_list, $qsub_cmd);
+    $rec->{velvetg}->{$tr}->{qsub_cmd} = $qsub_cmd;
+    $rec->{velvetg}->{$tr}->{cmd_file} = $batch_filename;
+}
+
+sub init_velvet_recs
+{
+    my $rec = shift;
+    for my $key (qw(velvet velveth velvetg)) {
+        $rec->{$key} = {} unless ($rec->{$key});
+        $rec->{$key}->{$tr} = {} unless ($rec->{$key}->{$tr});
+    }
 }
 
 sub build_assembly_cmds
@@ -319,6 +345,7 @@ sub build_assembly_cmds
     for my $sample (@genomic_samples) {
         my $rec = ($records->{$sample} ? $records->{$sample} : '');
         unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
+        init_velvet_recs($rec);
         my $cov_vars = get_coverage_vars($rec);
         if ($cov_vars) {
             my $assembly_outdir = get_assembly_outdir($rec);
@@ -329,10 +356,8 @@ sub build_assembly_cmds
                 push (@vh_cmd_list, $vh_cmd);
                 push (@vg_cmd_list, $vg_cmd);
             }
-            my $vh_qsub_cmd = get_vh_qsub($rec, \@vh_cmd_list);
-            my $vg_qsub_cmd = get_vg_qsub($rec, \@vg_cmd_list);
-            push (@vh_qsub_list, $vh_qsub_cmd);
-            push (@vg_qsub_list, $vg_qsub_cmd);
+            get_vh_qsub($rec, \@vh_cmd_list);
+            get_vg_qsub($rec, \@vg_cmd_list);
         } else {
             print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
         }
