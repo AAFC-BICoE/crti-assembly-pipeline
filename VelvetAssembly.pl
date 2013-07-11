@@ -13,8 +13,8 @@ use Getopt::Long;
 # Ideally: have separate folders within velvet that include
 # e.g. the different genome lengths, QC trims etc. that we try?
 
-$options = {};
-$records = {};
+my $options = {};
+my $records = {};
 my @genomic_samples = ();
 my @glen_col_headers = qw(IL_Species IL_Genotype IL_Biomaterial IL_Biomaterial_type 
     IL_Sample_ID IL_Kingdom IL_Resident_Expert RG_Species RG_Strain RG_Est_Genome_Length
@@ -29,7 +29,7 @@ my @kbins = (0, 31, 63, 127, 145);
 # Assumes we have binaries of form
 # velvetg_x and velveth_x for x>0 and x in @kbins.
                                 
-my @vg_qsub_list = ();
+my @vh_qsub_list = ();
 my @vg_qsub_list = ();
 
 sub set_default_opts
@@ -60,7 +60,7 @@ sub set_default_opts
 
 sub check_opts
 {
-    unless ($opts->{yaml_in} and $opts->{yaml_out}) {
+    unless ($options->{yaml_in} and $options->{yaml_out}) {
         die "Usage: $0 -i <yaml input file> -o <yaml output file>
             Optional:
                 --genome_length_file <filename>
@@ -112,15 +112,15 @@ sub parse_genome_lengths
         while (my $line = <FGLEN>) {
             chomp $line;
             my @fields = split(/\t/, $line);
-            my %fh = map { $glen_col_headers[$i] => ($fields[$i] ? $fields[$i] : '') } (0..$#glen_col_headers);
-            my $sample = $fh->{IL_Sample_ID};
+            my %fh = map { $glen_col_headers[$_] => ($fields[$_] ? $fields[$_] : '') } (0..$#glen_col_headers);
+            my $sample = $fh{IL_Sample_ID};
             my $rec = ($records->{$sample} ? $records->{$sample} : '');
             if ($rec) {
                 $rec->{related_genome_length} = {};
                 my $rgl_ref = $rec->{related_genome_length};
                 for my $ch (@glen_col_headers) {
                     if ($ch =~ /^RG/) {
-                        $rgl_ref->{$ch} = $fh->{$ch};
+                        $rgl_ref->{$ch} = $fh{$ch};
                     }
                 }
             } else {
@@ -134,7 +134,7 @@ sub parse_genome_lengths
 sub get_genomic_records
 {
     for my $sample (keys %$records) {
-        if ($records->{$species}->{bio_type} =~ /DNA/) {
+        if ($records->{$sample}->{bio_type} =~ /DNA/) {
             push (@genomic_samples, $sample);
         }
     }
@@ -158,13 +158,24 @@ sub get_coverage_vars
 {
     my $rec = shift;
     my $var = {};
-    my $var->{R1_nreads} = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
-    my $var->{R1_readlen} = get_check_record($rec, ["data_stats", "R1", $trdata, "read_length"]);
-    my $var->{R2_nreads} = get_check_record($rec, ["data_stats", "R2", $trdata, "num_reads"]);
-    my $var->{R2_readlen} = get_check_record($rec, ["data_stats", "R2", $trdata, "read_length"]);
-    my $var->{genome_length} = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
-    my $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
-    my $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
+    $var->{R1_nreads} = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
+    $var->{R1_readlen} = get_check_record($rec, ["data_stats", "R1", $trdata, "read_length"]);
+    $var->{R2_nreads} = get_check_record($rec, ["data_stats", "R2", $trdata, "num_reads"]);
+    $var->{R2_readlen} = get_check_record($rec, ["data_stats", "R2", $trdata, "read_length"]);
+    $var->{genome_length} = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
+    my $pass = 1;
+    for my $key (keys %$var) {
+        if ($var->{$key} !~ /^\s*\d+\s*$/) {
+            $pass = 0;
+        }
+    }
+    if ($pass) {
+        $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
+        $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
+        return $var;
+    } else {
+        return '';
+    }
 }
 
 sub calc_exp_cov
@@ -178,11 +189,12 @@ sub calc_exp_cov
 
 sub get_assembly_outdir
 {
+    my $rec = shift;
     unless (defined ($rec->{velvet})) {
         $rec->{velvet} = {};
     }
     unless (defined ($rec->{velvet}->{$tr})) {
-        $rec->{velvet}->{$tr};
+        $rec->{velvet}->{$tr} = {};
     }
     my $assembly_outdir = $rec->{sample_dir} . "/assemblies/velvet/$tr";
     mkpath $assembly_outdir;
@@ -242,8 +254,8 @@ sub get_velvetg_cmd
     my $min_contig_opt = " ";
     my $scaffolding_opt = " -scaffolding yes ";
     my $velvetg_bin = $velvet_bin_dir . "/velvetg_" . $kmer_bin;
-    my $velveth_cmd = $velvetg_bin . " " . $working_dir . " " .
-        "-ins_length 300 -exp_cov " . $exp_cov . " " $min_contig_opt . 
+    my $velvetg_cmd = $velvetg_bin . " " . $working_dir . " " .
+        "-ins_length 300 -exp_cov " . $exp_cov . " " . $min_contig_opt . 
         $scaffolding_opt . " -amos_file no -cov_cutoff auto";
     return $velvetg_cmd;
 }
@@ -257,27 +269,25 @@ sub get_velvet_cmds
     my $kmer_bin = get_kmer_bin($kmer);
     my $exp_cov = calc_exp_cov($cov_vars, $kmer);
     my $kdir = get_velvet_kdir($assembly_outdir, $kmer, $exp_cov);
-    my $vh_cmd = get_velveth_cmd($rec, $cov_vars->{avg_readlen}, $kmer, $kmer_bin, $kdir);
+    my $vh_cmd = get_velveth_cmd($rec, $kmer, $kmer_bin, $kdir);
     my $vg_cmd = get_velvetg_cmd($exp_cov, $kmer, $kmer_bin, $kdir);
     return ($vh_cmd, $vg_cmd);
 }
 
-sub vh_write_batch
+sub write_batch_cmds
 {
-    my $vh_batch_dir = $options->{vh_batch_dir};
-    open (FHBATCH, '>', $vh_batch_file) or die "Error: couldn't open file " . $vh_batch_file . "\n";
-    print FHBATCH join ("\n", @vh_list) . "\n";
-    close (FHBATCH);
-}
-
-sub vg_write_batch
-{
-    my $sample = shift;
-    my $vg_batch_dir = $options->{vg_batch_dir};
-    my $sample_batch
-    open (FGBATCH, '>', $vg_batch_file) or die "Error: couldn't open file " . $vg_batch_file . "\n";
-    print FGBATCH join ("\n", @vg_list) . "\n";
-    close (FGBATCH);
+    my $rec = shift;
+    my $aref = shift;
+    my $vtype = shift; # should be 'vh' or 'vg';  
+    my $bdir_key = $vtype . "_batch_dir";
+    my @cmd_list = @$aref;
+    my $batch_dir = $options->{$bdir_key};
+    unless (-e $batch_dir) { mkpath $batch_dir; }
+    my $batch_file = $batch_dir . "/" . $rec->{sample} . "_" . $tr . ".sh";
+    open (FBATCH, '>', $batch_file) or die "Error: couldn't open file " . $batch_file . "\n";
+    print FBATCH join ("\n", @cmd_list) . "\n";
+    close (FBATCH);
+    return $batch_file;
 }
 
 sub get_vh_qsub
@@ -287,7 +297,7 @@ sub get_vh_qsub
     my $sample = $rec->{sample};
     my @vh_cmd_list = @$aref;
     my $num_cmds = scalar @vh_cmd_list;
-    my $batch_filename = vh_write_batch($aref);
+    my $batch_filename = write_batch_cmds($rec, $aref, "vh");
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
     push (@vh_qsub_list, $qsub_cmd);
 }
@@ -297,9 +307,9 @@ sub get_vg_qsub
     my $rec = shift;
     my $aref = shift;
     my $sample = $rec->{sample};
-    my @vh_cmd_list = @$aref;
+    my @vg_cmd_list = @$aref;
     my $num_cmds = scalar @vg_cmd_list;
-    my $batch_filename = vg_write_batch($aref);
+    my $batch_filename = write_batch_cmds($rec, $aref, "vg");
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velvetg -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
     push (@vg_qsub_list, $qsub_cmd);
 }
@@ -308,20 +318,24 @@ sub build_assembly_cmds
 {
     for my $sample (@genomic_samples) {
         my $rec = ($records->{$sample} ? $records->{$sample} : '');
-        unless ($rec) die "Couldn't get a record from yaml file for sample $sample.\n";
+        unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
         my $cov_vars = get_coverage_vars($rec);
-        my $assembly_outdir = get_assembly_outdir;
-        my @vh_cmd_list = ();
-        my @vg_cmd_list = ();
-        for my $kmer ($options->{min_kmer}..$options->{max_kmer}) {
-            my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $cov_vars, $assembly_outdir, $kmer);
-            push (@vh_cmd_list, $vh_cmd);
-            push (@vg_cmd_list, $vg_cmd);
+        if ($cov_vars) {
+            my $assembly_outdir = get_assembly_outdir($rec);
+            my @vh_cmd_list = ();
+            my @vg_cmd_list = ();
+            for (my $kmer =$options->{min_kmer}; $kmer <= $options->{max_kmer}; $kmer = $kmer+2) {
+                my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $cov_vars, $assembly_outdir, $kmer);
+                push (@vh_cmd_list, $vh_cmd);
+                push (@vg_cmd_list, $vg_cmd);
+            }
+            my $vh_qsub_cmd = get_vh_qsub($rec, \@vh_cmd_list);
+            my $vg_qsub_cmd = get_vg_qsub($rec, \@vg_cmd_list);
+            push (@vh_qsub_list, $vh_qsub_cmd);
+            push (@vg_qsub_list, $vg_qsub_cmd);
+        } else {
+            print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
         }
-        my $vh_qsub_cmd = get_vh_qsub($rec, \@vh_cmd_list);
-        my $vg_qsub_cmd = get_vg_qsub($rec, \@vg_cmd_list);
-        push (@vh_qsub_list, $vh_qsub_cmd);
-        push (@vg_qsub_list, $vg_qsub_cmd);
     }
 }
 
@@ -348,7 +362,7 @@ sub create_qsubs
     # then add hold_jid to the vg's qsubs
 }
 
-
+gather_opts;
 $records = LoadFile($options->{yaml_in});
 get_genomic_records;
 parse_genome_lengths;
