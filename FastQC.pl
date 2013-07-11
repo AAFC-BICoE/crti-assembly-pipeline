@@ -15,6 +15,21 @@ my $records = {};
 my @qsub_cmd_list;
 
 
+sub set_default_opts
+{
+    my %defaults = qw(
+            qsub_script qsub_script.sh
+            );
+    for my $key (keys %defaults) {
+        $options->{$key} = $defaults{$key} unless $options->{$key};
+    }
+    my $tr = "raw";
+    if ($options->{trim}) {
+        $tr = "trim";
+    }
+    $options->{qsub_opts} .= " -N " . $tr . "_FastQC ";
+}    
+
 sub check_opts
 {
     unless ($options->{yaml_in} and $options->{yaml_out} and ($options->{trim} or $options->{raw})) {
@@ -48,6 +63,7 @@ sub gather_opts
 			'qsub_batch_file=s',
 			'submit',
 			);
+	set_default_opts;
 	check_opts;
 }
 
@@ -110,9 +126,6 @@ sub get_qsub_cmd
     my $rval = shift;
     my $tr = shift;
     my $fastqc_cmd = shift;
-    $options->{qsub_opts} = ($options->{qsub_opts} ? $options->{qsub_opts} : '');
-    $options->{qsub_opts} .= " -N " . $tr . "_FastQC ";
-    $options->{qsub_script} = ($options->{qsub_script} ? $options->{qsub_script} : '');
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " " . $options->{qsub_script} . " '" . $fastqc_cmd . "'";
     my $key = $tr . "_qsub";
     $rec->{fastqc}->{$rval}->{$key} = $qsub_cmd;
@@ -168,17 +181,8 @@ sub get_reports
     my $text_path = $fastqc_subdir . "/fastqc_data.txt";
     my $html_key = $tr . "_report_html";
     my $text_key = $tr . "_data_txt";
-    #if (-e $fastqc_subdir) {
-    #    if (-e $html_path and -e $txt_path) {
-    #        $rec->{fastqc}->{$rval}->{$key} = $html_path;
-    #        $rec->{fastqc}->{$rval}->{$key} = $text_path;
-    #    } else {
-    #        die "Error: have fastqc output dir but it contains no html and/or text report\n";
-    #    }
-    #} else {
-        $rec->{fastqc}->{$rval}->{$html_key} = $html_path;
-        $rec->{fastqc}->{$rval}->{$text_key} = $text_path;
-    #}
+    $rec->{fastqc}->{$rval}->{$html_key} = $html_path;
+    $rec->{fastqc}->{$rval}->{$text_key} = $text_path;
 }
 
 gather_opts;

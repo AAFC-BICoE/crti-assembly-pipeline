@@ -11,6 +11,19 @@ my @qsub_cmd_list = ();
 my @html_lines = ();
 my $records = {};
 
+sub set_default_opts
+{
+    my %defaults = qw(
+        trim_params_table input_data/ManualTrimParams.tab
+        qsub_script qsub_script.sh
+        qsub_batch_file qsub_files/02_fastx_trim.sh
+        report_notrim output_files/01_qc_report_notrim.html
+        );
+    for my $key (keys %defaults) {
+        $options->{$key} = $defaults{$key} unless $options->{$key};
+    }
+}
+
 sub check_opts
 {
     unless ($options->{yaml_in} and $options->{yaml_out}) {
@@ -45,6 +58,7 @@ sub gather_opts
             'qsub_batch_file=s',
             'run_fastx',
             );
+    set_default_opts;
     check_opts;
 }
 

@@ -36,7 +36,6 @@ sub gather_opts
         'input_read_table=s',
         'output_read_table=s',
         'verbose',
-        
         );
     check_opts;
 }
