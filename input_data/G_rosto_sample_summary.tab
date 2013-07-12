@@ -1,29 +1,14 @@
-Illumina Sample							Related genome			Relation Evidence			
-Organism	Genotype	Biomaterial	Biomaterial type	Sample ID	Kingdom	Resident Expert	Organism	Strain	Estimated Genome Length (bp)	Source	Citation	URL	Notes
-Pectobacterium wasabiae	Ecw1002	Pw gDNA	Genomic	S000CFE	Bacteria		Pectobacterium wasabiae	WPP163	5000000	JGI		http://genome.ornl.gov/microbial/pcar_was/, http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=TaxonDetail&page=taxonDetail&taxon_oid=646311947	
-Ralstonia solanacearum	NCPPB 909 race 3 biovar 2	Rs gDNA	Genomic	S000CFF	Bacteria		Ralstonia solanacearum	GMI1000	5800000	NCBI		http://www.ncbi.nlm.nih.gov/bioproject/57593	
-Pantoea stewartii	strain DOAB 021	Ps gDNA 	Genomic	S000D00	Bacteria		Pantoea stewartii	DC283	5000000				
-Tilletia walkeri	RS 109	T. wal. gDNA	Genomic	S000D01	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Streptomyces scabies	CG-1	Ss gDNA	Genomic	S000D02	Bacteria		Streptomyces scabies		10100000				
-Tilletia caries	RS 629	T. car. gDNA	Genomic	S000D03	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia indica	RS 103	T. ind. gDNA	Genomic	S000D04	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia controversa	RS 113	T. con. gDNA	Genomic	S000D05	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Penicillium verrucosum 	strain DAOM 211566	Pv 211566 gDNA	Genomic	S001068 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Penicillium verrucosum 	 strain KAS 4251	Pv 4251 gDNA	Genomic	S001069 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Penicillium verrucosum 	strain KAS 4382	Pv 4382 gDNA	Genomic	S00106A 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Penicillium thymicola 	strain DAOM 180753	Pt 180753 gDNA	Genomic	S00106B 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Pantoea stewartii	subsp. Nov. S301	Ps S301 gDNA	Genomic	S00106C 	Bacteria		Pantoea stewartii	DC283	5000000				
-Basidioascus undulatus		Bu gDNA	Genomic	S00106D 	Fungi	Hai Nguyen	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf	
-Penicillium verrucosum 	strain KAS 4260	Pv 4260 gDNA	Genomic	S00106E 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Ditylenchus destructor		Dd gDNA	Genomic	S00106F 	Animalia (Nematode)	Qing Yu	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Streptomyces scabies 	CG-1	Ss gDNA 	Genomic	S001079 	Bacteria		Streptomyces scabies		10100000				
-Pantoea stewartii 	strain DOAB 230	Ps-DoAB230 gDNA	Genomic	S00107A 	Bacteria		Pantoea stewartii	DC283	5000000				
-Arcobacter lanthierii 	strain AF 1430	Al-AF1430 gDNA 	Genomic	S00107D 	Bacteria	Izhar Khan	Campylobacter jejuni	NCTC11168	1641481	Sanger		http://www.magma.ca/~scimat/Arcobacter.htm, http://www.sanger.ac.uk/resources/downloads/bacteria/campylobacter-jejuni.html	
-Tilletia caries	RS 629	T. car. M-P 3kb gDNA 	Genomic	S001417 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia controversa	RS 113	T. con. M-P 3kb gDNA 	Genomic	S001419 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia indica	RS 103	T. ind. M-P 3kb gDNA 	Genomic	S001416 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia walkeri	RS 109	T. wal. M-P 3kb gDNA 	Genomic	S001418 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Ditylenchus dipsaci		D.dip. MP 8kb gDNA 	Genomic	S00141A 	Animalia (Nematode)	Qing Yu	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	QC strain, pathotype Ro1	Gr QC RO1 MP 8kb gDNA 	Genomic	S00141B 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	??	??	Genomic	A066581	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	??	??	Genomic	A066585	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
+Plate Name	Organism	Biomaterial Type	Sample Name	Rawdata dir
+G_ROSTO	Globodera rostochiensis	DNA	A066581	/isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy
+G_ROSTO	Globodera rostochiensis	DNA	A066585	/isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_2	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_3	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_4	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_5	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_6	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_7	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_8	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_9	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_10	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_11	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
+G_ROSTO	Globodera rostochiensis	RNA	HI.0735.004.Index_12	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy
