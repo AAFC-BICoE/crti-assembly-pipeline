@@ -18,7 +18,7 @@ sub set_default_opts
         yaml_out yaml_files/05_readinfo.yml
         illumina_summary_table input_data/Illumina_sample_summary.tab
         input_read_table input_data/ReadData.tab
-        output_read_table output_data/ReadDataOut.tab
+        output_read_table output_files/ReadDataOut.tab
         verbose 1
         );
     for my $kdef (keys %defaults) {
