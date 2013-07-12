@@ -13,7 +13,21 @@ my $options = {};
 my %records = ();
 my @search_samples = ();
 my %species_abbrs = ();
-$options->{specimen_dir} = "../processing_test";
+
+sub set_default_opts
+{
+    my %defaults = qw(
+        seq_sample_file input_data/Illumina_sample_summary.tab
+        species_abbr_file input_data/SpeciesAbbreviations.tab
+        specimen_dir ../../processing_test
+        all_samples 1
+        yaml_out yaml_files/01_dirsetup.yml
+        g_rosto_file input_data/G_rosto_sample_summary.tab
+        );
+    for my $key (keys %defaults) {
+        $options->{$key} = $defaults{$key} unless $options->{$key};
+    }
+}
 
 sub check_options
 {
@@ -50,6 +64,7 @@ sub gather_options
 		'yaml_out|y=s',
 		'g_rosto_file=s',
 		);
+	set_default_opts;
 	check_options;
 }
 

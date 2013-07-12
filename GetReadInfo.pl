@@ -11,6 +11,21 @@ use YAML::XS qw(LoadFile DumpFile);
 my $options = {};
 my $records = {};
 
+sub set_default_opts
+{
+    my %defaults = qw(
+        yaml_in yaml_files/04_trimqc.yml
+        yaml_out yaml_files/05_readinfo.yml
+        illumina_summary_table input_data/Illumina_sample_summary.tab
+        input_read_table input_data/ReadData.tab
+        output_read_table output_data/ReadDataOut.tab
+        verbose 1
+        );
+    for my $kdef (keys %defaults) {
+        $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
+    }
+}
+
 sub check_opts
 {
     unless ($options->{yaml_in} and $options->{yaml_out}) {
@@ -37,6 +52,7 @@ sub gather_opts
         'output_read_table=s',
         'verbose',
         );
+    set_default_opts;
     check_opts;
 }
 
@@ -104,21 +120,28 @@ sub read_table_stats
 sub get_read_info
 {
     my $fq_infile = shift;
-    open (FQIN, '<', $fq_infile);
-    my ($num_reads, $read_length) = (0, 0);
-    if ($options->{verbose}) { print "Determining read length/num reads from file $fq_infile\n"; }
-    while (my $line = <FQIN>) {
-        if ($. == 2) {
-            chomp $line;
-            $read_length = length($line);
+    if (-e $fq_infile) {
+        open (FQIN, '<', $fq_infile);
+        my ($num_reads, $read_length) = (0, 0);
+        if ($options->{verbose}) { print "Determining read length/num reads from file $fq_infile\n"; }
+        while (my $line = <FQIN>) {
+            if ($. == 2) {
+                chomp $line;
+                $read_length = length($line);
+            }
+            if ($line =~ /^\@H/) {
+                $num_reads++;
+            }
         }
-        if ($line =~ /^\@HWI/) {
-            $num_reads++;
+        close (FQIN);
+        print join("\t", ($fq_infile, $read_length, $num_reads)) . "\n";
+        return ($read_length, $num_reads);
+    } else {
+        if ($options->{verbose}) {
+            print "Input file ${fq_infile} does not exist - skipping this record.\n";
         }
     }
-    close (FQIN);
-    print join("\t", ($fq_infile, $read_length, $num_reads)) . "\n";
-    return ($read_length, $num_reads);
+    return ('','');
 }
 
 sub calc_stats

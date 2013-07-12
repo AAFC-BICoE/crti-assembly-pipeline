@@ -17,9 +17,22 @@ my @qsub_cmd_list;
 
 sub set_default_opts
 {
-    my %defaults = qw(
+    my %defaults = ();
+    if ($options->{raw}) {
+        %defaults = qw(
+            yaml_in yaml_files/01_dirsetup.yml
+            yaml_out yaml_files/02_rawqc.yml
+            qsub_batch_file qsub_files/01_raw_fastqc.sh
             qsub_script qsub_script.sh
             );
+    } elsif ($options->{trim}) {
+        %defaults = qw(
+            yaml_in yaml_files/03_trim.yml
+            yaml_out yaml_files/04_trimqc.yml
+            qsub_script qsub_script.sh
+            qsub_batch_file qsub_files/03_trim_fastqc.sh
+            );
+    } 
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
     }
@@ -27,7 +40,12 @@ sub set_default_opts
     if ($options->{trim}) {
         $tr = "trim";
     }
-    $options->{qsub_opts} .= " -N " . $tr . "_FastQC ";
+    my $qopts = " -N " . $tr . "_FastQC ";
+    if ($options->{qsub_opts}) {
+        $options->{qsub_opts} .= $qopts;
+    } else {
+        $options->{qsub_opts} = $qopts;
+    }
 }    
 
 sub check_opts

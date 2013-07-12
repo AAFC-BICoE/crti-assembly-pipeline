@@ -114,6 +114,7 @@ sub parse_genome_lengths
             my @fields = split(/\t/, $line);
             my %fh = map { $glen_col_headers[$_] => ($fields[$_] ? $fields[$_] : '') } (0..$#glen_col_headers);
             my $sample = $fh{IL_Sample_ID};
+            $sample =~ s/\s+//g;
             my $rec = ($records->{$sample} ? $records->{$sample} : '');
             if ($rec) {
                 $rec->{related_genome_length} = {};

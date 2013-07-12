@@ -14,6 +14,8 @@ my $records = {};
 sub set_default_opts
 {
     my %defaults = qw(
+        yaml_in yaml_files/02_rawqc.yml
+        yaml_out yaml_files/03_trim.yml
         trim_params_table input_data/ManualTrimParams.tab
         qsub_script qsub_script.sh
         qsub_batch_file qsub_files/02_fastx_trim.sh
