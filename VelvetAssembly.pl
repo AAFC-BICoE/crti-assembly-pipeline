@@ -35,6 +35,8 @@ my @vg_qsub_list = ();
 sub set_default_opts
 {
     my %defaults = qw(
+            yaml_in yaml_files/05_readinfo.yml
+            yaml_out yaml_files/06_velvet.yml
             min_kmer 21 
             max_kmer 95
             vh_batch_dir qsub_files/04_vh_cmds
@@ -99,8 +101,8 @@ sub gather_opts
             'vh_batch_file=s',
             'vg_batch_file=s',
             );
-    check_opts;
     set_default_opts;
+    check_opts;
 }
 
 sub parse_genome_lengths
@@ -158,6 +160,7 @@ sub get_check_record
 sub get_coverage_vars
 {
     my $rec = shift;
+    print "Getting cov vars for " . $rec->{sample} . "\n";
     my $var = {};
     $var->{R1_nreads} = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
     $var->{R1_readlen} = get_check_record($rec, ["data_stats", "R1", $trdata, "read_length"]);
@@ -167,6 +170,7 @@ sub get_coverage_vars
     my $pass = 1;
     for my $key (keys %$var) {
         if ($var->{$key} !~ /^\s*\d+\s*$/) {
+            print "Got bad var " . $var->{$key} . " at key " . $key . "\n";
             $pass = 0;
         }
     }
