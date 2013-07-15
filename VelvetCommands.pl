@@ -7,8 +7,7 @@ use Getopt::Long;
 
 # From the records, pull just the genomic data
 # Read in genome lengths from file
-# Write out table of velvet assembly params
-# Write out qsubs using these commands.
+# Write out all the velveth/g commands per sample per kmer
 
 # Ideally: have separate folders within velvet that include
 # e.g. the different genome lengths, QC trims etc. that we try?
@@ -22,15 +21,11 @@ my @glen_col_headers = qw(IL_Species IL_Genotype IL_Biomaterial IL_Biomaterial_t
 
 my $tr;
 my $trdata;
-my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
 my $velvet_bin_dir = "/opt/bio/velvet";
 my @kbins = (0, 31, 63, 127, 145); 
 # @ kbins is only used by get_kmer_bin function below.
 # Assumes we have binaries of form
 # velvetg_x and velveth_x for x>0 and x in @kbins.
-                                
-my @vh_qsub_list = ();
-my @vg_qsub_list = ();
 
 sub set_default_opts
 {
@@ -39,11 +34,6 @@ sub set_default_opts
             yaml_out yaml_files/06_velvet.yml
             min_kmer 21 
             max_kmer 95
-            vh_batch_dir qsub_files/04_vh_cmds
-            vg_batch_dir qsub_files/04_vg_cmds
-            qsub_script qsub_array.sh
-            vh_qsub_batch qsub_files/04_vh_qsubs.sh
-            vg_qsub_batch qsub_files/04_vg_qsubs.sh
             trim 1
             genome_length_file input_data/GenomeLengthEst.tab
             );
@@ -57,7 +47,6 @@ sub set_default_opts
         $tr = "trim";
         $trdata = "trimdata";
     }
-    $options->{qsub_opts} = '' unless ($options->{qsub_opts});
 }
 
 sub check_opts
@@ -68,10 +57,6 @@ sub check_opts
                 --genome_length_file <filename>
                 --trim
                 --raw
-                --qsub_opts <qsub options string in quotes>
-                --qsub_script <script name>
-                --vh_qsub_batch <output batch filename>
-                --vg_qsub_batch <output batch filename>
                 --submit
                 --verbose
                 --min_kmer <value (default 21)>
@@ -91,9 +76,6 @@ sub gather_opts
             'genome_length_file|g=s',
             'trim',
             'raw',
-            'qsub_opts=s',
-            'qsub_script=s',
-            'qsub_batch=s',
             'submit',
             'verbose',
             'min_kmer',
@@ -249,6 +231,8 @@ sub get_velveth_cmd
     my $r2_file = $rec->{R2}->{$trdata};
     my $velveth_cmd = $velveth_bin . " " . $outdir . " " . $kmer . 
         "  -fastq -shortPaired -create_binary -separate " . $r1_file . " " . $r2_file;
+    $rec->{velveth}->{$tr}->{cmd} = {} unless ($rec->{velveth}->{cmd});
+    $rec->{velveth}->{$tr}->{cmd}->{$kmer} = $velveth_cmd;
     return $velveth_cmd;
 }
 
@@ -264,6 +248,8 @@ sub get_velvetg_cmd
     my $velvetg_cmd = $velvetg_bin . " " . $working_dir . " " .
         "-ins_length 300 -exp_cov " . $exp_cov . " " . $min_contig_opt . 
         $scaffolding_opt . " -amos_file no -cov_cutoff auto";
+    $rec->{velvetg}->{$tr}->{cmd} = {} unless ($rec->{velvetg}->{$tr}->{cmd});
+    $rec->{velvetg}->{$tr}->{cmd}->{$kmer} = $velvetg_cmd;
     return $velvetg_cmd;
 }
 
@@ -292,50 +278,6 @@ sub get_velvet_cmds
     return ($vh_cmd, $vg_cmd);
 }
 
-sub write_batch_cmds
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $vtype = shift; # should be 'vh' or 'vg';  
-    my $bdir_key = $vtype . "_batch_dir";
-    my @cmd_list = @$aref;
-    my $batch_dir = $options->{$bdir_key};
-    unless (-e $batch_dir) { mkpath $batch_dir; }
-    my $batch_file = $batch_dir . "/" . $rec->{sample} . "_" . $tr . ".sh";
-    open (FBATCH, '>', $batch_file) or die "Error: couldn't open file " . $batch_file . "\n";
-    print FBATCH join ("\n", @cmd_list) . "\n";
-    close (FBATCH);
-    return $batch_file;
-}
-
-sub get_vh_qsub
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $sample = $rec->{sample};
-    my @vh_cmd_list = @$aref;
-    my $num_cmds = scalar @vh_cmd_list;
-    my $batch_filename = write_batch_cmds($rec, $aref, "vh");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-    push (@vh_qsub_list, $qsub_cmd);
-    $rec->{velveth}->{$tr}->{qsub_cmd} = $qsub_cmd;
-    $rec->{velveth}->{$tr}->{cmd_file} = $batch_filename;
-}
-
-sub get_vg_qsub
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $sample = $rec->{sample};
-    my @vg_cmd_list = @$aref;
-    my $num_cmds = scalar @vg_cmd_list;
-    my $batch_filename = write_batch_cmds($rec, $aref, "vg");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velvetg -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-    push (@vg_qsub_list, $qsub_cmd);
-    $rec->{velvetg}->{$tr}->{qsub_cmd} = $qsub_cmd;
-    $rec->{velvetg}->{$tr}->{cmd_file} = $batch_filename;
-}
-
 sub init_velvet_recs
 {
     my $rec = shift;
@@ -343,6 +285,8 @@ sub init_velvet_recs
         $rec->{$key} = {} unless ($rec->{$key});
         $rec->{$key}->{$tr} = {} unless ($rec->{$key}->{$tr});
     }
+    $rec->{velvet}->{$tr}->{min_kmer} = $options->{min_kmer};
+    $rec->{velvet}->{$tr}->{max_kmer} = $options->{max_kmer};
 }
 
 sub build_assembly_cmds
@@ -354,46 +298,13 @@ sub build_assembly_cmds
         my $cov_vars = get_coverage_vars($rec);
         if ($cov_vars) {
             my $assembly_outdir = get_assembly_outdir($rec);
-            my @vh_cmd_list = ();
-            my @vg_cmd_list = ();
             for (my $kmer =$options->{min_kmer}; $kmer <= $options->{max_kmer}; $kmer = $kmer+2) {
                 my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $cov_vars, $assembly_outdir, $kmer);
-                if ($vh_cmd) {
-                    push (@vh_cmd_list, $vh_cmd);
-                }
-                if ($vg_cmd) {
-                    push (@vg_cmd_list, $vg_cmd);
-                }
             }
-            get_vh_qsub($rec, \@vh_cmd_list);
-            get_vg_qsub($rec, \@vg_cmd_list);
         } else {
             print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
         }
     }
-}
-
-sub vh_write_qsub_batch
-{
-    my $outfile = $options->{vh_qsub_batch};
-    open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    print FQS join("\n", @vh_qsub_list) . "\n";
-    close (FQS);
-}
-
-sub vg_write_qsub_batch
-{
-    my $outfile = $options->{vg_qsub_batch};
-    open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    print FQS join("\n", @vg_qsub_list) . "\n";
-    close (FQS);    
-}
-
-sub create_qsubs
-{
-    # Go through vh's 
-    # submit all for a sample, then record jid
-    # then add hold_jid to the vg's qsubs
 }
 
 gather_opts;
@@ -401,6 +312,4 @@ $records = LoadFile($options->{yaml_in});
 get_genomic_records;
 parse_genome_lengths;
 build_assembly_cmds;
-vh_write_qsub_batch;
-vg_write_qsub_batch;
 DumpFile($options->{yaml_out}, $records);
