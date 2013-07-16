@@ -8,20 +8,34 @@ my $options = {};
 my $records = {};
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
 my @sample_list = ();
+my $tr;
+my $trdata;
 
 
 # output files created by velveth
 my @vh_outputs = qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps);
 
-sub set_default_opts;
+sub set_default_opts
 {
     my %defaults = qw(
+        yaml_in yaml_files/06_velvet.yml
+        yaml_out yaml_files/07_velveth_qsub.yml
+        qsub_script qsub_array.sh
         vh_batch_dir qsub_files/04_vh_cmds
         trim 1
+        verbose 0
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
     }
+    if ($options->{raw}) {
+        $tr = "raw";
+        $trdata = "rawdata";
+    } else {
+        $tr = "trim";
+        $trdata = "trimdata";
+    }
+    $options->{qsub_opts} = $options->{qsub_opts} . " -p -500 "; # . -N velvet_hg ";
 }
 
 sub check_opts
@@ -29,12 +43,13 @@ sub check_opts
     unless ($options->{yaml_in} and $options->{yaml_out}) {
         die "Usage: $0 -i <input yaml file> -o <output yaml file>
             Optional:
-                verbose
-                sample_list <ID1,ID2,...,IDX (no spaces)>
-                qsub_array_script <filename>
-                memory
-                trim
-                raw
+                --verbose
+                --sample_list <ID1,ID2,...,IDX (no spaces)>
+                --qsub_array_script <filename>
+                --memory
+                --trim
+                --raw
+                --submit
                 ";
     }
 }
@@ -49,6 +64,9 @@ sub gather_opts
         'verbose',
         'sample_list=s',
         'memory_requirements|m=s',
+        'trim',
+        'raw',
+        'submit',
         );
     set_default_opts;
     check_opts;
@@ -75,10 +93,12 @@ sub get_kmer_range
     my $kmin = get_check_record($rec, ["velvet", $tr, "min_kmer"]);
     my $kmax = get_check_record($rec, ["velvet", $tr, "max_kmer"]);
     my $krange = [];
-    for (my $kmer = $kmin; $kmer <= $kmax; $kmer = $kmer + 2) {
-        push (@$kref, $kmer);
+    if ($kmin =~ /^\d+$/ and $kmax =~ /^\d+$/) {
+        for (my $kmer = $kmin; $kmer <= $kmax; $kmer = $kmer + 2) {
+            push (@$krange, $kmer);
+        }
     }
-    return $kref;
+    return $krange;
 }
 
 # Check if:
@@ -98,8 +118,15 @@ sub check_vh_kmer_cmd
             $outputs_exist = 0;
         }
     }
-    if ($outputs_exist) {
+    if (!$outputs_exist) {
+        if ($options->{verbose}) {
+            print "Found missing/empty output files, running the following command:\n$cmd\n";
+        }
+        # delete any files that do exist first?
         return $cmd;
+    }
+    if ($options->{verbose}) {
+        print "Not running for this kmer - found valid output files for sample " . $rec->{sample} . " trim/raw=" . $tr . " kmer=" . $kmer . "\n";
     }
     return '';
 }
@@ -120,6 +147,44 @@ sub write_batch_cmds
     return $batch_file;
 }
 
+sub get_jobid
+{
+    my $qsub_str = shift;
+    my $hold_jobid = '';
+    if ($qsub_str =~ /Your job[^\s]+\s(\d+)[\.\s]/) {
+        $hold_jobid = $1;
+    }
+    return $hold_jobid;
+}
+
+# Get all the outstanding commands/kmers for the given sample
+# together and submit as an array job.
+sub get_vh_qsub
+{
+    my $rec = shift;
+    my $aref = shift;
+    my $sample = $rec->{sample};
+    my @vh_cmd_list = @$aref;
+    my $num_cmds = scalar @vh_cmd_list;
+    if ($num_cmds > 0) {
+        my $batch_filename = write_batch_cmds($rec, $aref, "vh");
+        my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
+        $rec->{velveth}->{$tr}->{qsub_cmd} = $qsub_cmd;
+        $rec->{velveth}->{$tr}->{cmd_file} = $batch_filename;
+        if ($options->{verbose}) {
+            print "Qsubbing array of " . $num_cmds . " velveth commands for sample " . $rec->{sample} . "\n";
+            print $qsub_cmd . "\n";
+        }
+        print $qsub_cmd . "\n";
+        if ($options->{submit}) {
+            my $qsub_str = `$qsub_cmd`;
+            print $qsub_str;
+            my $jobid = get_jobid($qsub_str);
+            $rec->{velveth}->{$tr}->{qsub_jobid} = $jobid;
+        }
+    }
+}
+
 sub check_vh_sample_cmd
 {
     my $rec = shift;
@@ -131,32 +196,17 @@ sub check_vh_sample_cmd
             push (@$vh_cmds, $cmd);
         }
     }
-    submit_vh_array($vh_cmds);
+    get_vh_qsub($rec, $vh_cmds);
 }
 
-sub get_unfinished_vh_cmds
-{
-    for my $sample (@sample_list) {
-        my $rec = $records->{$sample};
-        my $cmd = check_vh_cmd($rec, $
-
+gather_opts;
+$records = LoadFile($options->{yaml_in});
+for my $sample (keys %$records) {
+    my $rec = $records->{$sample};
+    check_vh_sample_cmd($rec);
 }
+DumpFile($options->{yaml_out}, $records);
 
-
-
-sub get_vh_qsub
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $sample = $rec->{sample};
-    my @vh_cmd_list = @$aref;
-    my $num_cmds = scalar @vh_cmd_list;
-    my $batch_filename = write_batch_cmds($rec, $aref, "vh");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-    push (@vh_qsub_list, $qsub_cmd);
-    $rec->{velveth}->{$tr}->{qsub_cmd} = $qsub_cmd;
-    $rec->{velveth}->{$tr}->{cmd_file} = $batch_filename;
-}
 
 sub get_vg_qsub
 {
@@ -167,7 +217,7 @@ sub get_vg_qsub
     my $num_cmds = scalar @vg_cmd_list;
     my $batch_filename = write_batch_cmds($rec, $aref, "vg");
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velvetg -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-    push (@vg_qsub_list, $qsub_cmd);
+    #push (@vg_qsub_list, $qsub_cmd);
     $rec->{velvetg}->{$tr}->{qsub_cmd} = $qsub_cmd;
     $rec->{velvetg}->{$tr}->{cmd_file} = $batch_filename;
 }
@@ -176,7 +226,7 @@ sub vh_write_qsub_batch
 {
     my $outfile = $options->{vh_qsub_batch};
     open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    print FQS join("\n", @vh_qsub_list) . "\n";
+    #print FQS join("\n", @vh_qsub_list) . "\n";
     close (FQS);
 }
 
@@ -184,15 +234,8 @@ sub vg_write_qsub_batch
 {
     my $outfile = $options->{vg_qsub_batch};
     open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    print FQS join("\n", @vg_qsub_list) . "\n";
+    #print FQS join("\n", @vg_qsub_list) . "\n";
     close (FQS);    
 }
 
-# For each sample, look at the
-# kmers that have successfully
-# completed velvetg. Submit the rest.
 
-my $records = LoadFile($options->{yaml_in});
-
-vh_write_qsub_batch;
-vg_write_qsub_batch;

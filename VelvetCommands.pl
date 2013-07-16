@@ -231,13 +231,14 @@ sub get_velveth_cmd
     my $r2_file = $rec->{R2}->{$trdata};
     my $velveth_cmd = $velveth_bin . " " . $outdir . " " . $kmer . 
         "  -fastq -shortPaired -create_binary -separate " . $r1_file . " " . $r2_file;
-    $rec->{velveth}->{$tr}->{cmd} = {} unless ($rec->{velveth}->{cmd});
+    $rec->{velveth}->{$tr}->{cmd} = {} unless ($rec->{velveth}->{$tr}->{cmd});
     $rec->{velveth}->{$tr}->{cmd}->{$kmer} = $velveth_cmd;
     return $velveth_cmd;
 }
 
 sub get_velvetg_cmd
 {
+    my $rec = shift;
     my $exp_cov = shift;
     my $kmer = shift;
     my $kmer_bin = shift;
@@ -274,7 +275,7 @@ sub get_velvet_cmds
     my $kdir = get_velvet_kdir($assembly_outdir, $kmer, $exp_cov);
     track_kmer_dirs($rec, $kmer, $kdir);
     my $vh_cmd = get_velveth_cmd($rec, $kmer, $kmer_bin, $kdir);
-    my $vg_cmd = get_velvetg_cmd($exp_cov, $kmer, $kmer_bin, $kdir);
+    my $vg_cmd = get_velvetg_cmd($rec, $exp_cov, $kmer, $kmer_bin, $kdir);
     return ($vh_cmd, $vg_cmd);
 }
 
