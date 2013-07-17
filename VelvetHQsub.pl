@@ -60,7 +60,7 @@ sub gather_opts
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
-        'qsub_array_script=s',
+        'qsub_script=s',
         'verbose',
         'sample_list=s',
         'memory_requirements|m=s',
@@ -206,36 +206,5 @@ for my $sample (keys %$records) {
     check_vh_sample_cmd($rec);
 }
 DumpFile($options->{yaml_out}, $records);
-
-
-sub get_vg_qsub
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $sample = $rec->{sample};
-    my @vg_cmd_list = @$aref;
-    my $num_cmds = scalar @vg_cmd_list;
-    my $batch_filename = write_batch_cmds($rec, $aref, "vg");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velvetg -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-    #push (@vg_qsub_list, $qsub_cmd);
-    $rec->{velvetg}->{$tr}->{qsub_cmd} = $qsub_cmd;
-    $rec->{velvetg}->{$tr}->{cmd_file} = $batch_filename;
-}
-
-sub vh_write_qsub_batch
-{
-    my $outfile = $options->{vh_qsub_batch};
-    open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    #print FQS join("\n", @vh_qsub_list) . "\n";
-    close (FQS);
-}
-
-sub vg_write_qsub_batch
-{
-    my $outfile = $options->{vg_qsub_batch};
-    open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    #print FQS join("\n", @vg_qsub_list) . "\n";
-    close (FQS);    
-}
 
 

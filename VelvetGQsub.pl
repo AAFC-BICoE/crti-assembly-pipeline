@@ -11,19 +11,22 @@ my @sample_list = ();
 my $tr;
 my $trdata;
 
+# output files created by velveth/g
+my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
+my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
 
-# output files created by velveth
-my @vh_outputs = qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps);
+my @vg_cmds = ();
 
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/06_velvet.yml
-        yaml_out yaml_files/07_velveth_qsub.yml
-        qsub_script qsub_array.sh
-        vh_batch_dir qsub_files/04_vh_cmds
+        yaml_in yaml_files/07_velveth_qsub.yml
+        yaml_out yaml_files/08_velvetg_qsub.yml
+        qsub_script qsub_script.sh
+        vg_batch_dir qsub_files/04_vg_cmds
         trim 1
         verbose 0
+        submit 0
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -35,7 +38,7 @@ sub set_default_opts
         $tr = "trim";
         $trdata = "trimdata";
     }
-    $options->{qsub_opts} = $options->{qsub_opts} . " -p -500 "; # . -N velvet_hg ";
+    $options->{qsub_opts} = $options->{qsub_opts} . ""; # . -N velvet_hg ";
 }
 
 sub check_opts
@@ -50,6 +53,7 @@ sub check_opts
                 --trim
                 --raw
                 --submit
+                --submit_max <max # qsubs to perform>
                 ";
     }
 }
@@ -60,13 +64,14 @@ sub gather_opts
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
-        'qsub_array_script=s',
+        'qsub_script=s',
         'verbose',
         'sample_list=s',
         'memory_requirements|m=s',
         'trim',
         'raw',
         'submit',
+        'submit_max=s',
         );
     set_default_opts;
     check_opts;
@@ -86,6 +91,51 @@ sub get_check_record
     return $ref;
 }
 
+sub set_check_record
+{
+    my $ref = shift;
+    my $kref = shift;
+    my $last_key = shift;
+    my $value = shift;
+    for my $key (@$kref) {
+        if (defined ($ref->{$key})) {
+            $ref = $ref->{$key};
+        } else {
+            $ref->{$key} = {};
+        }
+    }
+    $ref->{$last_key} = $value;
+}
+    
+
+sub get_jobid
+{
+    my $qsub_str = shift;
+    my $hold_jobid = '';
+    if ($qsub_str =~ /Your job[^\s]*\s(\d+)[\.\s]/) {
+        $hold_jobid = $1;
+    }
+    return $hold_jobid;
+}
+
+sub get_sample_list
+{
+    my $sample_list = [];
+    if ($options->{sample_list}) {
+        $sample_list = [split(/,/, $options->{sample_list})];
+    } else {
+        $sample_list = [keys %$records];
+    }
+    return $sample_list;
+}
+
+sub print_verbose
+{
+    if ($options->{verbose}) {
+        print (@_);
+    }
+}
+
 # Get an array of all the kmer values
 sub get_kmer_range
 {
@@ -101,141 +151,119 @@ sub get_kmer_range
     return $krange;
 }
 
-# Check if:
-# 1. kmer dir exists
-# 2. all output files have been created
-# 3. No file size is 0.
-sub check_vh_kmer_cmd
+# check that a set of filenames exist in a given directory.
+sub outfiles_exist
 {
-    my $rec = shift;
-    my $kmer = shift;
-    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer_dirs", $kmer]);
-    my $cmd = get_check_record($rec, ["velveth", $tr, "cmd", $kmer]);
+    my $kdir = shift;
+    my $filenames = shift;
     my $outputs_exist = 1;
-    for my $fname (@vh_outputs) {
+    for my $fname (@$filenames) {
         my $fpath = $kdir . "/" . $fname;
         if (!-e $fpath or !-s $fpath) { # file nonexistent or empty
             $outputs_exist = 0;
         }
     }
-    if (!$outputs_exist) {
-        if ($options->{verbose}) {
-            print "Found missing/empty output files, running the following command:\n$cmd\n";
-        }
-        # delete any files that do exist first?
-        return $cmd;
-    }
-    if ($options->{verbose}) {
-        print "Not running for this kmer - found valid output files for sample " . $rec->{sample} . " trim/raw=" . $tr . " kmer=" . $kmer . "\n";
-    }
-    return '';
-}
+    return $outputs_exist;
+}  
 
-sub write_batch_cmds
+# Check if:
+# 1. kmer dir exists
+# 2. all output files have been created
+# 3. No file size is 0.
+sub get_vg_kmer_cmd
 {
     my $rec = shift;
-    my $aref = shift;
-    my $vtype = shift; # should be 'vh' or 'vg';  
-    my $bdir_key = $vtype . "_batch_dir";
-    my @cmd_list = @$aref;
-    my $batch_dir = $options->{$bdir_key};
-    unless (-e $batch_dir) { mkpath $batch_dir; }
-    my $batch_file = $batch_dir . "/" . $rec->{sample} . "_" . $tr . ".sh";
-    open (FBATCH, '>', $batch_file) or die "Error: couldn't open file " . $batch_file . "\n";
-    print FBATCH join ("\n", @cmd_list) . "\n";
-    close (FBATCH);
-    return $batch_file;
-}
+    my $kmer = shift;
+    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer_dirs", $kmer]);
+    my $cmd = get_check_record($rec, ["velvetg", $tr, "cmd", $kmer]);
+    
+    my $vh_files_exist = outfiles_exist($kdir, $vh_outfiles);
+    my $vg_files_exist = outfiles_exist($kdir, $vg_outfiles);
 
-sub get_jobid
-{
-    my $qsub_str = shift;
-    my $hold_jobid = '';
-    if ($qsub_str =~ /Your job[^\s]+\s(\d+)[\.\s]/) {
-        $hold_jobid = $1;
+    if ($vh_files_exist and !$vg_files_exist) {
+        print_verbose "Found vh files but not vg files. Running the following command:\n$cmd\n";
+    } elsif (!$vh_files_exist) {
+        print_verbose "Need to run velveth before it's possible to run velvetg for folder $kdir\n";
+        $cmd = '';
+    } else {
+        print_verbose "Not running for this kmer - found valid velvetg output files for sample " . $rec->{sample} . " trim/raw=" . $tr . " kmer=" . $kmer . "\n";
+        $cmd = '';
     }
-    return $hold_jobid;
+    return $cmd;
 }
 
-# Get all the outstanding commands/kmers for the given sample
-# together and submit as an array job.
-sub get_vh_qsub
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $sample = $rec->{sample};
-    my @vh_cmd_list = @$aref;
-    my $num_cmds = scalar @vh_cmd_list;
-    if ($num_cmds > 0) {
-        my $batch_filename = write_batch_cmds($rec, $aref, "vh");
-        my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-        $rec->{velveth}->{$tr}->{qsub_cmd} = $qsub_cmd;
-        $rec->{velveth}->{$tr}->{cmd_file} = $batch_filename;
-        if ($options->{verbose}) {
-            print "Qsubbing array of " . $num_cmds . " velveth commands for sample " . $rec->{sample} . "\n";
-            print $qsub_cmd . "\n";
-        }
-        print $qsub_cmd . "\n";
-        if ($options->{submit}) {
-            my $qsub_str = `$qsub_cmd`;
-            print $qsub_str;
-            my $jobid = get_jobid($qsub_str);
-            $rec->{velveth}->{$tr}->{qsub_jobid} = $jobid;
-        }
-    }
-}
-
-sub check_vh_sample_cmd
+sub get_vg_sample_cmds
 {
     my $rec = shift;
     my $krange = get_kmer_range($rec);
-    my $vh_cmds = [];
     for my $kmer (@$krange) {
-        my $cmd = check_vh_kmer_cmd($rec, $kmer);
+        my $cmd = get_vg_kmer_cmd($rec, $kmer);
         if ($cmd) {
-            push (@$vh_cmds, $cmd);
+            push (@vg_cmds, $cmd);
         }
     }
-    get_vh_qsub($rec, $vh_cmds);
 }
+
+sub get_processor_slots
+{
+    my $slots = [];
+    for (my $i=0; $i<4; $i++) {
+        push (@$slots, $i+4);
+        push (@$slots, $i+4);
+    }
+    push (@$slots, 9) for (1..8);
+    push (@$slots, 10) for (1..8);
+    return $slots;
+}
+
+sub do_host_qsub
+{
+    my $host = shift;
+    my $cmd = shift;
+    my $hold_jid = shift;
+    my $hold_param_str = ($hold_jid ? " -hold_jid " . $hold_jid . " " : "");
+    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velvetg_" . $tr . 
+            " -l h=" . $host . " -p -400 " . $hold_param_str . $options->{qsub_script} . " '" . $cmd . "'";
+    my ($jobid, $qsub_str) = ('','');
+    if ($options->{submit}) {
+        $qsub_str = `$qsub_cmd`;
+        print $qsub_str . "\n";
+        $jobid = get_jobid($qsub_str);
+        print "Got jobid " . $jobid . "\n";
+    }
+    return ($qsub_cmd, $jobid);
+}
+
+sub qsub_cmds
+{
+    my $slots = shift;
+    my $num_slots = scalar @$slots;
+    my $num_cmds = scalar @vg_cmds;
+    my $num_to_submit = $num_cmds;
+    if ($options->{submit_max} and $options->{submit_max} < $num_to_submit) {
+        $num_to_submit = $options->{submit_max};
+    }
+    my @holds = ();
+    push (@holds, 0) for (1..$num_slots);
+    for (my $i=0; $i<$num_to_submit; $i++) {
+        my $j = $i % $num_slots;
+        my $host = "biocomp-0-" . $slots->[$j];
+        my $cmd = $vg_cmds[$i];
+        my ($qsub_cmd, $jobid) = do_host_qsub($host, $cmd, $holds[$j]);
+        $holds[$j] = $jobid;
+    }
+}
+        
 
 gather_opts;
 $records = LoadFile($options->{yaml_in});
-for my $sample (keys %$records) {
+my $sample_list = get_sample_list;
+for my $sample (@$sample_list) {
     my $rec = $records->{$sample};
-    check_vh_sample_cmd($rec);
+    get_vg_sample_cmds($rec);
 }
+my $slots = get_processor_slots;
+qsub_cmds($slots);
 DumpFile($options->{yaml_out}, $records);
-
-
-sub get_vg_qsub
-{
-    my $rec = shift;
-    my $aref = shift;
-    my $sample = $rec->{sample};
-    my @vg_cmd_list = @$aref;
-    my $num_cmds = scalar @vg_cmd_list;
-    my $batch_filename = write_batch_cmds($rec, $aref, "vg");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velvetg -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-    #push (@vg_qsub_list, $qsub_cmd);
-    $rec->{velvetg}->{$tr}->{qsub_cmd} = $qsub_cmd;
-    $rec->{velvetg}->{$tr}->{cmd_file} = $batch_filename;
-}
-
-sub vh_write_qsub_batch
-{
-    my $outfile = $options->{vh_qsub_batch};
-    open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    #print FQS join("\n", @vh_qsub_list) . "\n";
-    close (FQS);
-}
-
-sub vg_write_qsub_batch
-{
-    my $outfile = $options->{vg_qsub_batch};
-    open (FQS, '>', $outfile) or die "Error: couldn't open file $outfile.\n";
-    #print FQS join("\n", @vg_qsub_list) . "\n";
-    close (FQS);    
-}
 
 
