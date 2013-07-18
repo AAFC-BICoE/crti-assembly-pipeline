@@ -15,7 +15,8 @@ my $trdata;
 my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
 
-my @vg_cmds = ();
+my $vg_cmds = {};
+
 
 sub set_default_opts
 {
@@ -186,6 +187,7 @@ sub get_vg_kmer_cmd
             print_verbose "Found vh files but not vg files. Running the following command:\n$cmd\n";
         } else {
             print_verbose "No command found to run for kmer " . $kmer . " sample " . $rec->{sample} . "\n";
+            $cmd = '';
         }
     } elsif (!$vh_files_exist) {
         print_verbose "Need to run velveth before it's possible to run velvetg for folder $kdir\n";
@@ -200,11 +202,13 @@ sub get_vg_kmer_cmd
 sub get_vg_sample_cmds
 {
     my $rec = shift;
+    my $sample = $rec->{sample};
     my $krange = get_kmer_range($rec);
     for my $kmer (@$krange) {
         my $cmd = get_vg_kmer_cmd($rec, $kmer);
         if ($cmd) {
-            push (@vg_cmds, $cmd);
+            #push (@vg_cmds, $cmd);
+            $vg_cmds->{$sample}->{$kmer} = $cmd;
         }
     }
 }
@@ -243,19 +247,24 @@ sub qsub_cmds
 {
     my $slots = shift;
     my $num_slots = scalar @$slots;
-    my $num_cmds = scalar @vg_cmds;
-    my $num_to_submit = $num_cmds;
-    if ($options->{submit_max} and $options->{submit_max} < $num_to_submit) {
-        $num_to_submit = $options->{submit_max};
-    }
     my @holds = ();
     push (@holds, 0) for (1..$num_slots);
-    for (my $i=0; $i<$num_to_submit; $i++) {
-        my $j = $i % $num_slots;
-        my $host = "biocomp-0-" . $slots->[$j];
-        my $cmd = $vg_cmds[$i];
-        my ($qsub_cmd, $jobid) = do_host_qsub($host, $cmd, $holds[$j]);
-        $holds[$j] = $jobid;
+    
+    my $i = 0;
+    for my $sample (keys %$vg_cmds) {
+        my $vg_sample_cmds = $vg_cmds->{$sample};
+        for my $kmer (keys %$vg_sample_cmds) {
+            my $j = $i % $num_slots;
+            my $cmd = $vg_sample_cmds->{$kmer};
+            my $host = "biocomp-0-" . $slots->[$j];
+            my ($qsub_cmd, $jobid) = do_host_qsub($host, $cmd, $holds[$j]);
+            $holds[$j] = $jobid;
+            set_check_record($records, [$sample, "velvet", $tr, "kmer", $kmer], "velvetg_qsub_cmd", $qsub_cmd);
+            set_check_record($records, [$sample, "velvet", $tr, "kmer", $kmer], "velvetg_qsub_jobid", $jobid);
+            $i++;
+            last if ($options->{submit_max} and $i >= $options->{submit_max});
+        }
+        last if ($options->{submit_max} and $i >= $options->{submit_max});
     }
 }
         
