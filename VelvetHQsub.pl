@@ -18,12 +18,14 @@ my @vh_outputs = qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps);
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/06_velvet.yml
+        yaml_in yaml_files/06_velvet_cmds.yml
         yaml_out yaml_files/07_velveth_qsub.yml
         qsub_script qsub_array.sh
         vh_batch_dir qsub_files/04_vh_cmds
         trim 1
+        raw 0
         verbose 0
+        submit 0
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -86,6 +88,23 @@ sub get_check_record
     return $ref;
 }
 
+sub set_check_record
+{
+    my $ref = shift;
+    my $kref = shift;
+    my $last_key = shift;
+    my $value = shift;
+    for my $key (@$kref) {
+        if (defined ($ref->{$key})) {
+            $ref = $ref->{$key};
+        } else {
+            $ref->{$key} = {};
+            $ref = $ref->{$key};
+        }
+    }
+    $ref->{$last_key} = $value;
+}
+
 # Get an array of all the kmer values
 sub get_kmer_range
 {
@@ -109,8 +128,11 @@ sub check_vh_kmer_cmd
 {
     my $rec = shift;
     my $kmer = shift;
-    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer_dirs", $kmer]);
-    my $cmd = get_check_record($rec, ["velveth", $tr, "cmd", $kmer]);
+    #my $kdir = get_check_record($rec, ["velvet", $tr, "kmer_dirs", $kmer]);
+    #my $cmd = get_check_record($rec, ["velveth", $tr, "cmd", $kmer]);
+    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
+    my $cmd = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "velveth_cmd"]);
+    
     my $outputs_exist = 1;
     for my $fname (@vh_outputs) {
         my $fpath = $kdir . "/" . $fname;
@@ -120,6 +142,7 @@ sub check_vh_kmer_cmd
     }
     if (!$outputs_exist) {
         if ($options->{verbose}) {
+            print "sample: " . $rec->{sample} . ":\n";
             print "Found missing/empty output files, running the following command:\n$cmd\n";
         }
         # delete any files that do exist first?
@@ -168,9 +191,9 @@ sub get_vh_qsub
     my $num_cmds = scalar @vh_cmd_list;
     if ($num_cmds > 0) {
         my $batch_filename = write_batch_cmds($rec, $aref, "vh");
-        my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N " . $tr . "_velveth -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
-        $rec->{velveth}->{$tr}->{qsub_cmd} = $qsub_cmd;
-        $rec->{velveth}->{$tr}->{cmd_file} = $batch_filename;
+        my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velveth_" . $tr . " -t 1:" . $num_cmds . " " . $options->{qsub_script} . " " . $batch_filename;
+        set_check_record($rec, ["velvet", $tr, "velveth"], "qsub_cmd", $qsub_cmd);
+        set_check_record($rec, ["velvet", $tr, "velveth"], "cmd_file", $batch_filename);
         if ($options->{verbose}) {
             print "Qsubbing array of " . $num_cmds . " velveth commands for sample " . $rec->{sample} . "\n";
             print $qsub_cmd . "\n";
@@ -180,7 +203,7 @@ sub get_vh_qsub
             my $qsub_str = `$qsub_cmd`;
             print $qsub_str;
             my $jobid = get_jobid($qsub_str);
-            $rec->{velveth}->{$tr}->{qsub_jobid} = $jobid;
+            set_check_record($rec, ["velvet", $tr, "velveth"], "qsub_jobid", $jobid);
         }
     }
 }

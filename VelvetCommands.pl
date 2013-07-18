@@ -31,21 +31,15 @@ sub set_default_opts
 {
     my %defaults = qw(
             yaml_in yaml_files/05_readinfo.yml
-            yaml_out yaml_files/06_velvet.yml
+            yaml_out yaml_files/06_velvet_cmds.yml
             min_kmer 21 
             max_kmer 95
             trim 1
+            raw 1
             genome_length_file input_data/GenomeLengthEst.tab
             );
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
-    }
-    if ($options->{raw}) {
-        $tr = "raw";
-        $trdata = "rawdata";
-    } else {
-        $tr = "trim";
-        $trdata = "trimdata";
     }
 }
 
@@ -139,9 +133,28 @@ sub get_check_record
     return $ref;
 }
 
+sub set_check_record
+{
+    my $ref = shift;
+    my $kref = shift;
+    my $last_key = shift;
+    my $value = shift;
+    for my $key (@$kref) {
+        if (defined ($ref->{$key})) {
+            $ref = $ref->{$key};
+        } else {
+            $ref->{$key} = {};
+            $ref = $ref->{$key};
+        }
+    }
+    $ref->{$last_key} = $value;
+}
+
 sub get_coverage_vars
 {
     my $rec = shift;
+    my $trimraw = shift;
+    my $trdata = $trimraw . "data";
     print "Getting cov vars for " . $rec->{sample} . "\n";
     my $var = {};
     $var->{R1_nreads} = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
@@ -159,8 +172,8 @@ sub get_coverage_vars
     if ($pass) {
         $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
         $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
-        $rec->{velvet}->{total_coverage} = $var->{total_coverage};
-        $rec->{velvet}->{average_read_length} = $var->{avg_readlen};
+        set_check_record($rec, ["velvet", $trimraw], "total_coverage", $var->{total_coverage});
+        set_check_record($rec, ["velvet", $trimraw], "average_read_length", $var->{avg_readlen});
         return $var;
     } else {
         return '';
@@ -179,26 +192,24 @@ sub calc_exp_cov
 sub get_assembly_outdir
 {
     my $rec = shift;
-    unless (defined ($rec->{velvet})) {
-        $rec->{velvet} = {};
-    }
-    unless (defined ($rec->{velvet}->{$tr})) {
-        $rec->{velvet}->{$tr} = {};
-    }
-    my $assembly_outdir = $rec->{sample_dir} . "/assemblies/velvet/$tr";
+    my $trimraw = shift;
+    my $assembly_outdir = $rec->{sample_dir} . "/assemblies/velvet/$trimraw";
     mkpath $assembly_outdir;
-    $rec->{velvet}->{$tr}->{assembly_outdir} = $assembly_outdir;
+    set_check_record($rec, ["velvet", $trimraw], "assembly_outdir", $assembly_outdir);
     return $assembly_outdir;
 }
 
 sub get_velvet_kdir
 {
+    my $rec = shift;
+    my $trimraw = shift;
     my $assembly_outdir = shift;
     my $kmer = shift;
     my $exp_cov = shift;
-    my $kdir = $assembly_outdir . "/assem_kmer-" . $kmer . "_exp-" . $exp_cov . "_covcutoff-auto";
-    mkpath $kdir;
-    return $kdir;
+    my $kmer_dir = $assembly_outdir . "/assem_kmer-" . $kmer . "_exp-" . $exp_cov . "_covcutoff-auto";
+    mkpath $kmer_dir;
+    set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "kmer_dir", $kmer_dir);
+    return $kmer_dir;
 }
 
 sub get_kmer_bin
@@ -223,22 +234,24 @@ sub get_kmer_bin
 sub get_velveth_cmd
 {
     my $rec = shift;
+    my $trimraw = shift;
     my $kmer = shift;
     my $kmer_bin = shift;
     my $outdir = shift;
+    my $trdata = $trimraw . "data";
     my $velveth_bin = $velvet_bin_dir . "/velveth_" . $kmer_bin;
     my $r1_file = $rec->{R1}->{$trdata};
     my $r2_file = $rec->{R2}->{$trdata};
     my $velveth_cmd = $velveth_bin . " " . $outdir . " " . $kmer . 
         "  -fastq -shortPaired -create_binary -separate " . $r1_file . " " . $r2_file;
-    $rec->{velveth}->{$tr}->{cmd} = {} unless ($rec->{velveth}->{$tr}->{cmd});
-    $rec->{velveth}->{$tr}->{cmd}->{$kmer} = $velveth_cmd;
+    set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "velveth_cmd", $velveth_cmd);
     return $velveth_cmd;
 }
 
 sub get_velvetg_cmd
 {
     my $rec = shift;
+    my $trimraw = shift;
     my $exp_cov = shift;
     my $kmer = shift;
     my $kmer_bin = shift;
@@ -249,61 +262,55 @@ sub get_velvetg_cmd
     my $velvetg_cmd = $velvetg_bin . " " . $working_dir . " " .
         "-ins_length 300 -exp_cov " . $exp_cov . " " . $min_contig_opt . 
         $scaffolding_opt . " -amos_file no -cov_cutoff auto";
-    $rec->{velvetg}->{$tr}->{cmd} = {} unless ($rec->{velvetg}->{$tr}->{cmd});
-    $rec->{velvetg}->{$tr}->{cmd}->{$kmer} = $velvetg_cmd;
+    set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "velvetg_cmd", $velvetg_cmd);
     return $velvetg_cmd;
-}
-
-# keep a list of our common output dirs for each kmer of velvet assembly
-sub track_kmer_dirs
-{
-    my $rec = shift;
-    my $kmer = shift;
-    my $kmer_dir = shift;
-    $rec->{velvet}->{$tr}->{kmer_dirs} = {} unless ($rec->{velvet}->{$tr}->{kmer_dirs});
-    $rec->{velvet}->{$tr}->{kmer_dirs}->{$kmer} = $kmer_dir;
 }
 
 sub get_velvet_cmds
 {
     my $rec = shift;
+    my $trimraw = shift;
     my $cov_vars = shift;
     my $assembly_outdir = shift;
     my $kmer = shift;
     my $kmer_bin = get_kmer_bin($kmer);
     my $exp_cov = calc_exp_cov($cov_vars, $kmer);
-    my $kdir = get_velvet_kdir($assembly_outdir, $kmer, $exp_cov);
-    track_kmer_dirs($rec, $kmer, $kdir);
-    my $vh_cmd = get_velveth_cmd($rec, $kmer, $kmer_bin, $kdir);
-    my $vg_cmd = get_velvetg_cmd($rec, $exp_cov, $kmer, $kmer_bin, $kdir);
+    my $kmer_dir = get_velvet_kdir($rec, $trimraw, $assembly_outdir, $kmer, $exp_cov);
+    my $vh_cmd = get_velveth_cmd($rec, $trimraw, $kmer, $kmer_bin, $kmer_dir);
+    my $vg_cmd = get_velvetg_cmd($rec, $trimraw, $exp_cov, $kmer, $kmer_bin, $kmer_dir);
     return ($vh_cmd, $vg_cmd);
 }
 
 sub init_velvet_recs
 {
     my $rec = shift;
-    for my $key (qw(velvet velveth velvetg)) {
-        $rec->{$key} = {} unless ($rec->{$key});
-        $rec->{$key}->{$tr} = {} unless ($rec->{$key}->{$tr});
-    }
-    $rec->{velvet}->{$tr}->{min_kmer} = $options->{min_kmer};
-    $rec->{velvet}->{$tr}->{max_kmer} = $options->{max_kmer};
+    my $trimraw = shift;
+    #for my $key (qw(velvet velveth velvetg)) {
+    #    $rec->{$key} = {} unless ($rec->{$key});
+    #    $rec->{$key}->{$trimraw} = {} unless ($rec->{$key}->{$trimraw});
+    #}
+    set_check_record($rec, ["velvet", $trimraw], "min_kmer", $options->{min_kmer});
+    set_check_record($rec, ["velvet", $trimraw], "max_kmer", $options->{max_kmer});
 }
 
 sub build_assembly_cmds
 {
     for my $sample (@genomic_samples) {
-        my $rec = ($records->{$sample} ? $records->{$sample} : '');
-        unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
-        init_velvet_recs($rec);
-        my $cov_vars = get_coverage_vars($rec);
-        if ($cov_vars) {
-            my $assembly_outdir = get_assembly_outdir($rec);
-            for (my $kmer =$options->{min_kmer}; $kmer <= $options->{max_kmer}; $kmer = $kmer+2) {
-                my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $cov_vars, $assembly_outdir, $kmer);
+        for my $trimraw (qw(trim raw)) {
+            if ($options->{$trimraw}) {
+                my $rec = ($records->{$sample} ? $records->{$sample} : '');
+                unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
+                init_velvet_recs($rec, $trimraw);
+                my $cov_vars = get_coverage_vars($rec, $trimraw);
+                if ($cov_vars) {
+                    my $assembly_outdir = get_assembly_outdir($rec, $trimraw);
+                    for (my $kmer =$options->{min_kmer}; $kmer <= $options->{max_kmer}; $kmer = $kmer+2) {
+                        my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $trimraw, $cov_vars, $assembly_outdir, $kmer);
+                    }
+                } else {
+                    print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
+                }
             }
-        } else {
-            print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
         }
     }
 }

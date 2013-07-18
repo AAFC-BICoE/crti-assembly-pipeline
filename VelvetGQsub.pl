@@ -48,7 +48,7 @@ sub check_opts
             Optional:
                 --verbose
                 --sample_list <ID1,ID2,...,IDX (no spaces)>
-                --qsub_array_script <filename>
+                --qsub_script <filename>
                 --memory
                 --trim
                 --raw
@@ -102,6 +102,7 @@ sub set_check_record
             $ref = $ref->{$key};
         } else {
             $ref->{$key} = {};
+            $ref = $ref->{$key};
         }
     }
     $ref->{$last_key} = $value;
@@ -174,18 +175,22 @@ sub get_vg_kmer_cmd
 {
     my $rec = shift;
     my $kmer = shift;
-    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer_dirs", $kmer]);
-    my $cmd = get_check_record($rec, ["velvetg", $tr, "cmd", $kmer]);
+    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
+    my $cmd = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "velvetg_cmd"]);
     
     my $vh_files_exist = outfiles_exist($kdir, $vh_outfiles);
     my $vg_files_exist = outfiles_exist($kdir, $vg_outfiles);
 
     if ($vh_files_exist and !$vg_files_exist) {
-        print_verbose "Found vh files but not vg files. Running the following command:\n$cmd\n";
+        if ($cmd) {
+            print_verbose "Found vh files but not vg files. Running the following command:\n$cmd\n";
+        } else {
+            print_verbose "No command found to run for kmer " . $kmer . " sample " . $rec->{sample} . "\n";
+        }
     } elsif (!$vh_files_exist) {
         print_verbose "Need to run velveth before it's possible to run velvetg for folder $kdir\n";
         $cmd = '';
-    } else {
+    } elsif ($vh_files_exist) {
         print_verbose "Not running for this kmer - found valid velvetg output files for sample " . $rec->{sample} . " trim/raw=" . $tr . " kmer=" . $kmer . "\n";
         $cmd = '';
     }
