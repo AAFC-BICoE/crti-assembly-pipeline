@@ -17,7 +17,7 @@ sub set_default_opts
         trim 1
         verbose 0
         velvetk_infile input_data/VelvetKBest.tab
-        velvetk_outfile input_data/VelvetKBestOut.tab
+        velvetk_outfile output_files/VelvetKBestOut.tab
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -102,7 +102,11 @@ sub get_sample_list
     if ($options->{sample_list}) {
         $sample_list = [split(/,/, $options->{sample_list})];
     } else {
-        $sample_list = [keys %$records];
+        for my $sample (keys %$records) {
+            if ($records->{$sample}->{bio_type} =~ /DNA/) {
+                push (@$sample_list, $sample);
+            }
+        }
     }
     return $sample_list;
 }
@@ -125,14 +129,32 @@ sub parse_input_table
             chomp $line;
             my @fields = split(/\t/, $line);
             if (scalar @fields == 4) {
-                my ($sample, $tr, $velvetk_cmd, $best_kmer) = @fields;
-                my $rec = $records{$sample};
-                set_check_record($rec, ["velvet", $tr], "velvetk_cmd", $velvetk_cmd);
-                set_check_record($rec, ["velvet", $tr], "velvetk_best_kmer", $best_kmer);
+                my ($sample, $trimraw, $best_kmer, $velvetk_cmd) = @fields;
+                my $rec = $records->{$sample};
+                set_check_record($rec, ["velvet", $trimraw], "velvetk_cmd", $velvetk_cmd);
+                set_check_record($rec, ["velvet", $trimraw], "velvetk_best_kmer", $best_kmer);
             }
         }
     }
 }
+
+sub write_output_table
+{
+    my $records = shift;
+    my $sample_list = shift;
+    my $fname = ($options->{velvetk_outfile} ? $options->{velvetk_outfile} : '');
+    if ($fname) {
+        open (FTAB, '>', $fname) or die "Error: couldn't open file $fname\n";
+        print FTAB join("\t", qw(Sample Trim/Raw VK_Best_Kmer VK_Command));
+        for my $sample (@$sample_list) {
+            my $rec = $records->{$sample};
+            my $vk_cmd = get_check_record($rec, ["velvet", $tr, "velvetk_cmd"]);
+            my $vk_best = get_check_record($rec, ["velvet", $tr, "velvetk_best_kmer"]);
+            print FTAB join("\t", ($sample, $tr, $vk_best, $vk_cmd)) . "\n";
+        }
+    }
+}
+            
 
 sub get_velvetk_cmd
 {
@@ -146,6 +168,7 @@ sub get_velvetk_cmd
 
 gather_opts;
 my $records = LoadFile($options->{yaml_in});
+parse_input_table($records);
 my $sample_list = get_sample_list($records);
 for my $sample (@$sample_list) {
     my $rec = $records->{$sample};
@@ -162,6 +185,7 @@ for my $sample (@$sample_list) {
         print_verbose "Already found best kmer for sample $sample trim/raw $tr. Best is: " . $have_best . "\n";
     }   
 }
+write_output_table($records, $sample_list);
 DumpFile($options->{yaml_out}, $records);
 
 
