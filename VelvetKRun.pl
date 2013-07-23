@@ -43,6 +43,7 @@ sub check_opts
                 --sample_list <ID1,ID2,...,IDX (no spaces)>
                 --trim
                 --raw
+                --run
                 --velvetk_infile <filename>
                 --velvetk_outfile <filename>
                 ";
@@ -61,6 +62,7 @@ sub gather_opts
         'raw',
         'velvetk_infile=s',
         'velvetk_outfile=s',
+        'run',
         );
     set_default_opts;
     check_opts;
