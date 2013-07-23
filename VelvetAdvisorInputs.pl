@@ -148,8 +148,8 @@ for my $sample (@$sample_list) {
         my $trdata = $tr . "data";
         my $advised_kmer = get_check_record($rec, ["velvet", $tr, "velvet_advisor_best_kmer"]);
         unless ($advised_kmer) {
-            my $r1_numreads = get_check_record($rec, ["data_stats", "R1", $trdata]);
-            my $r2_numreads = get_check_record($rec, ["data_stats", "R2", $trdata]);
+            my $r1_numreads = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
+            my $r2_numreads = get_check_record($rec, ["data_stats", "R2", $trdata, "num_reads"]);
             my $total_numreads = '';
             if ($r1_numreads and $r2_numreads) {
                 $total_numreads = ($r1_numreads + $r2_numreads) / 1000000;
