@@ -15,10 +15,6 @@ use Getopt::Long;
 my $options = {};
 my $records = {};
 my @genomic_samples = ();
-my @glen_col_headers = qw(IL_Species IL_Genotype IL_Biomaterial IL_Biomaterial_type 
-    IL_Sample_ID IL_Kingdom IL_Resident_Expert RG_Species RG_Strain RG_Est_Genome_Length
-     RG_Source RG_Citation RG_URL RG_Notes);
-
 my $tr;
 my $trdata;
 my $velvet_bin_dir = "/opt/bio/velvet";
@@ -30,13 +26,14 @@ my @kbins = (0, 31, 63, 127, 145);
 sub set_default_opts
 {
     my %defaults = qw(
-            yaml_in yaml_files/05_readinfo.yml
-            yaml_out yaml_files/06_velvet_cmds.yml
+            yaml_in yaml_files/07_velvetk.yml
+            yaml_out yaml_files/08_velvet_cmds.yml
             min_kmer 21 
             max_kmer 95
             trim 1
             raw 1
-            genome_length_file input_data/GenomeLengthEst.tab
+            use_velvetk 1
+            velvetk_radius 6
             );
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
@@ -48,15 +45,14 @@ sub check_opts
     unless ($options->{yaml_in} and $options->{yaml_out}) {
         die "Usage: $0 -i <yaml input file> -o <yaml output file>
             Optional:
-                --genome_length_file <filename>
                 --trim
                 --raw
                 --submit
                 --verbose
                 --min_kmer <value (default 21)>
                 --max_kmer <value (default 95)>
-                --vh_batch_file <filename>
-                --vg_batch_file <filename>
+                --use_velvetk
+                --velvetk_radius <nearby kmers max>
                 ";
     }
 }
@@ -67,47 +63,17 @@ sub gather_opts
     GetOptions($options,
             'yaml_in|i=s',
             'yaml_out|o=s',
-            'genome_length_file|g=s',
             'trim',
             'raw',
             'submit',
             'verbose',
             'min_kmer',
             'max_kmer',
-            'vh_batch_file=s',
-            'vg_batch_file=s',
+            'use_velvetk',
+            'velvetk_radius=s',
             );
     set_default_opts;
     check_opts;
-}
-
-sub parse_genome_lengths
-{
-    my $fname = ($options->{genome_length_file} ? $options->{genome_length_file} : '');
-    if ($fname) {
-        open (FGLEN, '<', $fname) or die "Error: couldn't open file $fname\n";
-        <FGLEN>; <FGLEN>; # Skip first two col header lines.
-        while (my $line = <FGLEN>) {
-            chomp $line;
-            my @fields = split(/\t/, $line);
-            my %fh = map { $glen_col_headers[$_] => ($fields[$_] ? $fields[$_] : '') } (0..$#glen_col_headers);
-            my $sample = $fh{IL_Sample_ID};
-            $sample =~ s/\s+//g;
-            my $rec = ($records->{$sample} ? $records->{$sample} : '');
-            if ($rec) {
-                $rec->{related_genome_length} = {};
-                my $rgl_ref = $rec->{related_genome_length};
-                for my $ch (@glen_col_headers) {
-                    if ($ch =~ /^RG/) {
-                        $rgl_ref->{$ch} = $fh{$ch};
-                    }
-                }
-            } else {
-                print "Warning: in file $fname, sample $sample was not found in input yaml file.\n";
-            }
-        }
-        close (FGLEN);
-    }
 }
 
 sub get_genomic_records
@@ -281,17 +247,38 @@ sub get_velvet_cmds
     return ($vh_cmd, $vg_cmd);
 }
 
-sub init_velvet_recs
+sub get_kmer_range
 {
     my $rec = shift;
     my $trimraw = shift;
-    #for my $key (qw(velvet velveth velvetg)) {
-    #    $rec->{$key} = {} unless ($rec->{$key});
-    #    $rec->{$key}->{$trimraw} = {} unless ($rec->{$key}->{$trimraw});
-    #}
+    my $kmer_range = [];
+    if ($options->{use_velvetk} and $options->{velvetk_radius}) {
+        my $velvetk_best = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
+        my $rad = $options->{velvetk_radius} * 2;
+        if ($velvetk_best =~ /^\s*\d+\s*$/ and $rad =~ /^\s*\d+\s*$/) {
+            if ($velvetk_best - $rad < 21) {
+                $options->{min_kmer} = 21;
+            } else {
+                $options->{min_kmer} = $velvetk_best - $rad;
+            }
+            if ($velvetk_best + $rad > 101) {
+                $options->{max_kmer} = 101;
+            } else {
+                $options->{max_kmer} = $velvetk_best + $rad;
+            }
+        } else {
+            # If no velvetk value found, don't create any commands.
+            $options->{min_kmer} = 1;
+            $options->{max_kmer} = 0;
+        }
+    }
     set_check_record($rec, ["velvet", $trimraw], "min_kmer", $options->{min_kmer});
     set_check_record($rec, ["velvet", $trimraw], "max_kmer", $options->{max_kmer});
-}
+    for (my $i = $options->{min_kmer}; $i <= $options->{max_kmer}; $i = $i+2) {
+        push (@$kmer_range, $i);
+    }
+    return $kmer_range;
+}        
 
 sub build_assembly_cmds
 {
@@ -300,11 +287,11 @@ sub build_assembly_cmds
             if ($options->{$trimraw}) {
                 my $rec = ($records->{$sample} ? $records->{$sample} : '');
                 unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
-                init_velvet_recs($rec, $trimraw);
                 my $cov_vars = get_coverage_vars($rec, $trimraw);
                 if ($cov_vars) {
                     my $assembly_outdir = get_assembly_outdir($rec, $trimraw);
-                    for (my $kmer =$options->{min_kmer}; $kmer <= $options->{max_kmer}; $kmer = $kmer+2) {
+                    my $kmer_range = get_kmer_range($rec, $trimraw);
+                    for my $kmer (@$kmer_range) {
                         my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $trimraw, $cov_vars, $assembly_outdir, $kmer);
                     }
                 } else {
@@ -318,6 +305,5 @@ sub build_assembly_cmds
 gather_opts;
 $records = LoadFile($options->{yaml_in});
 get_genomic_records;
-parse_genome_lengths;
 build_assembly_cmds;
 DumpFile($options->{yaml_out}, $records);

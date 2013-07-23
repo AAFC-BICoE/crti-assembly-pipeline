@@ -12,10 +12,12 @@ my $trdata;
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/07_velveth_qsub.yml
-        yaml_out yaml_files/08_velvetg_qsub.yml
+        yaml_in yaml_files/06_genome_lengths.yml
+        yaml_out yaml_files/07_velvetk.yml
         trim 1
+        raw 0
         verbose 0
+        run 0
         velvetk_infile input_data/VelvetKBest.tab
         velvetk_outfile output_files/VelvetKBestOut.tab
         );
@@ -145,7 +147,7 @@ sub write_output_table
     my $fname = ($options->{velvetk_outfile} ? $options->{velvetk_outfile} : '');
     if ($fname) {
         open (FTAB, '>', $fname) or die "Error: couldn't open file $fname\n";
-        print FTAB join("\t", qw(Sample Trim/Raw VK_Best_Kmer VK_Command));
+        print FTAB join("\t", qw(Sample Trim/Raw VK_Best_Kmer VK_Command)) . "\n";
         for my $sample (@$sample_list) {
             my $rec = $records->{$sample};
             my $vk_cmd = get_check_record($rec, ["velvet", $tr, "velvetk_cmd"]);
@@ -177,10 +179,12 @@ for my $sample (@$sample_list) {
         my $vk_cmd = get_velvetk_cmd($rec);
         print_verbose "Running command:\n" . $vk_cmd . "\n";
         #my $best = 0;
-        my $best = `$vk_cmd`;
-        chomp $best;
-        print_verbose "velvetk.pl found best kmer: " . $best . "\n";
-        set_check_record($rec, ["velvet", $tr], "velvetk_best_kmer", $best);
+        if ($options->{run}) {
+            my $best = `$vk_cmd`;
+            chomp $best;
+            print_verbose "velvetk.pl found best kmer: " . $best . "\n";
+            set_check_record($rec, ["velvet", $tr], "velvetk_best_kmer", $best);
+        }
     } else {
         print_verbose "Already found best kmer for sample $sample trim/raw $tr. Best is: " . $have_best . "\n";
     }   
