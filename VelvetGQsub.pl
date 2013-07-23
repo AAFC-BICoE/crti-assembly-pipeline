@@ -21,10 +21,9 @@ my $vg_cmds = {};
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/07_velveth_qsub.yml
-        yaml_out yaml_files/08_velvetg_qsub.yml
+        yaml_in yaml_files/09_velveth_qsub_target.yml
+        yaml_out yaml_files/10_velvetg_qsub.yml
         qsub_script qsub_script.sh
-        vg_batch_dir qsub_files/04_vg_cmds
         trim 1
         verbose 0
         submit 0

@@ -20,11 +20,11 @@ my $vh_cmds = {};
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/06_velvet_cmds.yml
-        yaml_out yaml_files/07_velveth_qsub_target.yml
+        yaml_in yaml_files/08_velvet_cmds.yml
+        yaml_out yaml_files/09_velveth_qsub_target.yml
         qsub_script qsub_script.sh
         trim 0
-        raw 1
+        raw 0
         verbose 0
         submit 0
         submit_max 0
@@ -39,7 +39,7 @@ sub set_default_opts
         $tr = "trim";
         $trdata = "trimdata";
     }
-    $options->{qsub_opts} = $options->{qsub_opts} . " -p -500 "; # . -N velvet_hg ";
+    #$options->{qsub_opts} = $options->{qsub_opts} . " -p -500 "; # . -N velvet_hg ";
 }
 
 sub check_opts
@@ -200,7 +200,7 @@ sub do_host_qsub
     my $hold_jid = shift;
     my $hold_param_str = ($hold_jid ? " -hold_jid " . $hold_jid . " " : "");
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velveth_" . $tr . 
-            " -l h=" . $host . " -p -400 " . $hold_param_str . $options->{qsub_script} . " '" . $cmd . "'";
+            " -l h=" . $host . "  " . $hold_param_str . $options->{qsub_script} . " '" . $cmd . "'";
     my ($jobid, $qsub_str) = ('','');
     print $qsub_cmd . "\n";
     if ($options->{submit}) {
@@ -217,7 +217,7 @@ sub qsub_cmds
     my $slots = shift;
     my $num_slots = scalar @$slots;
     my @holds = ();
-    push (@holds, 72429) for (1..$num_slots);
+    push (@holds, 0) for (1..$num_slots);
     
     my $i = 0;
     for my $sample (keys %$vh_cmds) {
