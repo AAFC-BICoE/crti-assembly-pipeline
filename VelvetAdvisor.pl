@@ -15,8 +15,8 @@ sub set_default_opts
         yaml_out yaml_files/07_velvet_advisor.yml
         trim 1
         verbose 0
-        advisor_infile input_data/VelvetAdvisorBest.tab
-        advisor_outfile output_files/VelvetAdvisorBestOut.tab
+        advisor_infile input_data/VelvetAdvisorKmers.tab
+        advisor_outfile output_files/VelvetAdvisorKmerOut.tab
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -115,10 +115,8 @@ sub parse_input_table
         <FTAB>; #skip first line.
         while (my $line = <FTAB>) {
             chomp $line;
-            print "Line $.\n";
             my @fields = split(/\t/, $line);
             if (scalar @fields == 6) {
-                print "Parsing!\n";
                 my ($sample, $trimraw, $num_reads, $avg_readlen, $est_gen_len, $advisor_best_kmer) = @fields;
                 my $rec = $records->{$sample};
                 set_check_record($rec, ["velvet", $trimraw], "velvet_advisor_best_kmer", $advisor_best_kmer);
@@ -166,14 +164,18 @@ sub write_genome_data
                 print FOUT $out_line . "\n";
             }
         }
+        close (FOUT);
     }
-    close (FOUT);
 }
 
-gather_opts;
-my $records = LoadFile($options->{yaml_in});
-my $sample_list = get_sample_list($records);
-parse_input_table($records);
-write_genome_data;
-DumpFile($options->{yaml_out}, $records);
+sub run_all
+{
+    gather_opts;
+    my $records = LoadFile($options->{yaml_in});
+    my $sample_list = get_sample_list($records);
+    parse_input_table($records);
+    write_genome_data($records, $sample_list);
+    DumpFile($options->{yaml_out}, $records);
+}
 
+run_all;

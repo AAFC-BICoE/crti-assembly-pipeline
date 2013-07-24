@@ -13,8 +13,8 @@ my @vh_outputs = qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps); # output fi
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/08_velvet_cmds.yml
-        yaml_out yaml_files/09_velveth_qsub_target.yml
+        yaml_in yaml_files/09_velvet_cmds.yml
+        yaml_out yaml_files/10_velveth_qsub_target.yml
         qsub_script qsub_script.sh
         trim 0
         raw 0

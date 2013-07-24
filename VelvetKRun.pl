@@ -10,8 +10,8 @@ my $velvetk_bin = "./velvetk.pl";
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/06_genome_lengths.yml
-        yaml_out yaml_files/07_velvetk.yml
+        yaml_in yaml_files/07_velvet_advisor.yml
+        yaml_out yaml_files/08_velvetk.yml
         trim 1
         raw 0
         verbose 0

@@ -26,8 +26,8 @@ my @kbins = (0, 31, 63, 127, 145);
 sub set_default_opts
 {
     my %defaults = qw(
-            yaml_in yaml_files/07_velvetk.yml
-            yaml_out yaml_files/08_velvet_cmds.yml
+            yaml_in yaml_files/08_velvetk.yml
+            yaml_out yaml_files/09_velvet_cmds.yml
             min_kmer 21 
             max_kmer 95
             trim 1
