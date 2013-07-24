@@ -2,35 +2,25 @@
 use strict;
 use warnings;
 use Getopt::Long;
-
 use YAML::XS qw (LoadFile DumpFile);
 
 my $options = {};
-my $velvetk_bin = "./velvetk.pl";
-#my $tr;
-#my $trdata;
+my @col_headers = ("Sample", "Trim/raw", "Num reads (M)", "Avg read length (bp)", 
+        "Est. Genome Size (Mbp)", "Advisor k-mer");
 
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/07_velveth_qsub.yml
-        yaml_out yaml_files/08_velvetg_qsub.yml
+        yaml_in yaml_files/06_genome_lengths.yml
+        yaml_out yaml_files/07_velvet_advisor.yml
         trim 1
         verbose 0
         advisor_infile input_data/VelvetAdvisorBest.tab
-        velvetk_outfile output_files/VelvetAdvisorBestOut.tab
+        advisor_outfile output_files/VelvetAdvisorBestOut.tab
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
     }
-    #if ($options->{raw}) {
-    #    $tr = "raw";
-    #    $trdata = "rawdata";
-    #} else {
-    #    $tr = "trim";
-    #    $trdata = "trimdata";
-    #}
-    $options->{qsub_opts} = $options->{qsub_opts} . ""; # . -N velvet_hg ";
 }
 
 sub check_opts
@@ -50,7 +40,6 @@ sub check_opts
 
 sub gather_opts
 {
-    $options->{qsub_opts} = '';
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
@@ -120,54 +109,71 @@ sub print_verbose
 sub parse_input_table
 {
     my $records = shift;
-    my $fname = ($options->{velvetk_infile} ? $options->{velvetk_infile} : '');
+    my $fname = ($options->{advisor_infile} ? $options->{advisor_infile} : '');
     if ($fname) {
         open (FTAB, '<', $fname) or die "Error: couldn't open file $fname\n";
         <FTAB>; #skip first line.
         while (my $line = <FTAB>) {
             chomp $line;
+            print "Line $.\n";
             my @fields = split(/\t/, $line);
-            if (scalar @fields == 3) {
-                my ($sample, $trimraw, $advisor_best_kmer) = @fields;
+            if (scalar @fields == 6) {
+                print "Parsing!\n";
+                my ($sample, $trimraw, $num_reads, $avg_readlen, $est_gen_len, $advisor_best_kmer) = @fields;
                 my $rec = $records->{$sample};
                 set_check_record($rec, ["velvet", $trimraw], "velvet_advisor_best_kmer", $advisor_best_kmer);
+            } else {
+                print_verbose "Couldn't parse input line $.:\n$line\n";
             }
         }
     }
+}
+
+sub pull_genome_data
+{
+    my $rec = shift;
+    my $sample = shift;
+    my $tr = shift;
+    my $trdata = $tr . "data";
+    my $advisor_kmer = get_check_record($rec, ["velvet", $tr, "velvet_advisor_best_kmer"]);
+    my $r1_numreads = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
+    my $r2_numreads = get_check_record($rec, ["data_stats", "R2", $trdata, "num_reads"]);
+    my $total_numreads = '';
+    if ($r1_numreads and $r2_numreads) {
+        $total_numreads = ($r1_numreads + $r2_numreads) / 1000000;
+    }
+    my $avg_readlen = get_check_record($rec, ["velvet", $tr, "average_read_length"]);
+    my $genome_len = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
+    if ($genome_len) {
+        $genome_len = $genome_len / 1000000;
+    }
+    my $out_str = join ("\t", ($sample, $tr, $total_numreads, $avg_readlen, $genome_len, $advisor_kmer));
+    return $out_str;
+}
+
+sub write_genome_data
+{
+    my $records = shift;
+    my $sample_list = shift;
+    my $fname = ($options->{advisor_outfile} ? $options->{advisor_outfile} : '');
+    if ($fname) {
+        open (FOUT, '>', $fname) or die "Error: couldn't open output file $fname.\n";
+        print FOUT join ("\t", @col_headers) . "\n";
+        for my $sample (@$sample_list) {
+            my $rec = $records->{$sample};
+            for my $tr (qw(trim raw)) {
+                my $out_line = pull_genome_data($rec, $sample, $tr);
+                print FOUT $out_line . "\n";
+            }
+        }
+    }
+    close (FOUT);
 }
 
 gather_opts;
 my $records = LoadFile($options->{yaml_in});
 my $sample_list = get_sample_list($records);
 parse_input_table($records);
-
-print join ("\t", (qw`Sample Trim/raw Num_reads_(M) Avg_readlen_(bp) Est_genome_size_(Mbp) Advised_kmer`)) . "\n";
-for my $sample (@$sample_list) {
-    my $rec = $records->{$sample};
-    for my $tr (qw(trim raw)) {
-        my $trdata = $tr . "data";
-        my $advised_kmer = get_check_record($rec, ["velvet", $tr, "velvet_advisor_best_kmer"]);
-        unless ($advised_kmer) {
-            my $r1_numreads = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
-            my $r2_numreads = get_check_record($rec, ["data_stats", "R2", $trdata, "num_reads"]);
-            my $total_numreads = '';
-            if ($r1_numreads and $r2_numreads) {
-                $total_numreads = ($r1_numreads + $r2_numreads) / 1000000;
-            }
-            my $avg_readlen = get_check_record($rec, ["velvet", $tr, "average_read_length"]);
-            my $genome_len = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
-            if ($genome_len) {
-                $genome_len = $genome_len / 1000000;
-            }
-            #print "Sample: $sample\n";
-            #print "Trim/raw: $tr\n";
-            #print "Number of reads (millions): " . $total_numreads . "\n";
-            #print "Average read length (bp): " . $avg_readlen . "\n";
-            #print "Est genome size (millions of bp): " . $genom_len . "\n";
-            print join ("\t", ($sample, $tr, $total_numreads, $avg_readlen, $genome_len)) . "\n";
-        }
-    }
-}
-
-
+write_genome_data;
+DumpFile($options->{yaml_out}, $records);
 
