@@ -17,8 +17,8 @@ my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/08_velvetg_qsub.yml
-        yaml_out yaml_files/09_velvet_n50.yml
+        yaml_in yaml_files/10_velvetg_qsub.yml
+        yaml_out yaml_files/11_velvet_stats.yml
         verbose 0
         );
     for my $kdef (keys %defaults) {

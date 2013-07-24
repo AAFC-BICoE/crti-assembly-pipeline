@@ -6,8 +6,6 @@ use YAML::XS qw (LoadFile DumpFile);
 
 my $options = {};
 my $velvetk_bin = "./velvetk.pl";
-my $tr;
-my $trdata;
 
 sub set_default_opts
 {
@@ -24,14 +22,6 @@ sub set_default_opts
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
     }
-    if ($options->{raw}) {
-        $tr = "raw";
-        $trdata = "rawdata";
-    } else {
-        $tr = "trim";
-        $trdata = "trimdata";
-    }
-    $options->{qsub_opts} = $options->{qsub_opts} . ""; # . -N velvet_hg ";
 }
 
 sub check_opts
@@ -52,7 +42,6 @@ sub check_opts
 
 sub gather_opts
 {
-    $options->{qsub_opts} = '';
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
@@ -145,16 +134,17 @@ sub parse_input_table
 sub write_output_table
 {
     my $records = shift;
-    my $sample_list = shift;
     my $fname = ($options->{velvetk_outfile} ? $options->{velvetk_outfile} : '');
     if ($fname) {
         open (FTAB, '>', $fname) or die "Error: couldn't open file $fname\n";
         print FTAB join("\t", qw(Sample Trim/Raw VK_Best_Kmer VK_Command)) . "\n";
-        for my $sample (@$sample_list) {
-            my $rec = $records->{$sample};
-            my $vk_cmd = get_check_record($rec, ["velvet", $tr, "velvetk_cmd"]);
-            my $vk_best = get_check_record($rec, ["velvet", $tr, "velvetk_best_kmer"]);
-            print FTAB join("\t", ($sample, $tr, $vk_best, $vk_cmd)) . "\n";
+        for my $sample (keys %$records) {
+            for my $trimraw (qw(trim raw)) {
+                my $rec = $records->{$sample};
+                my $vk_cmd = get_check_record($rec, ["velvet", $trimraw, "velvetk_cmd"]);
+                my $vk_best = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
+                print FTAB join("\t", ($sample, $trimraw, $vk_best, $vk_cmd)) . "\n";
+            }
         }
     }
 }
@@ -163,35 +153,61 @@ sub write_output_table
 sub get_velvetk_cmd
 {
     my $rec = shift;
+    my $trimraw = shift;
+    my $trimdata = $trimraw . "data";
     my $genome_len = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
-    my $r1data = get_check_record($rec, ["R1", $trdata]);
-    my $r2data = get_check_record($rec, ["R2", $trdata]);
+    my $r1data = get_check_record($rec, ["R1", $trimdata]);
+    my $r2data = get_check_record($rec, ["R2", $trimdata]);
     my $velvetk_cmd = $velvetk_bin . " --size " . $genome_len . " --best $r1data $r2data";
-    set_check_record($rec, ["velvet", $tr], "velvetk_cmd", $velvetk_cmd);
+    set_check_record($rec, ["velvet", $trimraw], "velvetk_cmd", $velvetk_cmd);
 }
 
-gather_opts;
-my $records = LoadFile($options->{yaml_in});
-parse_input_table($records);
-my $sample_list = get_sample_list($records);
-for my $sample (@$sample_list) {
-    my $rec = $records->{$sample};
-    my $have_best = get_check_record($rec, ["velvet", $tr, "velvetk_best_kmer"]);
+sub get_velvetk_sample
+{
+    my $rec = shift;
+    my $trimraw = shift;
+    my $sample = $rec->{sample};
+    my $have_best = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
     unless ($have_best) {
-        my $vk_cmd = get_velvetk_cmd($rec);
+        my $vk_cmd = get_velvetk_cmd($rec, $trimraw);
         print_verbose "Running command:\n" . $vk_cmd . "\n";
         #my $best = 0;
         if ($options->{run}) {
             my $best = `$vk_cmd`;
             chomp $best;
             print_verbose "velvetk.pl found best kmer: " . $best . "\n";
-            set_check_record($rec, ["velvet", $tr], "velvetk_best_kmer", $best);
+            set_check_record($rec, ["velvet", $trimraw], "velvetk_best_kmer", $best);
         }
     } else {
-        print_verbose "Already found best kmer for sample $sample trim/raw $tr. Best is: " . $have_best . "\n";
-    }   
+        print_verbose "Already found best kmer for sample $sample trim/raw $trimraw. Best is: " . $have_best . "\n";
+    }
+} 
+
+sub run_velvetk
+{
+    my $records = shift;
+    my $sample_list = shift;
+    for my $sample (@$sample_list) {
+        my $rec = $records->{$sample};
+        for my $trimraw (qw(trim raw)) {
+            if ($options->{$trimraw}) {
+                get_velvetk_sample($rec, $trimraw);
+            }
+        }   
+    }
+}  
+
+sub run_all
+{
+    gather_opts;
+    my $records = LoadFile($options->{yaml_in});
+    parse_input_table($records);
+    my $sample_list = get_sample_list($records);
+    run_velvetk($records, $sample_list);
+    write_output_table($records);
+    DumpFile($options->{yaml_out}, $records);
 }
-write_output_table($records, $sample_list);
-DumpFile($options->{yaml_out}, $records);
+
+run_all;
 
 

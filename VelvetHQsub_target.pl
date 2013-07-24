@@ -5,17 +5,10 @@ use Getopt::Long;
 use YAML::XS qw (LoadFile DumpFile);
 
 my $options = {};
-my $records = {};
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
 my @sample_list = ();
-my $tr;
-my $trdata;
+my @vh_outputs = qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps); # output files created by velveth
 
-
-# output files created by velveth
-my @vh_outputs = qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps);
-
-my $vh_cmds = {};
 
 sub set_default_opts
 {
@@ -31,13 +24,6 @@ sub set_default_opts
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
-    }
-    if ($options->{raw}) {
-        $tr = "raw";
-        $trdata = "rawdata";
-    } else {
-        $tr = "trim";
-        $trdata = "trimdata";
     }
     #$options->{qsub_opts} = $options->{qsub_opts} . " -p -500 "; # . -N velvet_hg ";
 }
@@ -108,12 +94,20 @@ sub set_check_record
     $ref->{$last_key} = $value;
 }
 
+sub print_verbose
+{
+    if ($options->{verbose}) {
+        print (@_);
+    }
+}
+
 # Get an array of all the kmer values
 sub get_kmer_range
 {
     my $rec = shift;
-    my $kmin = get_check_record($rec, ["velvet", $tr, "min_kmer"]);
-    my $kmax = get_check_record($rec, ["velvet", $tr, "max_kmer"]);
+    my $trimraw = shift;
+    my $kmin = get_check_record($rec, ["velvet", $trimraw, "min_kmer"]);
+    my $kmax = get_check_record($rec, ["velvet", $trimraw, "max_kmer"]);
     my $krange = [];
     if ($kmin =~ /^\d+$/ and $kmax =~ /^\d+$/) {
         for (my $kmer = $kmin; $kmer <= $kmax; $kmer = $kmer + 2) {
@@ -121,40 +115,6 @@ sub get_kmer_range
         }
     }
     return $krange;
-}
-
-# Check if:
-# 1. kmer dir exists
-# 2. all output files have been created
-# 3. No file size is 0.
-sub check_vh_kmer_cmd
-{
-    my $rec = shift;
-    my $kmer = shift;
-    #my $kdir = get_check_record($rec, ["velvet", $tr, "kmer_dirs", $kmer]);
-    #my $cmd = get_check_record($rec, ["velveth", $tr, "cmd", $kmer]);
-    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
-    my $cmd = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "velveth_cmd"]);
-    
-    my $outputs_exist = 1;
-    for my $fname (@vh_outputs) {
-        my $fpath = $kdir . "/" . $fname;
-        if (!-e $fpath or !-s $fpath) { # file nonexistent or empty
-            $outputs_exist = 0;
-        }
-    }
-    if (!$outputs_exist) {
-        if ($options->{verbose}) {
-            print "sample: " . $rec->{sample} . ":\n";
-            print "Found missing/empty output files, running the following command:\n$cmd\n";
-        }
-        # delete any files that do exist first?
-        return $cmd;
-    }
-    if ($options->{verbose}) {
-        print "Not running for this kmer - found valid output files for sample " . $rec->{sample} . " trim/raw=" . $tr . " kmer=" . $kmer . "\n";
-    }
-    return '';
 }
 
 sub get_jobid
@@ -167,19 +127,33 @@ sub get_jobid
     return $hold_jobid;
 }
 
-sub get_vh_sample_cmds
+# Return the velveth command to run, unless the three following conditions are met:
+# 1. kmer dir exists
+# 2. all output files have been created
+# 3. No file size is 0.
+sub check_vh_cmd
 {
     my $rec = shift;
-    my $sample = $rec->{sample};
-    my $krange = get_kmer_range($rec);
-    #my $vh_cmds = [];
-    for my $kmer (@$krange) {
-        my $cmd = check_vh_kmer_cmd($rec, $kmer);
-        if ($cmd) {
-            $vh_cmds->{$sample}->{$kmer} = $cmd;
+    my $trimraw = shift;
+    my $kmer = shift;
+    my $kdir = get_check_record($rec, ["velvet", $trimraw, "kmer", $kmer, "kmer_dir"]);
+    my $cmd = get_check_record($rec, ["velvet", $trimraw, "kmer", $kmer, "velveth_cmd"]);
+    
+    my $outputs_exist = 1;
+    for my $fname (@vh_outputs) {
+        my $fpath = $kdir . "/" . $fname;
+        if (!-e $fpath or !-s $fpath) { # file nonexistent or empty
+            $outputs_exist = 0;
         }
     }
-
+    if (!$outputs_exist) {
+        print_verbose "sample: " . $rec->{sample} . ":\n";
+        print_verbose "Found missing/empty output files, running the following command:\n$cmd\n";
+    } else {
+        print_verbose "Not running for this kmer - found valid output files for sample " . $rec->{sample} . " trim/raw=" . $trimraw . " kmer=" . $kmer . "\n";
+        $cmd = '';
+    }
+    return $cmd;
 }
 
 sub get_processor_slots
@@ -195,56 +169,76 @@ sub get_processor_slots
 
 sub do_host_qsub
 {
+    my $trimraw = shift;
     my $host = shift;
     my $cmd = shift;
     my $hold_jid = shift;
     my $hold_param_str = ($hold_jid ? " -hold_jid " . $hold_jid . " " : "");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velveth_" . $tr . 
+    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velveth_" . $trimraw . 
             " -l h=" . $host . "  " . $hold_param_str . $options->{qsub_script} . " '" . $cmd . "'";
     my ($jobid, $qsub_str) = ('','');
     print $qsub_cmd . "\n";
     if ($options->{submit}) {
         $qsub_str = `$qsub_cmd`;
-        print $qsub_str . "\n";
+        print_verbose $qsub_str . "\n";
         $jobid = get_jobid($qsub_str);
-        print "Got jobid " . $jobid . "\n";
+        print_verbose "Got jobid " . $jobid . "\n";
     }
     return ($qsub_cmd, $jobid);
 }
 
 sub qsub_cmds
 {
-    my $slots = shift;
+    my $records = shift;
+    my $qsub_param_list = shift;
+    my $slots = get_processor_slots;
     my $num_slots = scalar @$slots;
     my @holds = ();
     push (@holds, 0) for (1..$num_slots);
-    
-    my $i = 0;
-    for my $sample (keys %$vh_cmds) {
-        my $vh_sample_cmds = $vh_cmds->{$sample};
-        for my $kmer (keys %$vh_sample_cmds) {
-            my $j = $i % $num_slots;
-            my $cmd = $vh_sample_cmds->{$kmer};
-            my $host = "biocomp-0-" . $slots->[$j];
-            my ($qsub_cmd, $jobid) = do_host_qsub($host, $cmd, $holds[$j]);
-            $holds[$j] = $jobid;
-            set_check_record($records, [$sample, "velvet", $tr, "kmer", $kmer], "velveth_qsub_cmd", $qsub_cmd);
-            set_check_record($records, [$sample, "velvet", $tr, "kmer", $kmer], "velveth_qsub_jobid", $jobid);
-            $i++;
-            last if ($options->{submit_max} and $i >= $options->{submit_max});
-        }
-        last if ($options->{submit_max} and $i >= $options->{submit_max});
+    my $num_to_submit = scalar @$qsub_param_list;
+    $num_to_submit = $options->{submit_max} if ($options->{submit_max} < $num_to_submit);
+    for (my $i=0; $i<$num_to_submit; $i++) {
+        my ($sample, $trimraw, $kmer, $cmd) = @{$qsub_param_list->[$i]};
+        my $j = $i % $num_slots;
+        my $host = "biocomp-0-" . $slots->[$j];
+        my ($qsub_cmd, $jobid) = do_host_qsub($trimraw, $host, $cmd, $holds[$j]);
+        $holds[$j] = $jobid;
+        set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velveth_qsub_cmd", $qsub_cmd);
+        set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velveth_qsub_jobid", $jobid);
     }
 }
 
-gather_opts;
-$records = LoadFile($options->{yaml_in});
-for my $sample (keys %$records) {
-    my $rec = $records->{$sample};
-    get_vh_sample_cmds($rec);
+# Returns a list of sample/trimraw/kmer/velveth command combos where
+# no valid output files were found - i.e. velveth needs to be run.
+sub get_all_cmds
+{
+    my $records = shift;
+    my $qsub_param_list = [];
+    for my $sample (keys %$records) {
+        my $rec = $records->{$sample};
+        for my $trimraw (qw(trim raw)) {
+            if ($options->{$trimraw}) {
+                my $krange = get_kmer_range($rec, $trimraw);
+                for my $kmer (@$krange) {
+                    my $cmd = check_vh_cmd($rec, $trimraw, $kmer);
+                    if ($cmd) {
+                        push (@$qsub_param_list, [$sample, $trimraw, $kmer, $cmd]);
+                    }
+                }
+            }
+        }
+    }
+    return $qsub_param_list;
 }
-my $slots = get_processor_slots;
-qsub_cmds($slots);
-DumpFile($options->{yaml_out}, $records);
 
+sub run_all
+{
+    gather_opts;
+    my $records = LoadFile($options->{yaml_in});
+    my $qsub_param_list = get_all_cmds($records);
+    qsub_cmds($records, $qsub_param_list);
+    DumpFile($options->{yaml_out}, $records);
+}
+
+run_all;
 
