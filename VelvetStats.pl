@@ -7,15 +7,15 @@ use YAML::XS qw (LoadFile DumpFile);
 my $options = {};
 # output files created by velvetg
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
-my @col_headers = ("Sample", "Trim/raw", "Total num reads (M)", "Avg. read len (bp)",
+my @col_headers = ("Sample", "Trim/raw", "Species", "Seq type", "Total num reads (M)", "Avg. read len (bp)",
         "Min kmer", "Max kmer", "Best kmer", "Best N50", "VelvetK kmer", "VelvetK N50",
-        "Advisor kmer", "Advisor N50"); 
+        "Advisor kmer", "Advisor N50", "Missing kmers"); 
 
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/10_velvetg_qsub.yml
-        yaml_out yaml_files/11_velvet_stats.yml
+        yaml_in yaml_files/11_velvetg_qsub.yml
+        yaml_out yaml_files/12_velvet_stats.yml
         stats_outfile output_files/VelvetStats.tab
         verbose 0
         );
@@ -96,6 +96,18 @@ sub get_kmer_range
     return $krange;
 }
 
+sub get_genomic_samples
+{
+    my $records = shift;
+    my $sample_list = [];
+    for my $sample (keys %$records) {
+        if ($records->{$sample}->{bio_type} =~ /DNA/) {
+            push (@$sample_list, $sample);
+        }
+    }
+    return $sample_list;
+}
+
 sub parse_log_n50
 {
     my $rec = shift;
@@ -149,7 +161,8 @@ sub get_max_kmer
 sub get_all_max
 {
     my $records = shift;
-    for my $sample (keys %$records) {
+    my $sample_list = shift;
+    for my $sample (@$sample_list) {
         print $sample . "\n";
         my $rec = $records->{$sample};
         for my $tr (qw(trim raw)) {
@@ -158,12 +171,33 @@ sub get_all_max
     }
 }   
 
+sub get_missing_kmers
+{
+    my $rec = shift;
+    my $trimraw = shift;
+    my $kmin = shift;
+    my $kmax = shift;
+    my @missing = ();
+    if ($kmin and $kmax) {
+        for (my $k=$kmin; $k<=$kmax; $k+= 2) {
+            my $n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $k, "N50"]);
+            unless ($n50 =~ /\d/) {
+                push (@missing, $k);
+            }
+        }
+    }
+    return join(",", @missing);
+}
+
 sub get_stats_line
 {
     my $rec = shift;
     my $trimraw = shift;
     my $trimdata = $trimraw . "data";
-    my $sample = ''; #$rec->{sample};
+    my $sample = $rec->{sample};
+    
+    my $species = $rec->{species};
+    my $bio_type = $rec->{bio_type};
     
     my $r1_numreads = get_check_record($rec, ["data_stats", "R1", $trimdata, "num_reads"]);
     my $r2_numreads = get_check_record($rec, ["data_stats", "R2", $trimdata, "num_reads"]);
@@ -181,13 +215,13 @@ sub get_stats_line
     my $advisor_kmer = get_check_record($rec, ["velvet", $trimraw, "velvet_advisor_best_kmer"]);
     my $advisor_n50 ='';
     if ($advisor_kmer) {
-        $advisor_n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $advisor_kmer, "n50"]);
+        $advisor_n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $advisor_kmer, "N50"]);
     }
 
     my $vk_kmer = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
     my $vk_n50 = '';
     if ($vk_kmer) {
-        $vk_n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $vk_kmer, "n50"]);
+        $vk_n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $vk_kmer, "N50"]);
     }
     
     my $best_kmer = get_check_record($rec, ["velvet", $trimraw, "max_n50_kmer"]);
@@ -195,10 +229,10 @@ sub get_stats_line
 
     my $kmin = get_check_record($rec, ["velvet", $trimraw, "min_kmer"]);
     my $kmax = get_check_record($rec, ["velvet", $trimraw, "max_kmer"]);
-    #my $missing_kmers = get_check_record($rec, [ ]);
+    my $missing_kmers = get_missing_kmers($rec, $trimraw, $kmin, $kmax);
     
-    my $out_str = join ("\t", ($sample, $trimraw, $total_numreads, $avg_readlen, $kmin, $kmax,
-            $best_kmer, $best_n50, $vk_kmer, $vk_n50, $advisor_kmer, $advisor_n50));
+    my $out_str = join ("\t", ($sample, $trimraw, $species, $bio_type, $total_numreads, $avg_readlen, 
+            $kmin, $kmax, $best_kmer, $best_n50, $vk_kmer, $vk_n50, $advisor_kmer, $advisor_n50, $missing_kmers));
     
     return $out_str;
 }
@@ -206,12 +240,13 @@ sub get_stats_line
 sub write_stats_file
 {
     my $records = shift;
+    my $sample_list = shift;
     my $fname = ($options->{stats_outfile} ? $options->{stats_outfile} : '');
     if ($fname) {
         open (FSTATS, '>', $fname) or die "Error: couldn't open output stats file $fname.\n";
         print FSTATS join ("\t", @col_headers) . "\n";
-        for my $sample (keys %$records) {
-            my $rec = $records->{sample};
+        for my $sample (@$sample_list) {
+            my $rec = $records->{$sample};
             for my $trimraw (qw(trim raw)) {
                 my $stats_line = get_stats_line ($rec, $trimraw);
                 print FSTATS $stats_line . "\n";
@@ -225,8 +260,9 @@ sub run_all
 {          
     gather_opts;
     my $records = LoadFile($options->{yaml_in});
-    get_all_max($records);
-    write_stats_file($records);
+    my $sample_list = get_genomic_samples($records);
+    get_all_max($records, $sample_list);
+    write_stats_file($records, $sample_list);
     DumpFile($options->{yaml_out}, $records);
 }
 
