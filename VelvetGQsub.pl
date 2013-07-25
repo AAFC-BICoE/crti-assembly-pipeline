@@ -9,17 +9,21 @@ my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
 # output files created by velveth/g
 my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
-
+my @job_table_headers = ("Sample", "Trim/raw", "kmer", "Qsub Job ID", "Command");
 
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/10_velveth_qsub_target.yml
+        yaml_in yaml_files/10_velveth_qsub_host.yml
         yaml_out yaml_files/11_velvetg_qsub.yml
+        job_table_in input_data/VGQsubJobIDs.tab
+        job_table_out output_files/VGQsubJobIDsOut.tab
         qsub_script qsub_script.sh
         trim 1
+        raw 1
         verbose 0
         submit 0
+        submit_max 0
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -249,6 +253,7 @@ sub qsub_cmds
 {
     my $records = shift;
     my $qsub_param_list = shift;
+    my $jobid_list = shift;
     my $slots = get_processor_slots;
     my $num_slots = scalar @$slots;
     my @holds = ();
@@ -257,6 +262,7 @@ sub qsub_cmds
     if ($options->{submit_max} and $options->{submit_max} < $num_to_submit) {
         $num_to_submit = $options->{submit_max};
     }
+    my $new_qsub_ids = [];
     for (my $i=0; $i<$num_to_submit; $i++) {
         my ($sample, $trimraw, $kmer, $cmd) = @{$qsub_param_list->[$i]};
         my $j = $i % $num_slots;
@@ -265,6 +271,44 @@ sub qsub_cmds
         $holds[$j] = $jobid;
         set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velvetg_qsub_cmd", $qsub_cmd);
         set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velvetg_qsub_jobid", $jobid);
+        push (@$jobid_list, [$sample, $trimraw, $kmer, $jobid, $cmd]);
+    }
+    return $jobid_list;
+}
+
+sub add_old_jobids
+{
+    my $records = shift;
+    my $fname = ($options->{job_table_in} ? $options->{job_table_in} : '');
+    my $jobid_list = [];
+    if ($fname and -e $fname) {
+        open (JID_IN, '<', $fname) or die "Error: couldn't open input job table $fname.\n";
+        while (my $line = <JID_IN>) {
+            chomp $line;
+            my @fields = split (/\s+/, $line);
+            if (scalar @fields == 4) {
+                my ($sample, $trimraw, $kmer, $old_jobid, $old_cmd) = @fields;
+                set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velvetg_qsub_cmd", $old_cmd);
+                set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velvetg_qsub_jobid", $old_jobid);
+                push (@$jobid_list, [$sample, $trimraw, $kmer, $old_jobid, $old_cmd]);
+            }
+        }
+        close (JID_IN);
+    }
+    return $jobid_list;
+}
+                    
+sub write_all_jobids
+{
+    my $jobid_list = shift;
+    my $fname = ($options->{job_table_in} ? $options->{job_table_in} : '');
+    if ($fname) {
+        open (JID_OUT, '>', $fname) or die "Error: couldn't open output job table $fname.\n";
+        print JID_OUT join("\t", @job_table_headers) . "\n";
+        for my $arr (@$jobid_list) {
+            print JID_OUT join("\t", @$arr) . "\n";
+        }
+        close (JID_OUT);
     }
 }
 
@@ -272,9 +316,11 @@ sub run_all
 {
     gather_opts;
     my $records = LoadFile($options->{yaml_in});
+    my $jobid_list = add_old_jobids($records);
     my $sample_list = get_sample_list($records);
     my $qsub_param_list = get_all_cmds($records, $sample_list);
-    qsub_cmds($records, $qsub_param_list);
+    qsub_cmds($records, $qsub_param_list, $jobid_list);
+    write_all_jobids($jobid_list);
     DumpFile($options->{yaml_out}, $records);
 }
 
