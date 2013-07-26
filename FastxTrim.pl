@@ -19,7 +19,7 @@ sub set_default_opts
         trim_params_table input_data/ManualTrimParams.tab
         qsub_script qsub_script.sh
         qsub_batch_file qsub_files/02_fastx_trim.sh
-        report_notrim output_files/01_qc_report_notrim.html
+        report_notrim output_files/untrimmed_reports.html
         );
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
