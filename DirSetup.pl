@@ -71,6 +71,7 @@ sub gather_options
 sub format_species_key
 {
 	my $species = shift;
+	$species =~ s/\s\(Erwinia\)//g; # Not the best solution, but there it is.
 	$species =~ s/^\s+|\s+$//g;
 	$species =~ s/ /_/g;
 	if ($species =~ /^([A-Z][a-z]+_[a-z]+)/) {
