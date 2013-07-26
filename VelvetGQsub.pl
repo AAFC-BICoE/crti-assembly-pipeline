@@ -301,7 +301,7 @@ sub add_old_jobids
 sub write_all_jobids
 {
     my $jobid_list = shift;
-    my $fname = ($options->{job_table_in} ? $options->{job_table_in} : '');
+    my $fname = ($options->{job_table_out} ? $options->{job_table_iout} : '');
     if ($fname) {
         open (JID_OUT, '>', $fname) or die "Error: couldn't open output job table $fname.\n";
         print JID_OUT join("\t", @job_table_headers) . "\n";

@@ -8,7 +8,7 @@ my $options = {};
 # output files created by velvetg
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
 my @col_headers = ("Sample", "Trim/raw", "Species", "Seq type", "Total num reads (M)", "Avg. read len (bp)",
-        "Min kmer", "Max kmer", "Best kmer", "Best N50", "VelvetK kmer", "VelvetK N50",
+        "Est. Genome Length", "Min kmer", "Max kmer", "Best kmer", "Best N50", "VelvetK kmer", "VelvetK N50",
         "Advisor kmer", "Advisor N50", "Missing kmers"); 
 
 sub set_default_opts
@@ -231,7 +231,7 @@ sub get_stats_line
     my $kmax = get_check_record($rec, ["velvet", $trimraw, "max_kmer"]);
     my $missing_kmers = get_missing_kmers($rec, $trimraw, $kmin, $kmax);
     
-    my $out_str = join ("\t", ($sample, $trimraw, $species, $bio_type, $total_numreads, $avg_readlen, 
+    my $out_str = join ("\t", ($sample, $trimraw, $species, $bio_type, $total_numreads, $avg_readlen, $genome_len,
             $kmin, $kmax, $best_kmer, $best_n50, $vk_kmer, $vk_n50, $advisor_kmer, $advisor_n50, $missing_kmers));
     
     return $out_str;
