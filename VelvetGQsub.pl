@@ -257,7 +257,7 @@ sub qsub_cmds
     my $slots = get_processor_slots;
     my $num_slots = scalar @$slots;
     my @holds = ();
-    push (@holds, 0) for (1..$num_slots);
+    push (@holds, 81213) for (1..$num_slots);
     my $num_to_submit = scalar @$qsub_param_list;
     if ($options->{submit_max} and $options->{submit_max} < $num_to_submit) {
         $num_to_submit = $options->{submit_max};
