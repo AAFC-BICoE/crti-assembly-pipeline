@@ -89,8 +89,8 @@ sub parse_trim_params
         while (my $line = <FTRIM>) {
             chomp $line;
             my @fields = split(/\s+/, $line);
-            if (scalar @fields == 5) {
-                my ($sample, $type, $direction, $Qval, $fval) = @fields;
+            if (scalar @fields >= 5) {
+                my ($sample, $type, $direction, $Qval, $fval) = @fields[0..4];
                 if ($sample =~ /[A-Z][a-z]_(S00[A-Z0-9]+)/) {
                     $sample = $1;
                 }
@@ -101,8 +101,8 @@ sub parse_trim_params
                     $rec->{fastx_trimmer}->{$direction}->{fval} = $fval;
                     $rec->{fastx_trimmer}->{$direction}->{Qval} = $Qval;
                 }
-            } elsif (scalar @fields > 0) {
-                print "Warning: wrong number of fields in file $ft line $.\n";
+            } else {
+                print "Warning: too few fields in file $ft line $.\n";
             }
         }
     } else {
@@ -182,6 +182,7 @@ sub apply_trim_params
             for my $direction (qw(R1 R2)) {
                 #my $html_report = $rec->{fastqc}->{$direction}->{raw_report_html};
                 my $html_report = get_subrecord($rec, ['fastqc', $direction, 'raw_report_html']);
+                $html_report = "../" . $html_report; # since the report will be put in the output_files/ subdir.
                 if ($html_report) {
                     push (@html_lines, "<tr><td>$sample</td><td>$direction</td><td><a href='${html_report}'>report</a></td></tr>");
                 } else {

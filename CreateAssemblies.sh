@@ -45,6 +45,11 @@
 # if you only wish to incorporate already-known values into the 
 # output yaml file.
 ./GetReadInfo.pl
+# The new read info should then be incorporated back into the input reads table
+# svn commit
+# mv output_files/ReadDataOut.tab input_data/ReadData.tab
+# svn commit
+
 
 # Add any new estimated genome sizes to the file
 # input_data/GenomeLengthEst.tab

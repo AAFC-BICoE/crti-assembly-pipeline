@@ -315,3 +315,15 @@ S000D03	trimdata	R1	../../processing_test/T_caries/DNA/Tca_S000D03/data//S000D03
 S000D03	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R1.fq	101	14311341
 S000D03	trimdata	R2	../../processing_test/T_caries/DNA/Tca_S000D03/data//S000D03_ATGTCA_L001_trim_4-0-0_R2.fq	97	14311341
 S000D03	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R2.fq	101	14311341
+S001381	trimdata	R1			
+S001381	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001381_ATTCCT_L006_R1.fq	101	37220327
+S001381	trimdata	R2			
+S001381	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001381_ATTCCT_L006_R2.fq	101	37220327
+S001707	trimdata	R1			
+S001707	rawdata	R1			
+S001707	trimdata	R2			
+S001707	rawdata	R2			
+S00171C	trimdata	R1			
+S00171C	rawdata	R1			
+S00171C	trimdata	R2			
+S00171C	rawdata	R2			
