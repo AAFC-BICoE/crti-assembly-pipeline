@@ -120,6 +120,7 @@ sub parse_record
 	$rec->{plate} = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Plate_Name"]);
 	$rec->{species} = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Organism"]);
 	$rec->{species} =~ s/\s\(Erwinia\)//g; # Not the best solution, but there it is.
+	$rec->{species} =~ s/\s\-\sresequencing\s*$//; # as above
 	return $rec;
 }	
 
