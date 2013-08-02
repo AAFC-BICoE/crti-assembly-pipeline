@@ -6,15 +6,12 @@ use File::Path;
 use File::Basename;
 use 5.010;
 use YAML::XS qw(DumpFile);
-
 use Assembly::Utils  qw(set_check_record get_check_record);
 
-# Specify location of different columns
-my %colno = qw(plate 4 species 7 bio_type 12 sample 13);
 my $options = {};
-my %records = ();
-my @search_samples = ();
+my $records = {};
 my %species_abbrs = ();
+
 
 my @col_headers = qw (Shipping_Date Results_Received_NRC_PBI_LIMS_Request Project 
         Sequencing_Specifications Plate_Name Run_Name Lane Organism Genotype Growth_Media
@@ -27,7 +24,6 @@ sub set_default_opts
         seq_sample_file input_data/Illumina_sample_summary.tab
         species_abbr_file input_data/SpeciesAbbreviations.tab
         specimen_dir ../../processing_test
-        all_samples 1
         yaml_out yaml_files/01_dirsetup.yml
         g_rosto_file input_data/G_rosto_sample_summary.tab
         );
@@ -41,13 +37,8 @@ sub check_options
 	unless ($options->{seq_sample_file} and $options->{species_abbr_file} ) {
 		die "Usage: $0 -s <sequence sample file> -a <species name abbreviation file> 
 			Optional:
-				--species <species> 
-				--sample <sample> 
-				--sample_file <sample file>
-				--all_samples
 				--testing
 				--verbose
-				--record_file <output records file>
 				--specimen_dir <path to specimen/ dir>
 				--yaml_out <yaml output file>
 				--g_rosto_file <filename>
@@ -60,13 +51,9 @@ sub gather_options
 	GetOptions($options,
 		'seq_sample_file|s=s',
 		'species_abbr_file|a=s',
-		'species=s',
-		'sample_file=s',
-		'sample=s',
 		'all_samples',
 		'testing|t',
 		'verbose|v',
-		'record_file|r=s',
 		'specimen_dir|p=s',
 		'yaml_out|y=s',
 		'g_rosto_file=s',
@@ -107,20 +94,6 @@ sub parse_abbrevs
 	close (FABBR);
 }
 
-sub get_search_samples
-{
-	if ($options->{sample}) {
-		$options->{sample} =~ s/\s//g;
-		push (@search_samples, $options->{sample});
-	} elsif ($options->{sample_file}) {
-		open (FSAMP, '<', $options->{sample_file}) or die "Error: couldn't open file " . $options->{sample_file} . "\n";
-		while (my $sample = <FSAMP>) {
-			$sample =~ s/\s//g;
-			push (@search_samples, $sample);
-		}		
-	}
-}
-
 sub clean_field
 {
 	my $infield = shift;
@@ -150,41 +123,13 @@ sub parse_record
 	return $rec;
 }	
 
-sub check_add_species
-{
-	my $rec = shift;
-	my $species_search = $options->{species};
-	if ($species_search =~ /\_([A-Za-z]+)$/) {
-		$species_search = $1;
-	}
-	if ($rec->{species} =~ /${species_search}/) {
-		$records{$rec->{sample}} = $rec;
-	}
-}
-
-sub print_rec
-{
-	my $rec = shift;
-	foreach my $key (keys %{$rec}) {
-		print "$key: " . $rec->{$key} . "\n";
-	}
-}
-
 sub parse_line
 {
     my $line = shift;
     chomp $line;
     my $rec = parse_record($line);
     if (defined $rec->{sample} and $rec->{sample} =~ /\S/) {
-        if ($options->{species}) {
-            check_add_species($rec);
-        } elsif ($options->{sample} or $options->{sample_file}) {
-            if ($rec->{sample} ~~ @search_samples) {
-                $records{$rec->{sample}} = $rec;
-            }
-        } elsif ($options->{all_samples} and $rec->{sample}) {
-            $records{$rec->{sample}} = $rec;
-        }
+        $records->{$rec->{sample}} = $rec;
     }
 }
 
@@ -204,7 +149,6 @@ sub build_rosto_records
 {
     open (FIN, '<', $options->{g_rosto_file}) or die "Error: couldn't open file " . $options->{g_rosto_records} . "\n";
     <FIN>; # Skip the parsing the first line (col headers).
-	%colno = qw(plate 0 species 1 bio_type 2 sample 3); # redefine the column #s for parse_line() fn
 	while (my $line = <FIN>) {
         #parse_line($line);
         chomp $line;
@@ -216,28 +160,10 @@ sub build_rosto_records
             $rec->{bio_type} = $fields[2];
             $rec->{sample} = $fields[3];
             $rec->{rawdata_dir} = $fields[4];
-            $records{$rec->{sample}} = $rec;
+            $records->{$rec->{sample}} = $rec;
         }
 	}
 	close FIN;
-}
-
-sub print_all_records
-{
-	open (FREC, '>', $options->{record_file}) or die "Error: couldn't open record output file ". $options->{record_file} . "\n";
-	my @col_order = qw(species sample bio_type plate);
-	print FREC join("\t", @col_order) . "\n";
-	foreach my $sample (keys %records) {
-		my $rec = $records{$sample};
-		foreach my $key (@col_order) {
-			if ($rec->{$key}) {
-				print FREC $rec->{$key};
-			}
-			print FREC "\t";
-		}
-		print FREC "\n";
-	}
-	close (FREC);
 }
 
 sub species_to_dirname
@@ -390,7 +316,6 @@ sub create_species_dirs
 sub create_directory_setup
 {
 	my $rec = shift;
-	return unless $rec->{sample} =~ /\S/ and $rec->{species} =~ /\S/;
 	$rec->{species_dir} = species_to_dirname($rec->{species});
 	$rec->{bio_type} = get_type($rec->{bio_type});
 	my $species_key = format_species_key($rec->{species});
@@ -415,28 +340,19 @@ sub create_directory_setup
 
 sub setup_all_dirs
 {
-	foreach my $sample (keys %records) {
+	foreach my $sample (keys %$records) {
 	    if ($sample =~ /\S/) {
-		    my $rec = $records{$sample};
+		    my $rec = $records->{$sample};
 		    create_directory_setup($rec);
 	    }
 	}
 }
 
-sub write_yaml
-{
-	DumpFile($options->{yaml_out}, \%records);
-}
-
 gather_options;
 parse_abbrevs;
-if ($options->{sample} or $options->{sample_file}) {
-	get_search_samples;
-}
 build_records;
 if ($options->{g_rosto_file}) {
     build_rosto_records;
 }
-print_all_records if $options->{record_file};
 setup_all_dirs;
-write_yaml;
+DumpFile($options->{yaml_out}, $records);

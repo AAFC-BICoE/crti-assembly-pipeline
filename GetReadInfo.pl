@@ -16,7 +16,6 @@ sub set_default_opts
     my %defaults = qw(
         yaml_in yaml_files/04_trimqc.yml
         yaml_out yaml_files/05_readinfo.yml
-        illumina_summary_table input_data/Illumina_sample_summary.tab
         input_read_table input_data/ReadData.tab
         output_read_table output_files/ReadDataOut.tab
         verbose 1
@@ -45,7 +44,6 @@ sub gather_opts
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
-        'illumina_summary_table|s=s',
         'sample=s',
         'no_raw_stats',
         'input_read_table=s',
@@ -54,27 +52,6 @@ sub gather_opts
         );
     set_default_opts;
     check_opts;
-}
-
-sub get_illumina_stats
-{
-    my $fname = $options->{illumina_summary_table};
-    open (FIS, '<', $fname) or die "Error: couldn't open file $fname\n";
-    while (my $line = <FIS>) {
-        chomp $line;
-        my @fields = split(/\t/, $line); 
-        my $sample = ($fields[13] ? $fields[13] : '');
-        my $numreads = ($fields[17] ? $fields[17] : '');
-        $sample =~ s/^(\s+)|(\s+$)//g;
-        $numreads =~ s/^(\s+)|(\s+$)//g;
-        if ($sample and $sample =~ /[A-Z0-9]+/ and $numreads and $numreads =~ /^\d+/) {
-            if (defined $records->{$sample}) {
-                my $rec = $records->{$sample};
-                $rec->{illumina_numreads} = $numreads;
-            }
-        }
-    }
-    close (FIS);
 }
 
 sub record_read_info
