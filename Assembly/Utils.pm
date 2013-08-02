@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Assembly::Utils.pm
 # Author: Jeff Cullis
 # Date: August 01, 2013
@@ -38,12 +39,6 @@ sub set_check_record
     $ref->{$last_key} = $value;
 }
 
-sub print_verbose
-{
-    if ($options->{verbose}) {
-        print (@_);
-    }
-}
 
 # Get an array of all the kmer values
 sub get_kmer_range
@@ -71,3 +66,4 @@ sub get_jobid
     return $hold_jobid;
 }
 
+return 1;

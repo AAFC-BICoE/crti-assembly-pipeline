@@ -7,6 +7,8 @@ use File::Basename;
 use 5.010;
 use YAML::XS qw(DumpFile);
 
+use Assembly::Utils  qw(set_check_record get_check_record);
+
 # Specify location of different columns
 my %colno = qw(plate 4 species 7 bio_type 12 sample 13);
 my $options = {};
@@ -136,12 +138,14 @@ sub parse_record
 	my $rec = {};
 	for (my $i=0; $i < scalar @col_headers; $i++) {
 	    my $colname = $col_headers[$i];
-	    my $value = ($fields[$i] ? $fields[$i] : '');
+	    my $value = ($fields[$i] ? $fields[$i] : ''); # i+1 because of blank first col in summary table.
 	    $value = clean_field ($value);
-	    set_check_record($rec, ["sequencing_metadata"], $colname, $value);
+	    Assembly::Utils::set_check_record($rec, ["sequencing_metadata"], $colname, $value);
 	}
-	$rec->{sample} = get_check_record($rec, ["sequencing_metadata", "Sample_Name"]);
-	$rec->{species} = get_check_record($rec, ["sequencing_metadata", "Organism"]);
+	$rec->{sample} = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Sample_Name"]);
+	$rec->{bio_type} = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Biomaterial_Type"]);
+	$rec->{plate} = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Plate_Name"]);
+	$rec->{species} = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Organism"]);
 	$rec->{species} =~ s/\s\(Erwinia\)//g; # Not the best solution, but there it is.
 	return $rec;
 }	
@@ -171,7 +175,6 @@ sub parse_line
     my $line = shift;
     chomp $line;
     my $rec = parse_record($line);
-    
     if (defined $rec->{sample} and $rec->{sample} =~ /\S/) {
         if ($options->{species}) {
             check_add_species($rec);
@@ -203,13 +206,17 @@ sub build_rosto_records
     <FIN>; # Skip the parsing the first line (col headers).
 	%colno = qw(plate 0 species 1 bio_type 2 sample 3); # redefine the column #s for parse_line() fn
 	while (my $line = <FIN>) {
-        parse_line($line);
+        #parse_line($line);
         chomp $line;
         my @fields = split(/\t/, $line);
         if (scalar @fields == 5) {
-            my $sample = $fields[3];
-            my $raw_dir = $fields[4];
-            $records{$sample}->{rawdata_dir} = $raw_dir;
+            my $rec = {};
+            $rec->{plate} = $fields[0];
+            $rec->{species} = $fields[1];
+            $rec->{bio_type} = $fields[2];
+            $rec->{sample} = $fields[3];
+            $rec->{rawdata_dir} = $fields[4];
+            $records{$rec->{sample}} = $rec;
         }
 	}
 	close FIN;
@@ -236,13 +243,16 @@ sub print_all_records
 sub species_to_dirname
 {
 	my $species_long = shift;
-	my $dirname = '';
-	if ($species_long =~ /^\s*([A-Z])\S+\s*([a-z]+)\s*/) {
-		$dirname = $options->{specimen_dir} . "/" . $1 . "_" . $2;
-	} elsif ($species_long =~ /([A-Z]_[a-z]+)/) {
-		$dirname = $options->{specimen_dir} . "/" . $1;
-	}
-	return $dirname;
+	if ($species_long) {
+        my $dirname = '';
+        if ($species_long =~ /^\s*([A-Z])\S+\s*([a-z]+)\s*/) {
+            $dirname = $options->{specimen_dir} . "/" . $1 . "_" . $2;
+        } elsif ($species_long =~ /([A-Z]_[a-z]+)/) {
+            $dirname = $options->{specimen_dir} . "/" . $1;
+        }
+        return $dirname;
+    }
+    return '';
 }
 
 # Check whether driectory exists or just testing.
@@ -380,6 +390,7 @@ sub create_species_dirs
 sub create_directory_setup
 {
 	my $rec = shift;
+	return unless $rec->{sample} =~ /\S/ and $rec->{species} =~ /\S/;
 	$rec->{species_dir} = species_to_dirname($rec->{species});
 	$rec->{bio_type} = get_type($rec->{bio_type});
 	my $species_key = format_species_key($rec->{species});
@@ -405,8 +416,10 @@ sub create_directory_setup
 sub setup_all_dirs
 {
 	foreach my $sample (keys %records) {
-		my $rec = $records{$sample};
-		create_directory_setup($rec);
+	    if ($sample =~ /\S/) {
+		    my $rec = $records{$sample};
+		    create_directory_setup($rec);
+	    }
 	}
 }
 
