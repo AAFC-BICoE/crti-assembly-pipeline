@@ -14,6 +14,11 @@ my %records = ();
 my @search_samples = ();
 my %species_abbrs = ();
 
+my @col_headers = qw (Shipping_Date Results_Received_NRC_PBI_LIMS_Request Project 
+        Sequencing_Specifications Plate_Name Run_Name Lane Organism Genotype Growth_Media
+        Growth_Condition_Notes Biomaterial Biomaterial_Type Sample_Name MID_Tag Barcode
+        Total_Numreads_in_Lane NumReads Percent_of_Reads_in_Lane Download); 
+
 sub set_default_opts
 {
     my %defaults = qw(
@@ -129,12 +134,14 @@ sub parse_record
 	chomp $line;
 	my @fields = split (/\t/, $line);
 	my $rec = {};
-	foreach my $colname (keys %colno) {
-		my $cidx = $colno{$colname};
-		my $fval = ($fields[$cidx] ? $fields[$cidx] : '');
-		$rec->{$colname} = clean_field($fval);
-		#print "Got key=" . $colname . " val=" . $rec->{$colname} . "\n";
+	for (my $i=0; $i < scalar @col_headers; $i++) {
+	    my $colname = $col_headers[$i];
+	    my $value = ($fields[$i] ? $fields[$i] : '');
+	    $value = clean_field ($value);
+	    set_check_record($rec, ["sequencing_metadata"], $colname, $value);
 	}
+	$rec->{sample} = get_check_record($rec, ["sequencing_metadata", "Sample_Name"]);
+	$rec->{species} = get_check_record($rec, ["sequencing_metadata", "Organism"]);
 	$rec->{species} =~ s/\s\(Erwinia\)//g; # Not the best solution, but there it is.
 	return $rec;
 }	
