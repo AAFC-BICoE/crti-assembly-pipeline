@@ -222,7 +222,7 @@ sub write_table_stats
 
 gather_opts;
 $records = LoadFile($options->{yaml_in});
-get_illumina_stats;
+#get_illumina_stats;
 read_table_stats;
 calc_data_stats;
 write_table_stats;

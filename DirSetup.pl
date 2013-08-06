@@ -23,7 +23,7 @@ sub set_default_opts
     my %defaults = qw(
         seq_sample_file input_data/Illumina_sample_summary.tab
         species_abbr_file input_data/SpeciesAbbreviations.tab
-        specimen_dir ../../processing_test
+        specimen_dir ../../processing_test2
         yaml_out yaml_files/01_dirsetup.yml
         g_rosto_file input_data/G_rosto_sample_summary.tab
         );
@@ -60,22 +60,7 @@ sub gather_options
 		);
 	set_default_opts;
 	check_options;
-}
-
-sub format_species_key
-{
-	my $species = shift;
-	my $flag = 0;
-	$species =~ s/^\s+|\s+$//g;
-	$species =~ s/ /_/g;
-	if ($species =~ /^([A-Z][a-z]+_[a-z]+)/) {
-		$species = $1;
-	} else {
-		die "Error: malformed species name: $species. Aborting.\n";
-	}
-	return $species;
-}
-		
+}		
 
 sub parse_abbrevs
 {
@@ -85,7 +70,7 @@ sub parse_abbrevs
 		my @fields = split(/\t/, $line);
 		if (scalar @fields == 2) {
 			my ($abbr, $species) = @fields;
-			my $species_key = format_species_key($species);
+			my $species_key = Assembly::Utils::format_species_key($species);
 			$species_abbrs{$species_key} = $abbr;
 		} else {
 			die "Got wrong number of fields on line $. in abbrevs file " . $options->{species_abbr_file} . "\nline: $line\n";
@@ -202,16 +187,6 @@ sub check_create_dir
     }
 }
 
-sub create_sample_subdirs
-{
-	my $sampledir = shift;
-	check_create_dir($sampledir);
-	foreach my $dn (qw(annotations assemblies data)) {
-		my $dir = $sampledir . "/" . $dn;
-		check_create_dir($dir);
-	}
-}
-
 sub find_rawdata_files
 {
 	my $rec = shift;
@@ -276,20 +251,6 @@ sub link_rawdata
         }
 	}
 }
-		
-
-sub create_sample_dirs
-{
-	my $rec = shift;
-	my $specdir = $rec->{species_dir};
-	my $seqtype = $rec->{bio_type};
-	my $abbr = $rec->{species_abbr};
-	
-	my $sampledir = "$specdir/$seqtype/$abbr" . "_" . $rec->{sample};
-	$rec->{sample_dir} = $sampledir;
-	create_sample_subdirs($sampledir);
-	return $sampledir;
-}
 
 # Turn 'biomaterial_type' value into RNA or DNA.
 sub get_type
@@ -308,10 +269,29 @@ sub get_type
 sub create_species_dirs
 {
 	my $rec = shift;
-	check_create_dir($rec->{species_dir});
-	foreach my $subdir (qw(DNA RNA reference releases)) {
-		check_create_dir($rec->{species_dir} . "/" . $subdir);
+	my $specdir = $rec->{species_dir};
+	check_create_dir($specdir);
+	check_create_dir("$specdir/reference");
+	check_create_dir("$specdir/releases");
+	foreach my $subdir (qw(DNA RNA)) {
+		check_create_dir("$specdir/$subdir");
+		foreach my $ssd (qw(data assemblies annotations)) {
+		    check_create_dir("$specdir/$subdir/$ssd");
+		}
 	}
+}
+
+sub create_sample_dirs
+{
+	my $rec = shift;
+	my $specdir = $rec->{species_dir};
+	my $seqtype = $rec->{bio_type};
+	my $abbr = $rec->{species_abbr};
+	
+	my $sampledir = "$specdir/$seqtype/data/" . $abbr . "_" . $rec->{sample};
+	$rec->{sample_dir} = $sampledir;
+	check_create_dir($sampledir);
+	return $sampledir;
 }
 
 sub create_directory_setup
@@ -319,7 +299,7 @@ sub create_directory_setup
 	my $rec = shift;
 	$rec->{species_dir} = species_to_dirname($rec->{species});
 	$rec->{bio_type} = get_type($rec->{bio_type});
-	my $species_key = format_species_key($rec->{species});
+	my $species_key = Assembly::Utils::format_species_key($rec->{species});
 	if (defined $species_abbrs{$species_key}) {
 		$rec->{species_abbr} = $species_abbrs{$species_key};
 		my $rawfiles_ref = find_rawdata_files($rec);
@@ -327,7 +307,7 @@ sub create_directory_setup
 		if (scalar @rawfiles == 2) {
 			create_species_dirs($rec);
 			my $sampledir = create_sample_dirs($rec);
-			link_rawdata($rec, $rawfiles_ref, $sampledir . "/data/"); # Also adds rawdata info to record.
+			link_rawdata($rec, $rawfiles_ref, $sampledir); # Also adds rawdata info to record.
 		} elsif (scalar @rawfiles < 2) {
 			print "Couldn't find raw data for species " . $rec->{species} . ", sample " . $rec->{sample} . ".\n";
 		} else {

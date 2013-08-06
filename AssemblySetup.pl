@@ -2,8 +2,10 @@
 use strict;
 use warnings;
 use Getopt::Long;
-use YAML::XS;
-use Assembly::Util;
+use YAML::XS qw(LoadFile DumpFile);
+use Assembly::Utils;
+
+my $options = {};
 
 sub set_default_opts
 {
@@ -40,47 +42,41 @@ sub gather_opts
     check_opts;
 }
 
-sub split_sample_list
+sub format_species_key
 {
-    my $records = shift;
-    my $genomic_samples = [];
-    my $rnaseq_samples = [];
-    for my $sample (%$records) {
-        my $rec = $records->{sample};
-        if ($rec->{bio_type} eq "DNA") {
-            push (@$genomic_samples, $sample);
-        } elsif ($rec->{bio_type} eq "RNA") {
-            push (@$rnaseq_samples, $sample);
-        }
-    }
-    return ($genomic_samples, $rnaseq_samples);
+	my $species = shift;
+	my $flag = 0;
+	$species =~ s/^\s+|\s+$//g;
+	$species =~ s/ /_/g;
+	if ($species =~ /^([A-Z][a-z]+_[a-z]+)/) {
+		$species = $1;
+	} else {
+		die "Error: malformed species name: $species. Aborting.\n";
+	}
+	return $species;
 }
 
-sub genomic_super_rec
+
+sub alter_super_records
 {
     my $records = shift;
-    my $genomic_samples = shift;
-    my $genomic_super = {};
-    for my $sample (@$genomic_samples) {
+    my $super_records = {};
+    for my $sample (keys %$records) {
         my $rec = $records->{$sample};
-        my $species = $rec->{species};
-        my $strain = get_check_record($rec, ["sequence_metadata", "Genotype"]);
-        my $ga_key = get_genomic_key($species, $strain);
-        set_check_record($genomic_super, [$ga_key, "samples"], $sample, $rec);
-        #$genomic_super{$ga_key}{samples}{$sample} = $rec;
+        my $bio_type = Assembly::Utils::get_check_record($rec, ["bio_type"]);
+        my $species = Assembly::Utils::get_check_record($rec, ["species"]);
+        my $species_key = Assembly::Utils::format_species_key($species);
+        my $strain = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Genotype"]);
+        my $strain_key = Assembly::Utils::format_strain_key($strain);
+        Assembly::Utils::set_check_record ($super_records, [$species_key, $bio_type, $strain_key, "samples"], $sample, $rec);
     }
-    return $genomic_super;
+    return $super_records;
 }
 
-sub get_assembly_ids
-{
-    my $species = $rec->{
-    
-
+gather_opts;
 my $records = LoadFile($options->{yaml_in});
-my ($genomic_samples, $rnaseq_samples) = split_sample_list($records);
-# Add Transcriptome_Assemblies and Genome_Assemblies super-records
-# Genome_Assemblies: Make new keys species_sample with approp. sample elements below.
-my $assemblies = setup_assemblies($records, $sample_list);
+my $super_records = alter_super_records($records);
+DumpFile($options->{yaml_out}, $super_records);
+
 
 

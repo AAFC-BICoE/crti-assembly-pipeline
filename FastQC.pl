@@ -117,7 +117,7 @@ sub get_fastqc_subdir
     my $tr = shift;
     my $tr_filename = shift;
     
-    my $fastqc_subdir = $rec->{sample_dir} . "/data/fastqc_out/" . $tr_filename . "_fastqc";
+    my $fastqc_subdir = $rec->{sample_dir} . "/fastqc_out/" . $tr_filename . "_fastqc";
     my $key = $tr . "_subdir";
     $rec->{fastqc}->{$rval}->{$key} = $fastqc_subdir;
     return $fastqc_subdir;
@@ -223,7 +223,7 @@ foreach my $sample (keys %{$records})
             $rec->{fastqc} = {};
             for my $rval (qw(R1 R2)) {
                 if (check_record_fields($rec, $rval, $tr, $trdata)) {
-                    my $fastqc_out = $rec->{sample_dir} . "/data/fastqc_out";
+                    my $fastqc_out = $rec->{sample_dir} . "/fastqc_out";
                     $rec->{fastqc}->{fastqc_out} = $fastqc_out;
                     mkpath $fastqc_out;
                     $rec->{fastqc}->{$rval} = {};

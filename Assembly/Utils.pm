@@ -39,6 +39,29 @@ sub set_check_record
     $ref->{$last_key} = $value;
 }
 
+sub format_species_key
+{
+	my $species = shift;
+	my $flag = 0;
+	$species =~ s/^\s+|\s+$//g;
+	$species =~ s/ /_/g;
+	if ($species =~ /^([A-Z][a-z]+_[a-z]+)/) {
+		$species = $1;
+	} else {
+		die "Error: malformed species name: $species. Aborting.\n";
+	}
+	return $species;
+}
+
+sub format_strain_key
+{
+    my $strain = shift;
+    $strain =~ s/^\s+|\s+$//g;
+    $strain =~ s/strain\s+//i;
+    $strain =~ s/[^0-9A-Za-z ]//g;
+    $strain =~ s/\s+/_/g;
+    return $strain;
+}
 
 # Get an array of all the kmer values
 sub get_kmer_range
