@@ -1,42 +1,26 @@
-Illumina Sample							Related genome			Relation Evidence			
-Organism	Genotype	Biomaterial	Biomaterial type	Sample ID	Kingdom	Resident Expert	Organism	Strain	Estimated Genome Length (bp)	Source	Citation	URL	Notes
-Pectobacterium wasabiae	Ecw1002	Pw gDNA	Genomic	S000CFE	Bacteria		Pectobacterium wasabiae	WPP163	5000000	JGI		http://genome.ornl.gov/microbial/pcar_was/, http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=TaxonDetail&page=taxonDetail&taxon_oid=646311947	
-Ralstonia solanacearum	NCPPB 909 race 3 biovar 2	Rs gDNA	Genomic	S000CFF	Bacteria		Ralstonia solanacearum	GMI1000	5800000	NCBI		http://www.ncbi.nlm.nih.gov/bioproject/57593	
-Pantoea stewartii	strain DOAB 021	Ps gDNA 	Genomic	S000D00	Bacteria		Pantoea stewartii	DC283	5000000				
-Tilletia walkeri	RS 109	T. wal. gDNA	Genomic	S000D01	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Streptomyces scabies	CG-1	Ss gDNA	Genomic	S000D02	Bacteria		Streptomyces scabies		10100000				
-Tilletia caries	RS 629	T. car. gDNA	Genomic	S000D03	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia indica	RS 103	T. ind. gDNA	Genomic	S000D04	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia controversa	RS 113	T. con. gDNA	Genomic	S000D05	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Penicillium verrucosum 	strain DAOM 211566	Pv 211566 gDNA	Genomic	S001068 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Penicillium verrucosum 	 strain KAS 4251	Pv 4251 gDNA	Genomic	S001069 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Penicillium verrucosum 	strain KAS 4382	Pv 4382 gDNA	Genomic	S00106A 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Penicillium thymicola 	strain DAOM 180753	Pt 180753 gDNA	Genomic	S00106B 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Pantoea stewartii	subsp. Nov. S301	Ps S301 gDNA	Genomic	S00106C 	Bacteria		Pantoea stewartii	DC283	5000000				
-Basidioascus undulatus		Bu gDNA	Genomic	S00106D 	Fungi	Hai Nguyen	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf	
-Penicillium verrucosum 	strain KAS 4260	Pv 4260 gDNA	Genomic	S00106E 	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank			
-Ditylenchus destructor		Dd gDNA	Genomic	S00106F 	Animalia (Nematode)	Qing Yu	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Streptomyces scabies 	CG-1	Ss gDNA 	Genomic	S001079 	Bacteria		Streptomyces scabies		10100000				
-Pantoea stewartii 	strain DOAB 230	Ps-DoAB230 gDNA	Genomic	S00107A 	Bacteria		Pantoea stewartii	DC283	5000000				
-Arcobacter lanthierii 	strain AF 1430	Al-AF1430 gDNA 	Genomic	S00107D 	Bacteria	Izhar Khan	Campylobacter jejuni	NCTC11168	1641481	Sanger		http://www.magma.ca/~scimat/Arcobacter.htm, http://www.sanger.ac.uk/resources/downloads/bacteria/campylobacter-jejuni.html	
-Tilletia caries	RS 629	T. car. M-P 3kb gDNA 	Genomic	S001417 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia controversa	RS 113	T. con. M-P 3kb gDNA 	Genomic	S001419 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia indica	RS 103	T. ind. M-P 3kb gDNA 	Genomic	S001416 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Tilletia walkeri	RS 109	T. wal. M-P 3kb gDNA 	Genomic	S001418 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Ditylenchus dipsaci		D.dip. MP 8kb gDNA 	Genomic	S00141A 	Animalia (Nematode)	Qing Yu	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	QC strain, pathotype Ro1	Gr QC RO1 MP 8kb gDNA 	Genomic	S00141B 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	??	??	Genomic	A066581	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	??	??	Genomic	A066585	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1033	Pc brasil 1033 gDNA	Genomic	S001383 									
-Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1009	Pc brasil 1009 gDNA	Genomic	S001386 									
-Tilletia caries - resequencing	RS629	T. car. reseq gDNA	Genomic	S001387 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Globodera rostochiensis 	strain Ro19, pathotype Ro1	Gr Ro19 Ro1 PE gDNA 	Genomic	S001388 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Ralstonia solanacearum - resequencing	NCPPB 909 race 3 biovar 2	Rs reseq gDNA 	Genomic	S00138B 	Bacteria		Ralstonia solanacearum	GMI1000	5800000	NCBI		http://www.ncbi.nlm.nih.gov/bioproject/57593	
-Tilletia indica - resequencing	RS103	T. ind. reseq gDNA	Genomic	S00138C 	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute			
-Arcobacter cibarius 	strain LMG 21996	Ac LMG21996 gDNA	Genomic	S00138E 									
-Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1001	Pc brasil 1001 gDNA	Genomic	S00138F 									
-Globodera rostochiensis	SCRIR03, pathotype Ro3	Gr Ro3 gDNA	Genomic	S001384 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis	Nfld isolate	Gr Nfld gDNA	Genomic	S001385 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis 	Isolate Mar149,  pathotype Ro1	Gr Mar149 Ro1 gDNA	Genomic	S001389 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis	SCRIR04, pathotype Ro4	Gr Ro4 gDNA	Genomic	S00138A 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
-Globodera rostochiensis	SCRIR05, pathotype Ro5	Gr Ro5 gDNA	Genomic	S00138D 	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19	
+Illumina Sample				Related genome			Relation Evidence		
+Organism	Biomaterial type	Kingdom	Resident Expert	Organism	Strain	Estimated Genome Length (bp)	Source	Citation	URL
+Arcobacter cibarius 	Genomic								
+Arcobacter lanthierii 	Genomic	Bacteria	Izhar Khan	Campylobacter jejuni	NCTC11168	1700000	Sanger		http://www.magma.ca/~scimat/Arcobacter.htm, http://www.sanger.ac.uk/resources/downloads/bacteria/campylobacter-jejuni.html
+Basidioascus undulatus	Genomic	Fungi	Hai Nguyen	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf
+Ditylenchus destructor	Genomic	Animalia (Nematode)	Qing Yu	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Ditylenchus dipsaci	Genomic	Animalia (Nematode)	Qing Yu	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Globodera pallida	Genomic	Animalia (Nematode)							
+Globodera rostochiensis	Genomic	Animalia (Nematode)	Marc-Olivier Duceppe	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Pantoea ananatis 	Genomic								
+Pantoea stewartii	Genomic	Bacteria		Pantoea stewartii	DC283	5000000			
+Pectobacterium carotovorum 	Genomic								
+Pectobacterium wasabiae	Genomic	Bacteria		Pectobacterium wasabiae	WPP163	5000000	JGI		http://genome.ornl.gov/microbial/pcar_was/, http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=TaxonDetail&page=taxonDetail&taxon_oid=646311947
+Penicillium nordicum	Genomic								
+Penicillium thymicola 	Genomic	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank		
+Penicillium verrucosum 	Genomic	Fungi	Keith Seifert	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank		
+Puccinia graminis	Genomic								
+Puccinia triticina	Genomic								
+Ralstonia solanacearum	Genomic	Bacteria		Ralstonia solanacearum	GMI1000	5800000	NCBI		http://www.ncbi.nlm.nih.gov/bioproject/57593
+Streptomyces scabies	Genomic	Bacteria		Streptomyces scabies		10100000			
+Synchytrium endobioticum	Genomic								
+Tilletia caries	Genomic	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute		
+Tilletia controversa	Genomic	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute		
+Tilletia indica	Genomic	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute		
+Tilletia walkeri	Genomic	Fungi	Prasad Kesanakurti	Usiilago maydis		20000000	Broad Institute		
+

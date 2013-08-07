@@ -1,159 +1,137 @@
-Sample	Trim/Raw	VK_Best_Kmer	VK_Command
-S001383	trim		./velvetk.pl --size  --best ../../processing_test/P_carotovorum/DNA/Pcb_S001383/data//S001383_CGTACG_L001_trim_5-0-0_R1.fq ../../processing_test/P_carotovorum/DNA/Pcb_S001383/data//S001383_CGTACG_L001_trim_5-0-0_R2.fq
-S001383	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001383_CGTACG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001383_CGTACG_L001_R2.fq
-HI.0735.004.Index_7	trim		
-HI.0735.004.Index_7	raw		
-HI.0735.004.Index_4	trim		
-HI.0735.004.Index_4	raw		
-S00138C	trim	93	./velvetk.pl --size 20000000 --best ../../processing_test/T_indica/DNA/Ti_S00138C/data//S00138C_ATCACG_L001_trim_3-0-0_R1.fq ../../processing_test/T_indica/DNA/Ti_S00138C/data//S00138C_ATCACG_L001_trim_3-0-0_R2.fq
-S00138C	raw	95	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138C_ATCACG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138C_ATCACG_L001_R2.fq
-S000D07	trim		
-S000D07	raw		
-S000D1B	trim		
-S000D1B	raw		
-S001384	trim	79	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001384/data//S001384_GTGGCC_L002_trim_6-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001384/data//S001384_GTGGCC_L002_trim_6-0-0_R2.fq
-S001384	raw	85	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001384_GTGGCC_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001384_GTGGCC_L002_R2.fq
-S00141A	trim	35	./velvetk.pl --size 100000000 --best ../../processing_test/D_dipsaci/DNA/Ddi_S00141A/data//S00141A_NoIndex_L006_trim_7-0-0_R1.fq ../../processing_test/D_dipsaci/DNA/Ddi_S00141A/data//S00141A_NoIndex_L006_trim_7-0-0_R2.fq
-S00141A	raw	41	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141A_NoIndex_L006_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141A_NoIndex_L006_R2.fq
-S000D02	trim	79	./velvetk.pl --size 10100000 --best ../../processing_test/S_scabies/DNA/Ss_S000D02/data//S000D02_GAGTGG_L001_trim_9-0-0_R1.fq ../../processing_test/S_scabies/DNA/Ss_S000D02/data//S000D02_GAGTGG_L001_trim_9-0-0_R2.fq
-S000D02	raw	89	./velvetk.pl --size 10100000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D02_GAGTGG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D02_GAGTGG_L001_R2.fq
-A066585	trim	73	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_A066585/data//A066585_D0D8DABXX_5_trim_8-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_A066585/data//A066585_D0D8DABXX_5_trim_8-0-0_R2.fq
-A066585	raw	81	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066585_D0D8DABXX_5_R1.fq /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066585_D0D8DABXX_5_R2.fq
-S00107B	trim		
-S00107B	raw		
-S00107A	trim	81	./velvetk.pl --size 5000000 --best ../../processing_test/P_stewartii/DNA/Ps_S00107A/data//S00107A_CGATGT_L007_trim_5-0-0_R1.fq ../../processing_test/P_stewartii/DNA/Ps_S00107A/data//S00107A_CGATGT_L007_trim_3-0-0_R2.fq
-S00107A	raw	85	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107A_CGATGT_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107A_CGATGT_L007_R2.fq
-S000D11	trim		
-S000D11	raw		
-S000D19	trim		
-S000D19	raw		
-S001067	trim		
-S001067	raw		
-S001079	trim	87	./velvetk.pl --size 10100000 --best ../../processing_test/S_scabies/DNA/Ss_S001079/data//S001079_ATCACG_L007_trim_8-0-0_R1.fq ../../processing_test/S_scabies/DNA/Ss_S001079/data//S001079_ATCACG_L007_trim_9-0-0_R2.fq
-S001079	raw	95	./velvetk.pl --size 10100000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001079_ATCACG_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001079_ATCACG_L007_R2.fq
-S001419	trim	41	./velvetk.pl --size 20000000 --best ../../processing_test/T_controversa/DNA/Tc_S001419/data//S001419_NoIndex_L002_trim_8-0-0_R1.fq ../../processing_test/T_controversa/DNA/Tc_S001419/data//S001419_NoIndex_L002_trim_8-0-0_R2.fq
-S001419	raw	49	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001419_NoIndex_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001419_NoIndex_L002_R2.fq
-HI.0735.004.Index_12	trim		
-HI.0735.004.Index_12	raw		
-S000D00	trim	87	./velvetk.pl --size 5000000 --best ../../processing_test/P_stewartii/DNA/Ps_S000D00/data//S000D00_CGTACG_L001_trim_5-0-0_R1.fq ../../processing_test/P_stewartii/DNA/Ps_S000D00/data//S000D00_CGTACG_L001_trim_4-0-0_R2.fq
-S000D00	raw	91	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D00_CGTACG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D00_CGTACG_L001_R2.fq
-S00106E	trim	85	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S00106E/data//S00106E_TTAGGC_L002_trim_5-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S00106E/data//S00106E_TTAGGC_L002_trim_4-0-0_R2.fq
-S00106E	raw	89	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106E_TTAGGC_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106E_TTAGGC_L002_R2.fq
-S000D06	trim		
-S000D06	raw		
-S001078	trim		
-S001078	raw		
-S000D14	trim		
-S000D14	raw		
-S001389	trim	67	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001389/data//S001389_CTTGTA_L002_trim_6-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001389/data//S001389_CTTGTA_L002_trim_6-0-0_R2.fq
-S001389	raw	73	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001389_CTTGTA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001389_CTTGTA_L002_R2.fq
-S001418	trim	45	./velvetk.pl --size 20000000 --best ../../processing_test/T_walkeri/DNA/Tw_S001418/data//S001418_NoIndex_L005_trim_5-0-0_R1.fq ../../processing_test/T_walkeri/DNA/Tw_S001418/data//S001418_NoIndex_L005_trim_6-0-0_R2.fq
-S001418	raw	51	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001418_NoIndex_L005_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001418_NoIndex_L005_R2.fq
-A066581	trim	55	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_A066581/data//A066581_C01J0ABXX_1_trim_8-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_A066581/data//A066581_C01J0ABXX_1_trim_8-0-0_R2.fq
-A066581	raw	63	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066581_C01J0ABXX_1_R1.fq /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066581_C01J0ABXX_1_R2.fq
-S000D15	trim		
-S000D15	raw		
-S000D08	trim		
-S000D08	raw		
-S001386	trim		./velvetk.pl --size  --best ../../processing_test/P_carotovorum/DNA/Pcb_S001386/data//S001386_GATCAG_L001_trim_9-0-0_R1.fq ../../processing_test/P_carotovorum/DNA/Pcb_S001386/data//S001386_GATCAG_L001_trim_9-0-0_R2.fq
-S001386	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001386_GATCAG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001386_GATCAG_L001_R2.fq
-S000D0F	trim		
-S000D0F	raw		
-S001388	trim	77	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001388/data//S001388_TAGCTT_L001_trim_9-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001388/data//S001388_TAGCTT_L001_trim_9-0-0_R2.fq
-S001388	raw	87	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001388_TAGCTT_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001388_TAGCTT_L001_R2.fq
-S001385	trim	57	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001385/data//S001385_GTGAAA_L002_trim_7-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001385/data//S001385_GTGAAA_L002_trim_7-0-0_R2.fq
-S001385	raw	65	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001385_GTGAAA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001385_GTGAAA_L002_R2.fq
-HI.0735.004.Index_3	trim		
-HI.0735.004.Index_3	raw		
-S000D0D	trim		
-S000D0D	raw		
-S00106F	trim	73	./velvetk.pl --size 100000000 --best ../../processing_test/D_destructor/DNA/Dd_S00106F/data//S00106F_GTGAAA_L002_trim_5-0-0_R1.fq ../../processing_test/D_destructor/DNA/Dd_S00106F/data//S00106F_GTGAAA_L002_trim_6-0-0_R2.fq
-S00106F	raw	79	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106F_GTGAAA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106F_GTGAAA_L002_R2.fq
-HI.0735.004.Index_2	trim		
-HI.0735.004.Index_2	raw		
-S000D1A	trim		
-S000D1A	raw		
-S000D17	trim		
-S000D17	raw		
-S00138F	trim		./velvetk.pl --size  --best ../../processing_test/P_carotovorum/DNA/Pcb_S00138F/data//S00138F_TTAGGC_L001_trim_9-0-0_R1.fq ../../processing_test/P_carotovorum/DNA/Pcb_S00138F/data//S00138F_TTAGGC_L001_trim_9-0-0_R2.fq
-S00138F	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138F_TTAGGC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138F_TTAGGC_L001_R2.fq
-S000D0C	trim		
-S000D0C	raw		
-S001069	trim	69	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S001069/data//S001069_GCCAAT_L002_trim_7-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S001069/data//S001069_GCCAAT_L002_trim_7-0-0_R2.fq
-S001069	raw	77	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001069_GCCAAT_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001069_GCCAAT_L002_R2.fq
-S001417	trim	41	./velvetk.pl --size 20000000 --best ../../processing_test/T_caries/DNA/Tca_S001417/data//S001417_NoIndex_L001_trim_8-0-0_R1.fq ../../processing_test/T_caries/DNA/Tca_S001417/data//S001417_NoIndex_L001_trim_8-0-0_R2.fq
-S001417	raw	49	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001417_NoIndex_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001417_NoIndex_L001_R2.fq
-S00138E	trim		./velvetk.pl --size  --best ../../processing_test/A_cibarius/DNA/Ac_S00138E/data//S00138E_CGATGT_L001_trim_9-0-0_R1.fq ../../processing_test/A_cibarius/DNA/Ac_S00138E/data//S00138E_CGATGT_L001_trim_9-0-0_R2.fq
-S00138E	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138E_CGATGT_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138E_CGATGT_L001_R2.fq
-HI.0735.004.Index_11	trim		
-HI.0735.004.Index_11	raw		
-S00141B	trim	35	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S00141B/data//S00141B_NoIndex_L007_trim_4-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S00141B/data//S00141B_NoIndex_L007_trim_8-0-0_R2.fq
-S00141B	raw	41	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141B_NoIndex_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141B_NoIndex_L007_R2.fq
-S001387	trim	77	./velvetk.pl --size 20000000 --best ../../processing_test/T_caries/DNA/Tca_S001387/data//S001387_ATTCCT_L001_trim_9-0-0_R1.fq ../../processing_test/T_caries/DNA/Tca_S001387/data//S001387_ATTCCT_L001_trim_9-0-0_R2.fq
-S001387	raw	85	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001387_ATTCCT_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001387_ATTCCT_L001_R2.fq
-S00107C	trim		
-S00107C	raw		
-S000D05	trim	73	./velvetk.pl --size 20000000 --best ../../processing_test/T_controversa/DNA/Tc_S000D05/data//S000D05_CCGTCC_L001_trim_4-0-0_R1.fq ../../processing_test/T_controversa/DNA/Tc_S000D05/data//S000D05_CCGTCC_L001_trim_4-0-0_R2.fq
-S000D05	raw	77	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D05_CCGTCC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D05_CCGTCC_L001_R2.fq
-S000D0E	trim		
-S000D0E	raw		
-S000D10	trim		
-S000D10	raw		
-S001416	trim	43	./velvetk.pl --size 20000000 --best ../../processing_test/T_indica/DNA/Ti_S001416/data//S001416_NoIndex_L003_trim_6-0-0_R1.fq ../../processing_test/T_indica/DNA/Ti_S001416/data//S001416_NoIndex_L003_trim_8-0-0_R2.fq
-S001416	raw	49	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001416_NoIndex_L003_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001416_NoIndex_L003_R2.fq
-S000D01	trim	75	./velvetk.pl --size 20000000 --best ../../processing_test/T_walkeri/DNA/Tw_S000D01/data//S000D01_GTGAAA_L001_trim_8-0-0_R1.fq ../../processing_test/T_walkeri/DNA/Tw_S000D01/data//S000D01_GTGAAA_L001_trim_8-0-0_R2.fq
-S000D01	raw	83	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D01_GTGAAA_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D01_GTGAAA_L001_R2.fq
-S000D16	trim		
-S000D16	raw		
-S00106A	trim	1	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S00106A/data//S00106A_ACAGTG_L002_trim_7-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S00106A/data//S00106A_ACAGTG_L002_trim_8-0-0_R2.fq
-S00106A	raw	1	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106A_ACAGTG_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106A_ACAGTG_L002_R2.fq
-S000CFE	trim	83	./velvetk.pl --size 5000000 --best ../../processing_test/P_wasabiae/DNA/Pw_S000CFE/data//S000CFE_GTTTCG_L001_trim_5-0-0_R1.fq ../../processing_test/P_wasabiae/DNA/Pw_S000CFE/data//S000CFE_GTTTCG_L001_trim_5-0-0_R2.fq
-S000CFE	raw	87	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFE_GTTTCG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFE_GTTTCG_L001_R2.fq
-S00106C	trim	85	./velvetk.pl --size 5000000 --best ../../processing_test/P_stewartii/DNA/Ps_S00106C/data//S00106C_ATCACG_L002_trim_5-0-0_R1.fq ../../processing_test/P_stewartii/DNA/Ps_S00106C/data//S00106C_ATCACG_L002_trim_6-0-0_R2.fq
-S00106C	raw	91	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106C_ATCACG_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106C_ATCACG_L002_R2.fq
-S00107D	trim	93	./velvetk.pl --size 1641481 --best ../../processing_test/A_lanthierii/DNA/Al_S00107D/data//S00107D_TTAGGC_L007_trim_6-0-0_R1.fq ../../processing_test/A_lanthierii/DNA/Al_S00107D/data//S00107D_TTAGGC_L007_trim_6-0-0_R2.fq
-S00107D	raw	99	./velvetk.pl --size 1641481 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107D_TTAGGC_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107D_TTAGGC_L007_R2.fq
-S00107F	trim		
-S00107F	raw		
-S000D0B	trim		
-S000D0B	raw		
-S00106D	trim	53	./velvetk.pl --size 20000000 --best ../../processing_test/B_undulatus/DNA/Bu_S00106D/data//S00106D_CTTGTA_L002_trim_8-0-0_R1.fq ../../processing_test/B_undulatus/DNA/Bu_S00106D/data//S00106D_CTTGTA_L002_trim_9-0-0_R2.fq
-S00106D	raw	61	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106D_CTTGTA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106D_CTTGTA_L002_R2.fq
-S001068	trim	69	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S001068/data//S001068_TGACCA_L002_trim_5-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S001068/data//S001068_TGACCA_L002_trim_7-0-0_R2.fq
-S001068	raw	75	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001068_TGACCA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001068_TGACCA_L002_R2.fq
-S000D09	trim		
-S000D09	raw		
-S00138D	trim	63	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S00138D/data//S00138D_ACAGTG_L002_trim_9-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S00138D/data//S00138D_ACAGTG_L002_trim_9-0-0_R2.fq
-S00138D	raw	71	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138D_ACAGTG_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138D_ACAGTG_L002_R2.fq
-HI.0735.004.Index_8	trim		
-HI.0735.004.Index_8	raw		
-S00106B	trim	69	./velvetk.pl --size 32190000 --best ../../processing_test/P_thymicola/DNA/Pth_S00106B/data//S00106B_CGATGT_L002_trim_5-0-0_R1.fq ../../processing_test/P_thymicola/DNA/Pth_S00106B/data//S00106B_CGATGT_L002_trim_5-0-0_R2.fq
-S00106B	raw	73	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106B_CGATGT_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106B_CGATGT_L002_R2.fq
-S000D12	trim		
-S000D12	raw		
-S000D13	trim		
-S000D13	raw		
-S00107E	trim		
-S00107E	raw		
-S00138A	trim	55	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S00138A/data//S00138A_GCCAAT_L002_trim_9-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S00138A/data//S00138A_GCCAAT_L002_trim_9-0-0_R2.fq
-S00138A	raw	65	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138A_GCCAAT_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138A_GCCAAT_L002_R2.fq
-HI.0735.004.Index_6	trim		
-HI.0735.004.Index_6	raw		
-HI.0735.004.Index_9	trim		
-HI.0735.004.Index_9	raw		
-HI.0735.004.Index_10	trim		
-HI.0735.004.Index_10	raw		
-S000D0A	trim		
-S000D0A	raw		
-S000D18	trim		
-S000D18	raw		
-S00138B	trim	91	./velvetk.pl --size 5800000 --best ../../processing_test/R_solanacearum/DNA/Rs_S00138B/data//S00138B_TGACCA_L001_trim_9-0-0_R1.fq ../../processing_test/R_solanacearum/DNA/Rs_S00138B/data//S00138B_TGACCA_L001_trim_9-0-0_R2.fq
-S00138B	raw	99	./velvetk.pl --size 5800000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138B_TGACCA_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138B_TGACCA_L001_R2.fq
-HI.0735.004.Index_5	trim		
-HI.0735.004.Index_5	raw		
-S000D04	trim	73	./velvetk.pl --size 20000000 --best ../../processing_test/T_indica/DNA/Ti_S000D04/data//S000D04_GTCCGC_L001_trim_4-0-0_R1.fq ../../processing_test/T_indica/DNA/Ti_S000D04/data//S000D04_GTCCGC_L001_trim_4-0-0_R2.fq
-S000D04	raw	77	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D04_GTCCGC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D04_GTCCGC_L001_R2.fq
-S000CFF	trim	93	./velvetk.pl --size 5800000 --best ../../processing_test/R_solanacearum/DNA/Rs_S000CFF/data//S000CFF_GTGGCC_L001_trim_4-0-0_R1.fq ../../processing_test/R_solanacearum/DNA/Rs_S000CFF/data//S000CFF_GTGGCC_L001_trim_4-0-0_R2.fq
-S000CFF	raw	97	./velvetk.pl --size 5800000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFF_GTGGCC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFF_GTGGCC_L001_R2.fq
-S000D03	trim	81	./velvetk.pl --size 20000000 --best ../../processing_test/T_caries/DNA/Tca_S000D03/data//S000D03_ATGTCA_L001_trim_4-0-0_R1.fq ../../processing_test/T_caries/DNA/Tca_S000D03/data//S000D03_ATGTCA_L001_trim_4-0-0_R2.fq
-S000D03	raw	85	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R2.fq
+Organism	Genotype	Biomaterial Type	Sample Name	Trim/Raw	VK_Best_Kmer	VK_Command
+Globodera rostochiensis		Genomic	A066581	raw	63	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066581_C01J0ABXX_1_R1.fq /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066581_C01J0ABXX_1_R2.fq
+Globodera rostochiensis		Genomic	A066581	trim	55	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_A066581/data//A066581_C01J0ABXX_1_trim_8-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_A066581/data//A066581_C01J0ABXX_1_trim_8-0-0_R2.fq
+Globodera rostochiensis		Genomic	A066585	raw	81	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066585_D0D8DABXX_5_R1.fq /isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066585_D0D8DABXX_5_R2.fq
+Globodera rostochiensis		Genomic	A066585	trim	73	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_A066585/data//A066585_D0D8DABXX_5_trim_8-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_A066585/data//A066585_D0D8DABXX_5_trim_8-0-0_R2.fq
+Tilletia walkeri	DAOM 236422	Genomic	 S001713 			
+Tilletia walkeri	DAOM 236422	Genomic	 S001713 			
+Pectobacterium wasabiae	Ecw1002	Genomic	S000CFE	raw	87	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFE_GTTTCG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFE_GTTTCG_L001_R2.fq
+Pectobacterium wasabiae	Ecw1002	Genomic	S000CFE	trim	83	./velvetk.pl --size 5000000 --best ../../processing_test/P_wasabiae/DNA/Pw_S000CFE/data//S000CFE_GTTTCG_L001_trim_5-0-0_R1.fq ../../processing_test/P_wasabiae/DNA/Pw_S000CFE/data//S000CFE_GTTTCG_L001_trim_5-0-0_R2.fq
+Ralstonia solanacearum	NCPPB 909 race 3 biovar 2	Genomic	S000CFF	raw	97	./velvetk.pl --size 5800000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFF_GTGGCC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000CFF_GTGGCC_L001_R2.fq
+Ralstonia solanacearum	NCPPB 909 race 3 biovar 2	Genomic	S000CFF	trim	93	./velvetk.pl --size 5800000 --best ../../processing_test/R_solanacearum/DNA/Rs_S000CFF/data//S000CFF_GTGGCC_L001_trim_4-0-0_R1.fq ../../processing_test/R_solanacearum/DNA/Rs_S000CFF/data//S000CFF_GTGGCC_L001_trim_4-0-0_R2.fq
+Pantoea stewartii	strain DOAB 021	Genomic	S000D00	raw	91	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D00_CGTACG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D00_CGTACG_L001_R2.fq
+Pantoea stewartii	strain DOAB 021	Genomic	S000D00	trim	87	./velvetk.pl --size 5000000 --best ../../processing_test/P_stewartii/DNA/Ps_S000D00/data//S000D00_CGTACG_L001_trim_5-0-0_R1.fq ../../processing_test/P_stewartii/DNA/Ps_S000D00/data//S000D00_CGTACG_L001_trim_4-0-0_R2.fq
+Tilletia walkeri	DAOM 236422	Genomic	S000D01	raw	83	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D01_GTGAAA_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D01_GTGAAA_L001_R2.fq
+Tilletia walkeri	DAOM 236422	Genomic	S000D01	trim	75	./velvetk.pl --size 20000000 --best ../../processing_test/T_walkeri/DNA/Tw_S000D01/data//S000D01_GTGAAA_L001_trim_8-0-0_R1.fq ../../processing_test/T_walkeri/DNA/Tw_S000D01/data//S000D01_GTGAAA_L001_trim_8-0-0_R2.fq
+Streptomyces scabies	CG-1	Genomic	S000D02	raw	89	./velvetk.pl --size 10100000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D02_GAGTGG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D02_GAGTGG_L001_R2.fq
+Streptomyces scabies	CG-1	Genomic	S000D02	trim	79	./velvetk.pl --size 10100000 --best ../../processing_test/S_scabies/DNA/Ss_S000D02/data//S000D02_GAGTGG_L001_trim_9-0-0_R1.fq ../../processing_test/S_scabies/DNA/Ss_S000D02/data//S000D02_GAGTGG_L001_trim_9-0-0_R2.fq
+Tilletia caries	DAOM 238032	Genomic	S000D03	raw	85	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R2.fq
+Tilletia caries	DAOM 238032	Genomic	S000D03	trim	81	./velvetk.pl --size 20000000 --best ../../processing_test/T_caries/DNA/Tca_S000D03/data//S000D03_ATGTCA_L001_trim_4-0-0_R1.fq ../../processing_test/T_caries/DNA/Tca_S000D03/data//S000D03_ATGTCA_L001_trim_4-0-0_R2.fq
+Tilletia indica	DAOM 236416	Genomic	S000D04	raw	77	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D04_GTCCGC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D04_GTCCGC_L001_R2.fq
+Tilletia indica	DAOM 236416	Genomic	S000D04	trim	73	./velvetk.pl --size 20000000 --best ../../processing_test/T_indica/DNA/Ti_S000D04/data//S000D04_GTCCGC_L001_trim_4-0-0_R1.fq ../../processing_test/T_indica/DNA/Ti_S000D04/data//S000D04_GTCCGC_L001_trim_4-0-0_R2.fq
+Tilletia controversa	DAOM 236426	Genomic	S000D05	raw	77	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D05_CCGTCC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D05_CCGTCC_L001_R2.fq
+Tilletia controversa	DAOM 236426	Genomic	S000D05	trim	73	./velvetk.pl --size 20000000 --best ../../processing_test/T_controversa/DNA/Tc_S000D05/data//S000D05_CCGTCC_L001_trim_4-0-0_R1.fq ../../processing_test/T_controversa/DNA/Tc_S000D05/data//S000D05_CCGTCC_L001_trim_4-0-0_R2.fq
+Penicillium verrucosum 	strain DAOM 211566	Genomic	S001068 	raw	75	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001068_TGACCA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001068_TGACCA_L002_R2.fq
+Penicillium verrucosum 	strain DAOM 211566	Genomic	S001068 	trim	69	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S001068/data//S001068_TGACCA_L002_trim_5-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S001068/data//S001068_TGACCA_L002_trim_7-0-0_R2.fq
+Penicillium verrucosum 	 strain KAS 4251	Genomic	S001069 	raw	77	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001069_GCCAAT_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001069_GCCAAT_L002_R2.fq
+Penicillium verrucosum 	 strain KAS 4251	Genomic	S001069 	trim	69	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S001069/data//S001069_GCCAAT_L002_trim_7-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S001069/data//S001069_GCCAAT_L002_trim_7-0-0_R2.fq
+Penicillium verrucosum 	strain KAS 4382	Genomic	S00106A 	raw	1	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106A_ACAGTG_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106A_ACAGTG_L002_R2.fq
+Penicillium verrucosum 	strain KAS 4382	Genomic	S00106A 	trim	1	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S00106A/data//S00106A_ACAGTG_L002_trim_7-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S00106A/data//S00106A_ACAGTG_L002_trim_8-0-0_R2.fq
+Penicillium thymicola 	strain DAOM 180753	Genomic	S00106B 	raw	73	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106B_CGATGT_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106B_CGATGT_L002_R2.fq
+Penicillium thymicola 	strain DAOM 180753	Genomic	S00106B 	trim	69	./velvetk.pl --size 32190000 --best ../../processing_test/P_thymicola/DNA/Pth_S00106B/data//S00106B_CGATGT_L002_trim_5-0-0_R1.fq ../../processing_test/P_thymicola/DNA/Pth_S00106B/data//S00106B_CGATGT_L002_trim_5-0-0_R2.fq
+Pantoea stewartii	subsp. Nov. S301	Genomic	S00106C 	raw	91	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106C_ATCACG_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106C_ATCACG_L002_R2.fq
+Pantoea stewartii	subsp. Nov. S301	Genomic	S00106C 	trim	85	./velvetk.pl --size 5000000 --best ../../processing_test/P_stewartii/DNA/Ps_S00106C/data//S00106C_ATCACG_L002_trim_5-0-0_R1.fq ../../processing_test/P_stewartii/DNA/Ps_S00106C/data//S00106C_ATCACG_L002_trim_6-0-0_R2.fq
+Basidioascus undulatus		Genomic	S00106D 	raw	61	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106D_CTTGTA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106D_CTTGTA_L002_R2.fq
+Basidioascus undulatus		Genomic	S00106D 	trim	53	./velvetk.pl --size 20000000 --best ../../processing_test/B_undulatus/DNA/Bu_S00106D/data//S00106D_CTTGTA_L002_trim_8-0-0_R1.fq ../../processing_test/B_undulatus/DNA/Bu_S00106D/data//S00106D_CTTGTA_L002_trim_9-0-0_R2.fq
+Penicillium verrucosum 	strain KAS 4260	Genomic	S00106E 	raw	89	./velvetk.pl --size 32190000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106E_TTAGGC_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106E_TTAGGC_L002_R2.fq
+Penicillium verrucosum 	strain KAS 4260	Genomic	S00106E 	trim	85	./velvetk.pl --size 32190000 --best ../../processing_test/P_verrucosum/DNA/Pv_S00106E/data//S00106E_TTAGGC_L002_trim_5-0-0_R1.fq ../../processing_test/P_verrucosum/DNA/Pv_S00106E/data//S00106E_TTAGGC_L002_trim_4-0-0_R2.fq
+Ditylenchus destructor		Genomic	S00106F 	raw	79	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106F_GTGAAA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106F_GTGAAA_L002_R2.fq
+Ditylenchus destructor		Genomic	S00106F 	trim	73	./velvetk.pl --size 100000000 --best ../../processing_test/D_destructor/DNA/Dd_S00106F/data//S00106F_GTGAAA_L002_trim_5-0-0_R1.fq ../../processing_test/D_destructor/DNA/Dd_S00106F/data//S00106F_GTGAAA_L002_trim_6-0-0_R2.fq
+Streptomyces scabies 	CG-1	Genomic	S001079 	raw	95	./velvetk.pl --size 10100000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001079_ATCACG_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001079_ATCACG_L007_R2.fq
+Streptomyces scabies 	CG-1	Genomic	S001079 	trim	87	./velvetk.pl --size 10100000 --best ../../processing_test/S_scabies/DNA/Ss_S001079/data//S001079_ATCACG_L007_trim_8-0-0_R1.fq ../../processing_test/S_scabies/DNA/Ss_S001079/data//S001079_ATCACG_L007_trim_9-0-0_R2.fq
+Pantoea stewartii 	strain DOAB 230	Genomic	S00107A 	raw	85	./velvetk.pl --size 5000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107A_CGATGT_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107A_CGATGT_L007_R2.fq
+Pantoea stewartii 	strain DOAB 230	Genomic	S00107A 	trim	81	./velvetk.pl --size 5000000 --best ../../processing_test/P_stewartii/DNA/Ps_S00107A/data//S00107A_CGATGT_L007_trim_5-0-0_R1.fq ../../processing_test/P_stewartii/DNA/Ps_S00107A/data//S00107A_CGATGT_L007_trim_3-0-0_R2.fq
+Arcobacter lanthierii 	strain AF 1430	Genomic	S00107D 	raw	99	./velvetk.pl --size 1641481 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107D_TTAGGC_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107D_TTAGGC_L007_R2.fq
+Arcobacter lanthierii 	strain AF 1430	Genomic	S00107D 	trim	93	./velvetk.pl --size 1641481 --best ../../processing_test/A_lanthierii/DNA/Al_S00107D/data//S00107D_TTAGGC_L007_trim_6-0-0_R1.fq ../../processing_test/A_lanthierii/DNA/Al_S00107D/data//S00107D_TTAGGC_L007_trim_6-0-0_R2.fq
+Puccinia graminis	race TMRTK (RSA2053)	Genomic	S001376 			
+Puccinia graminis	race TMRTK (RSA2053)	Genomic	S001376 			
+Puccinia graminis	CF12WGA1_100pg DNA_0%PEG	Genomic	S001377 			
+Puccinia graminis	CF12WGA1_100pg DNA_0%PEG	Genomic	S001377 			
+Puccinia graminis	 race QTHJT (RSA2051)	Genomic	S001378 			
+Puccinia graminis	 race QTHJT (RSA2051)	Genomic	S001378 			
+Puccinia graminis	CF12WGA2_10ng DNA_0%PEG	Genomic	S00137A 			
+Puccinia graminis	CF12WGA2_10ng DNA_0%PEG	Genomic	S00137A 			
+Puccinia graminis	 race RHTSK (RSA2052)	Genomic	S00137B 			
+Puccinia graminis	 race RHTSK (RSA2052)	Genomic	S00137B 			
+Globodera pallida	strain A2 Cyprus, pathotype Pa2/3	Genomic	S00137C 			
+Globodera pallida	strain A2 Cyprus, pathotype Pa2/3	Genomic	S00137C 			
+Puccinia triticina	 race MBDS (RSA2119)	Genomic	S00137D 			
+Puccinia triticina	 race MBDS (RSA2119)	Genomic	S00137D 			
+Globodera pallida	strain B1 INRA LeRheu France, pathotype Pa2/3	Genomic	S00137E 			
+Globodera pallida	strain B1 INRA LeRheu France, pathotype Pa2/3	Genomic	S00137E 			
+Puccinia triticina	race MFDS (RSA2117)	Genomic	S001380 			
+Puccinia triticina	race MFDS (RSA2117)	Genomic	S001380 			
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S001381 			
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S001381 			
+Puccinia graminis	CF12WGA3_100pg DNA_1%PEG	Genomic	S001382 			
+Puccinia graminis	CF12WGA3_100pg DNA_1%PEG	Genomic	S001382 			
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1033	Genomic	S001383 	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001383_CGTACG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001383_CGTACG_L001_R2.fq
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1033	Genomic	S001383 	trim		./velvetk.pl --size  --best ../../processing_test/P_carotovorum/DNA/Pcb_S001383/data//S001383_CGTACG_L001_trim_5-0-0_R1.fq ../../processing_test/P_carotovorum/DNA/Pcb_S001383/data//S001383_CGTACG_L001_trim_5-0-0_R2.fq
+Globodera rostochiensis	SCRIR03, pathotype Ro3	Genomic	S001384 	raw	85	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001384_GTGGCC_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001384_GTGGCC_L002_R2.fq
+Globodera rostochiensis	SCRIR03, pathotype Ro3	Genomic	S001384 	trim	79	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001384/data//S001384_GTGGCC_L002_trim_6-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001384/data//S001384_GTGGCC_L002_trim_6-0-0_R2.fq
+Globodera rostochiensis	Nfld isolate	Genomic	S001385 	raw	65	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001385_GTGAAA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001385_GTGAAA_L002_R2.fq
+Globodera rostochiensis	Nfld isolate	Genomic	S001385 	trim	57	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001385/data//S001385_GTGAAA_L002_trim_7-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001385/data//S001385_GTGAAA_L002_trim_7-0-0_R2.fq
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1009	Genomic	S001386 	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001386_GATCAG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001386_GATCAG_L001_R2.fq
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1009	Genomic	S001386 	trim		./velvetk.pl --size  --best ../../processing_test/P_carotovorum/DNA/Pcb_S001386/data//S001386_GATCAG_L001_trim_9-0-0_R1.fq ../../processing_test/P_carotovorum/DNA/Pcb_S001386/data//S001386_GATCAG_L001_trim_9-0-0_R2.fq
+Tilletia caries	DAOM 238032	Genomic	S001387 	raw	85	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001387_ATTCCT_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001387_ATTCCT_L001_R2.fq
+Tilletia caries	DAOM 238032	Genomic	S001387 	trim	77	./velvetk.pl --size 20000000 --best ../../processing_test/T_caries/DNA/Tca_S001387/data//S001387_ATTCCT_L001_trim_9-0-0_R1.fq ../../processing_test/T_caries/DNA/Tca_S001387/data//S001387_ATTCCT_L001_trim_9-0-0_R2.fq
+Globodera rostochiensis 	strain Ro19, pathotype Ro1	Genomic	S001388 	raw	87	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001388_TAGCTT_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001388_TAGCTT_L001_R2.fq
+Globodera rostochiensis 	strain Ro19, pathotype Ro1	Genomic	S001388 	trim	77	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001388/data//S001388_TAGCTT_L001_trim_9-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001388/data//S001388_TAGCTT_L001_trim_9-0-0_R2.fq
+Globodera rostochiensis 	Isolate Mar149,  pathotype Ro1	Genomic	S001389 	raw	73	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001389_CTTGTA_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001389_CTTGTA_L002_R2.fq
+Globodera rostochiensis 	Isolate Mar149,  pathotype Ro1	Genomic	S001389 	trim	67	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S001389/data//S001389_CTTGTA_L002_trim_6-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S001389/data//S001389_CTTGTA_L002_trim_6-0-0_R2.fq
+Globodera rostochiensis	SCRIR04, pathotype Ro4	Genomic	S00138A 	raw	65	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138A_GCCAAT_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138A_GCCAAT_L002_R2.fq
+Globodera rostochiensis	SCRIR04, pathotype Ro4	Genomic	S00138A 	trim	55	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S00138A/data//S00138A_GCCAAT_L002_trim_9-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S00138A/data//S00138A_GCCAAT_L002_trim_9-0-0_R2.fq
+Ralstonia solanacearum - resequencing	NCPPB 909 race 3 biovar 2	Genomic	S00138B 	raw	99	./velvetk.pl --size 5800000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138B_TGACCA_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138B_TGACCA_L001_R2.fq
+Ralstonia solanacearum - resequencing	NCPPB 909 race 3 biovar 2	Genomic	S00138B 	trim	91	./velvetk.pl --size 5800000 --best ../../processing_test/R_solanacearum/DNA/Rs_S00138B/data//S00138B_TGACCA_L001_trim_9-0-0_R1.fq ../../processing_test/R_solanacearum/DNA/Rs_S00138B/data//S00138B_TGACCA_L001_trim_9-0-0_R2.fq
+Tilletia indica	DAOM 236416	Genomic	S00138C 	raw	95	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138C_ATCACG_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138C_ATCACG_L001_R2.fq
+Tilletia indica	DAOM 236416	Genomic	S00138C 	trim	93	./velvetk.pl --size 20000000 --best ../../processing_test/T_indica/DNA/Ti_S00138C/data//S00138C_ATCACG_L001_trim_3-0-0_R1.fq ../../processing_test/T_indica/DNA/Ti_S00138C/data//S00138C_ATCACG_L001_trim_3-0-0_R2.fq
+Globodera rostochiensis	SCRIR05, pathotype Ro5	Genomic	S00138D 	raw	71	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138D_ACAGTG_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138D_ACAGTG_L002_R2.fq
+Globodera rostochiensis	SCRIR05, pathotype Ro5	Genomic	S00138D 	trim	63	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S00138D/data//S00138D_ACAGTG_L002_trim_9-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S00138D/data//S00138D_ACAGTG_L002_trim_9-0-0_R2.fq
+Arcobacter cibarius 	strain LMG 21996	Genomic	S00138E 	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138E_CGATGT_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138E_CGATGT_L001_R2.fq
+Arcobacter cibarius 	strain LMG 21996	Genomic	S00138E 	trim		./velvetk.pl --size  --best ../../processing_test/A_cibarius/DNA/Ac_S00138E/data//S00138E_CGATGT_L001_trim_9-0-0_R1.fq ../../processing_test/A_cibarius/DNA/Ac_S00138E/data//S00138E_CGATGT_L001_trim_9-0-0_R2.fq
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1001	Genomic	S00138F 	raw		./velvetk.pl --size  --best /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138F_TTAGGC_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S00138F_TTAGGC_L001_R2.fq
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1001	Genomic	S00138F 	trim		./velvetk.pl --size  --best ../../processing_test/P_carotovorum/DNA/Pcb_S00138F/data//S00138F_TTAGGC_L001_trim_9-0-0_R1.fq ../../processing_test/P_carotovorum/DNA/Pcb_S00138F/data//S00138F_TTAGGC_L001_trim_9-0-0_R2.fq
+Tilletia indica	DAOM 236416	Genomic	S001416 	raw	49	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001416_NoIndex_L003_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001416_NoIndex_L003_R2.fq
+Tilletia indica	DAOM 236416	Genomic	S001416 	trim	43	./velvetk.pl --size 20000000 --best ../../processing_test/T_indica/DNA/Ti_S001416/data//S001416_NoIndex_L003_trim_6-0-0_R1.fq ../../processing_test/T_indica/DNA/Ti_S001416/data//S001416_NoIndex_L003_trim_8-0-0_R2.fq
+Tilletia caries	DAOM 238032	Genomic	S001417 	raw	49	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001417_NoIndex_L001_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001417_NoIndex_L001_R2.fq
+Tilletia caries	DAOM 238032	Genomic	S001417 	trim	41	./velvetk.pl --size 20000000 --best ../../processing_test/T_caries/DNA/Tca_S001417/data//S001417_NoIndex_L001_trim_8-0-0_R1.fq ../../processing_test/T_caries/DNA/Tca_S001417/data//S001417_NoIndex_L001_trim_8-0-0_R2.fq
+Tilletia walkeri	DAOM 236422	Genomic	S001418 	raw	51	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001418_NoIndex_L005_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001418_NoIndex_L005_R2.fq
+Tilletia walkeri	DAOM 236422	Genomic	S001418 	trim	45	./velvetk.pl --size 20000000 --best ../../processing_test/T_walkeri/DNA/Tw_S001418/data//S001418_NoIndex_L005_trim_5-0-0_R1.fq ../../processing_test/T_walkeri/DNA/Tw_S001418/data//S001418_NoIndex_L005_trim_6-0-0_R2.fq
+Tilletia controversa	DAOM 236426	Genomic	S001419 	raw	49	./velvetk.pl --size 20000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001419_NoIndex_L002_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S001419_NoIndex_L002_R2.fq
+Tilletia controversa	DAOM 236426	Genomic	S001419 	trim	41	./velvetk.pl --size 20000000 --best ../../processing_test/T_controversa/DNA/Tc_S001419/data//S001419_NoIndex_L002_trim_8-0-0_R1.fq ../../processing_test/T_controversa/DNA/Tc_S001419/data//S001419_NoIndex_L002_trim_8-0-0_R2.fq
+Globodera rostochiensis 	QC strain, pathotype Ro1	Genomic	S00141B 	raw	41	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141A_NoIndex_L006_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141A_NoIndex_L006_R2.fq
+Globodera rostochiensis 	QC strain, pathotype Ro1	Genomic	S00141B 	trim	35	./velvetk.pl --size 100000000 --best ../../processing_test/D_dipsaci/DNA/Ddi_S00141A/data//S00141A_NoIndex_L006_trim_7-0-0_R1.fq ../../processing_test/D_dipsaci/DNA/Ddi_S00141A/data//S00141A_NoIndex_L006_trim_7-0-0_R2.fq
+Ditylenchus destructor		Genomic	S00141C 	raw	41	./velvetk.pl --size 100000000 --best /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141B_NoIndex_L007_R1.fq /isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141B_NoIndex_L007_R2.fq
+Ditylenchus destructor		Genomic	S00141C 	trim	35	./velvetk.pl --size 100000000 --best ../../processing_test/G_rostochiensis/DNA/Gr_S00141B/data//S00141B_NoIndex_L007_trim_4-0-0_R1.fq ../../processing_test/G_rostochiensis/DNA/Gr_S00141B/data//S00141B_NoIndex_L007_trim_8-0-0_R2.fq
+Pantoea ananatis 	strain LMG 2665	Genomic	S0016FD 			
+Pantoea ananatis 	strain LMG 2665	Genomic	S0016FD 			
+Globodera rostochiensis	QC strain, pathotype Ro1	Genomic	S0016FE 			
+Globodera rostochiensis	QC strain, pathotype Ro1	Genomic	S0016FE 			
+Penicillium nordicum	strain DAOM 185683	Genomic	S0016FF 			
+Penicillium nordicum	strain DAOM 185683	Genomic	S0016FF 			
+Ditylenchus dipsaci		Genomic	S001700 			
+Ditylenchus dipsaci		Genomic	S001700 			
+Penicillium verrucosum 	strain DAOM 213195	Genomic	S001701 			
+Penicillium verrucosum 	strain DAOM 213195	Genomic	S001701 			
+Penicillium verrucosum 	strain DAOM 214801	Genomic	S001702 			
+Penicillium verrucosum 	strain DAOM 214801	Genomic	S001702 			
+Globodera rostochiensis	 QC strain, pathotype Ro1	Genomic	S001703 			
+Globodera rostochiensis	 QC strain, pathotype Ro1	Genomic	S001703 			
+Ditylenchus dipsaci		Genomic	S001705 			
+Ditylenchus dipsaci		Genomic	S001705 			
+Synchytrium endobioticum 	2012 PEI outbreak, unknown pathotype	Genomic	S001707			
+Synchytrium endobioticum 	2012 PEI outbreak, unknown pathotype	Genomic	S001707			
+Tilletia indica	DAOM 236416	Genomic	S001710 			
+Tilletia indica	DAOM 236416	Genomic	S001710 			
+Tilletia caries	DAOM 238032	Genomic	S001711 			
+Tilletia caries	DAOM 238032	Genomic	S001711 			
+Tilletia controversa	DAOM 236426	Genomic	S001712 			
+Tilletia controversa	DAOM 236426	Genomic	S001712 			
+Penicillium verrucosum	KAS 4260	Genomic	S001714 			
+Penicillium verrucosum	KAS 4260	Genomic	S001714 			
+Penicillium verrucosum 	KAS 4260	Genomic	S001715 			
+Penicillium verrucosum 	KAS 4260	Genomic	S001715 			
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S00171C 			
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S00171C 			
+Ditylenchus destructor 		Genomic	S00171D 			
+Ditylenchus destructor 		Genomic	S00171D 			

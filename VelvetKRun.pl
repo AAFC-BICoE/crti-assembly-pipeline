@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Getopt::Long;
 use YAML::XS qw (LoadFile DumpFile);
+use Assembly::Utils;
 
 my $options = {};
 my $velvetk_bin = "./velvetk.pl";
@@ -57,37 +58,6 @@ sub gather_opts
     check_opts;
 }
 
-sub get_check_record
-{
-    my $ref = shift;
-    my $kref = shift;
-    for my $key (@$kref) {
-        if (defined ($ref->{$key})) {
-            $ref = $ref->{$key};
-        } else {
-            return '';
-        }
-    }
-    return $ref;
-}
-
-sub set_check_record
-{
-    my $ref = shift;
-    my $kref = shift;
-    my $last_key = shift;
-    my $value = shift;
-    for my $key (@$kref) {
-        if (defined ($ref->{$key})) {
-            $ref = $ref->{$key};
-        } else {
-            $ref->{$key} = {};
-            $ref = $ref->{$key};
-        }
-    }
-    $ref->{$last_key} = $value;
-}
-
 sub get_sample_list
 {
     my $records = shift;
@@ -121,11 +91,17 @@ sub parse_input_table
         while (my $line = <FTAB>) {
             chomp $line;
             my @fields = split(/\t/, $line);
-            if (scalar @fields == 4) {
-                my ($sample, $trimraw, $best_kmer, $velvetk_cmd) = @fields;
-                my $rec = $records->{$sample};
-                set_check_record($rec, ["velvet", $trimraw], "velvetk_cmd", $velvetk_cmd);
-                set_check_record($rec, ["velvet", $trimraw], "velvetk_best_kmer", $best_kmer);
+            if (scalar @fields == 7) {
+                my ($species, $strain, $bio_type, $sample, $trimraw, $best_kmer, $velvetk_cmd) = @fields;
+                $species = Assembly::Utils::format_species_key($species);
+                $strain = Assembly::Utils::format_strain_key($strain);
+                print "species $species strain $strain sample $sample\n";
+                my $sample_list = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples"]);
+                if ($sample_list and scalar (keys (%$sample_list)) == 1) {
+                    print "setting\n";
+                    Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", $velvetk_cmd);
+                    Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best_kmer);
+                }
             }
         }
     }
@@ -134,16 +110,19 @@ sub parse_input_table
 sub write_output_table
 {
     my $records = shift;
+    my $sample = '';
     my $fname = ($options->{velvetk_outfile} ? $options->{velvetk_outfile} : '');
     if ($fname) {
         open (FTAB, '>', $fname) or die "Error: couldn't open file $fname\n";
-        print FTAB join("\t", qw(Sample Trim/Raw VK_Best_Kmer VK_Command)) . "\n";
-        for my $sample (keys %$records) {
-            for my $trimraw (qw(trim raw)) {
-                my $rec = $records->{$sample};
-                my $vk_cmd = get_check_record($rec, ["velvet", $trimraw, "velvetk_cmd"]);
-                my $vk_best = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
-                print FTAB join("\t", ($sample, $trimraw, $vk_best, $vk_cmd)) . "\n";
+        print FTAB join("\t", qw(Species Strain Trim/Raw VK_Best_Kmer VK_Command)) . "\n";
+        for my $species (keys %$records) {
+            my $ss = $records->{$species}->{DNA};
+            for my $strain (keys %$ss) {
+                for my $trimraw (qw(trim raw)) {
+                    my $vk_cmd = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_cmd"]);
+                    my $vk_best = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_best_kmer"]);
+                    print FTAB join("\t", ($species, $strain,$trimraw, $vk_best, $vk_cmd)) . "\n";
+                }
             }
         }
     }
@@ -152,48 +131,62 @@ sub write_output_table
 
 sub get_velvetk_cmd
 {
-    my $rec = shift;
+    my $records = shift;
+    my $species = shift;
+    my $strain = shift;
     my $trimraw = shift;
+    my $velvetk_cmd = '';
     my $trimdata = $trimraw . "data";
-    my $genome_len = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
-    my $r1data = get_check_record($rec, ["R1", $trimdata]);
-    my $r2data = get_check_record($rec, ["R2", $trimdata]);
-    my $velvetk_cmd = $velvetk_bin . " --size " . $genome_len . " --best $r1data $r2data";
-    set_check_record($rec, ["velvet", $trimraw], "velvetk_cmd", $velvetk_cmd);
+    my $genome_len = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
+    my $sample_hash = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples"]);
+    if ($sample_hash and scalar (keys (%$sample_hash)) == 1) {
+        my @sample_list = keys %$sample_hash;
+        my $sample = $sample_list[0];
+        my $r1data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "R1", $trimdata]);
+        my $r2data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "R2", $trimdata]);
+        $velvetk_cmd = $velvetk_bin . " --size " . $genome_len . " --best $r1data $r2data";
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", $velvetk_cmd);
+    }
+    return $velvetk_cmd;
 }
 
 sub get_velvetk_sample
 {
-    my $rec = shift;
+    my $records = shift;
+    my $species = shift;
+    my $strain = shift;
     my $trimraw = shift;
-    my $sample = $rec->{sample};
-    my $have_best = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
+    
+    my $have_best = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_best_kmer"]);
     unless ($have_best) {
-        my $vk_cmd = get_velvetk_cmd($rec, $trimraw);
+        my $vk_cmd = get_velvetk_cmd($records, $species, $strain, $trimraw);
         print_verbose "Running command:\n" . $vk_cmd . "\n";
         #my $best = 0;
-        if ($options->{run}) {
+        if ($options->{run} and $vk_cmd) {
             my $best = `$vk_cmd`;
             chomp $best;
             print_verbose "velvetk.pl found best kmer: " . $best . "\n";
-            set_check_record($rec, ["velvet", $trimraw], "velvetk_best_kmer", $best);
+            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best);
         }
     } else {
-        print_verbose "Already found best kmer for sample $sample trim/raw $trimraw. Best is: " . $have_best . "\n";
+        print_verbose "Already found best kmer for species $species strain $strain trim/raw $trimraw. Best is: " . $have_best . "\n";
     }
 } 
 
 sub run_velvetk
 {
     my $records = shift;
-    my $sample_list = shift;
-    for my $sample (@$sample_list) {
-        my $rec = $records->{$sample};
-        for my $trimraw (qw(trim raw)) {
-            if ($options->{$trimraw}) {
-                get_velvetk_sample($rec, $trimraw);
-            }
-        }   
+    #my $sample_list = shift;
+    for my $species (keys %$records) {
+        my $sr = $records->{$species}->{DNA};
+        for my $strain (keys %$sr) {
+            my $sl = $sr->{$strain};
+            for my $trimraw (qw(trim raw)) {
+                if ($options->{$trimraw}) {
+                    get_velvetk_sample($records, $species, $strain, $trimraw);
+                }
+            }   
+        }
     }
 }  
 
@@ -202,8 +195,8 @@ sub run_all
     gather_opts;
     my $records = LoadFile($options->{yaml_in});
     parse_input_table($records);
-    my $sample_list = get_sample_list($records);
-    run_velvetk($records, $sample_list);
+    #my $sample_list = get_sample_list($records);
+    run_velvetk($records);
     write_output_table($records);
     DumpFile($options->{yaml_out}, $records);
 }

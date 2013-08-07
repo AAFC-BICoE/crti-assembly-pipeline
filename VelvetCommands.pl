@@ -4,6 +4,7 @@ use warnings;
 use YAML::XS qw(LoadFile DumpFile);
 use File::Path;
 use Getopt::Long;
+use Assembly::Utils;
 
 # From the records, pull just the genomic data
 # Read in genome lengths from file
@@ -76,58 +77,20 @@ sub gather_opts
     check_opts;
 }
 
-sub get_genomic_records
-{
-    for my $sample (keys %$records) {
-        if ($records->{$sample}->{bio_type} =~ /DNA/) {
-            push (@genomic_samples, $sample);
-        }
-    }
-}
-
-sub get_check_record
-{
-    my $ref = shift;
-    my $kref = shift;
-    for my $key (@$kref) {
-        if (defined ($ref->{$key})) {
-            $ref = $ref->{$key};
-        } else {
-            return '';
-        }
-    }
-    return $ref;
-}
-
-sub set_check_record
-{
-    my $ref = shift;
-    my $kref = shift;
-    my $last_key = shift;
-    my $value = shift;
-    for my $key (@$kref) {
-        if (defined ($ref->{$key})) {
-            $ref = $ref->{$key};
-        } else {
-            $ref->{$key} = {};
-            $ref = $ref->{$key};
-        }
-    }
-    $ref->{$last_key} = $value;
-}
-
 sub get_coverage_vars
 {
     my $rec = shift;
+    my $strain = shift;
+    my $sample = shift;
     my $trimraw = shift;
     my $trdata = $trimraw . "data";
-    print "Getting cov vars for " . $rec->{sample} . "\n";
+    print "Getting cov vars for " . $sample . "\n";
     my $var = {};
-    $var->{R1_nreads} = get_check_record($rec, ["data_stats", "R1", $trdata, "num_reads"]);
-    $var->{R1_readlen} = get_check_record($rec, ["data_stats", "R1", $trdata, "read_length"]);
-    $var->{R2_nreads} = get_check_record($rec, ["data_stats", "R2", $trdata, "num_reads"]);
-    $var->{R2_readlen} = get_check_record($rec, ["data_stats", "R2", $trdata, "read_length"]);
-    $var->{genome_length} = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
+    $var->{R1_nreads} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R1", $trdata, "num_reads"]);
+    $var->{R1_readlen} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R1", $trdata, "read_length"]);
+    $var->{R2_nreads} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R2", $trdata, "num_reads"]);
+    $var->{R2_readlen} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R2", $trdata, "read_length"]);
+    $var->{genome_length} = Assembly::Utils::get_check_record($rec, [$strain, "related_genome_length", "RG_Est_Genome_Length"]);
     my $pass = 1;
     for my $key (keys %$var) {
         if ($var->{$key} !~ /^\s*\d+\s*$/) {
@@ -138,8 +101,8 @@ sub get_coverage_vars
     if ($pass) {
         $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
         $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
-        set_check_record($rec, ["velvet", $trimraw], "total_coverage", $var->{total_coverage});
-        set_check_record($rec, ["velvet", $trimraw], "average_read_length", $var->{avg_readlen});
+        Assembly::Utils::set_check_record($rec, [$strain, "velvet", $trimraw], "total_coverage", $var->{total_coverage});
+        Assembly::Utils::set_check_record($rec, [$strain, "velvet", $trimraw], "average_read_length", $var->{avg_readlen});
         return $var;
     } else {
         return '';
@@ -161,7 +124,7 @@ sub get_assembly_outdir
     my $trimraw = shift;
     my $assembly_outdir = $rec->{sample_dir} . "/assemblies/velvet/$trimraw";
     mkpath $assembly_outdir;
-    set_check_record($rec, ["velvet", $trimraw], "assembly_outdir", $assembly_outdir);
+    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw], "assembly_outdir", $assembly_outdir);
     return $assembly_outdir;
 }
 
@@ -174,7 +137,7 @@ sub get_velvet_kdir
     my $exp_cov = shift;
     my $kmer_dir = $assembly_outdir . "/assem_kmer-" . $kmer . "_exp-" . $exp_cov . "_covcutoff-auto";
     mkpath $kmer_dir;
-    set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "kmer_dir", $kmer_dir);
+    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "kmer_dir", $kmer_dir);
     return $kmer_dir;
 }
 
@@ -210,7 +173,7 @@ sub get_velveth_cmd
     my $r2_file = $rec->{R2}->{$trdata};
     my $velveth_cmd = $velveth_bin . " " . $outdir . " " . $kmer . 
         "  -fastq -shortPaired -create_binary -separate " . $r1_file . " " . $r2_file;
-    set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "velveth_cmd", $velveth_cmd);
+    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "velveth_cmd", $velveth_cmd);
     return $velveth_cmd;
 }
 
@@ -228,7 +191,7 @@ sub get_velvetg_cmd
     my $velvetg_cmd = $velvetg_bin . " " . $working_dir . " " .
         "-ins_length 300 -exp_cov " . $exp_cov . " " . $min_contig_opt . 
         $scaffolding_opt . " -amos_file no -cov_cutoff auto";
-    set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "velvetg_cmd", $velvetg_cmd);
+    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "velvetg_cmd", $velvetg_cmd);
     return $velvetg_cmd;
 }
 
@@ -253,7 +216,7 @@ sub get_kmer_range
     my $trimraw = shift;
     my $kmer_range = [];
     if ($options->{use_velvetk} and $options->{velvetk_radius}) {
-        my $velvetk_best = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
+        my $velvetk_best = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
         my $rad = $options->{velvetk_radius} * 2;
         if ($velvetk_best =~ /^\s*\d+\s*$/ and $rad =~ /^\s*\d+\s*$/) {
             if ($velvetk_best - $rad < 21) {
@@ -272,8 +235,8 @@ sub get_kmer_range
             $options->{max_kmer} = 0;
         }
     }
-    set_check_record($rec, ["velvet", $trimraw], "min_kmer", $options->{min_kmer});
-    set_check_record($rec, ["velvet", $trimraw], "max_kmer", $options->{max_kmer});
+    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw], "min_kmer", $options->{min_kmer});
+    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw], "max_kmer", $options->{max_kmer});
     for (my $i = $options->{min_kmer}; $i <= $options->{max_kmer}; $i = $i+2) {
         push (@$kmer_range, $i);
     }
@@ -282,20 +245,28 @@ sub get_kmer_range
 
 sub build_assembly_cmds
 {
-    for my $sample (@genomic_samples) {
-        for my $trimraw (qw(trim raw)) {
-            if ($options->{$trimraw}) {
-                my $rec = ($records->{$sample} ? $records->{$sample} : '');
-                unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
-                my $cov_vars = get_coverage_vars($rec, $trimraw);
-                if ($cov_vars) {
-                    my $assembly_outdir = get_assembly_outdir($rec, $trimraw);
-                    my $kmer_range = get_kmer_range($rec, $trimraw);
-                    for my $kmer (@$kmer_range) {
-                        my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $trimraw, $cov_vars, $assembly_outdir, $kmer);
+    my $records = shift;
+    for my $species (keys %$records) {
+        my $spec_ref = $records->{$species}->{DNA};
+        for my $strain (keys %$spec_ref) {
+            my $samp_ref = $spec_ref->{$strain}->{samples};
+            my @sample_list = keys %$samp_ref;
+            if (scalar @sample_list == 1)  {
+                for my $trimraw (qw(trim raw)) {
+                    if ($options->{$trimraw}) {
+                        #my $rec = ($records->{$sample} ? $records->{$sample} : '');
+                        #unless (defined($rec)) { die "Couldn't get a record from yaml file for sample $sample.\n"; }
+                        my $cov_vars = get_coverage_vars($records, $species, $strain, $sample, $trimraw);
+                        if ($cov_vars) {
+                            my $assembly_outdir = get_assembly_outdir($rec, $trimraw);
+                            my $kmer_range = get_kmer_range($rec, $trimraw);
+                            for my $kmer (@$kmer_range) {
+                                my ($vh_cmd, $vg_cmd) = get_velvet_cmds($rec, $trimraw, $cov_vars, $assembly_outdir, $kmer);
+                            }
+                        } else {
+                            print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
+                        }
                     }
-                } else {
-                    print "Warning: Couldn't parse coverage vars from input sample $sample.\n";
                 }
             }
         }

@@ -1,81 +1,137 @@
-Sample	Trim/raw	Num_reads_(M)	Avg_readlen_(bp)	Est_genome_size_(Mbp)	Advised_kmer
-A066581	raw	65.083903	100	100	81
-A066581	trim	65.089769	92	100	73
-A066585	raw	121.815947	100	100	91
-A066585	trim	121.812266	92	100	83
-S000CFE	raw	8.68264	101	5	95
-S000CFE	trim	8.68264	96	5	89
-S000CFF	raw	27.309024	101	5.8	99
-S000CFF	trim	27.309024	97	5.8	95
-S000D00	raw	11.7687	101	5	97
-S000D00	trim	11.7687	96.5	5	93
-S000D01	raw	26.684998	101	20	93
-S000D01	trim	26.684998	93	20	85
-S000D02	raw	18.40905	101	10.1	95
-S000D02	trim	18.40905	92	10.1	87
-S000D03	raw	28.622682	101	20	93
-S000D03	trim	28.622682	97	20	89
-S000D04	raw	19.41872	101	20	89
-S000D04	trim	19.41872	97	20	85
-S000D05	raw	19.405294	101	20	89
-S000D05	trim	19.405294	97	20	85
-S001068	raw	29.8428	101	32.19	89
-S001068	trim	29.8428	95	32.19	83
-S001069	raw	32.170356	101	32.19	89
-S001069	trim	32.170356	94	32.19	83
-S00106A	raw	5.02756	101	32.19	21
-S00106A	trim	5.02756	93.5	32.19	13
-S00106B	raw	28.22159	101	32.19	87
-S00106B	trim	28.22159	96	32.19	83
-S00106C	raw	11.384236	101	5	97
-S00106C	trim	11.384236	95.5	5	91
-S00106D	raw	12.16858	101	20	81
-S00106D	trim	12.16858	92.5	20	73
-S00106E	raw	63.505978	101	32.19	95
-S00106E	trim	63.505978	96.5	32.19	91
-S00106F	raw	105.663022	101	100	91
-S00106F	trim	105.663022	95.5	100	85
-S001079	raw	36.216966	101	10.1	99
-S001079	trim	36.216966	92.5	10.1	89
-S00107A	raw	7.567952	101	5	93
-S00107A	trim	7.567952	97	5	89
-S00107D	raw	13.318554	101	1.641481	101
-S00107D	trim	13.318554	95	1.641481	95
-S001383	raw	40.195334			
-S001383	trim	40.195334			
-S001384	raw	141.886676	101	100	93
-S001384	trim	141.886676	95	100	87
-S001385	raw	66.682944	101	100	83
-S001385	trim	66.682944	94	100	77
-S001386	raw	14.617664			
-S001386	trim	14.617664			
-S001387	raw	30.406426	101	20	93
-S001387	trim	30.406426	92	20	85
-S001388	raw	157.631698	101	100	95
-S001388	trim	157.631698	92	100	85
-S001389	raw	89.222926	101	100	87
-S001389	trim	89.222926	95	100	81
-S00138A	raw	66.03751	101	100	83
-S00138A	trim	66.03751	92	100	73
-S00138B	raw	49.492302	101	5.8	101
-S00138B	trim	49.492302	92	5.8	91
-S00138C	raw	74.002222	101	20	99
-S00138C	trim	74.002222	98	20	95
-S00138D	raw	81.408544	101	100	87
-S00138D	trim	81.408544	92	100	77
-S00138E	raw	30.30361			
-S00138E	trim	30.30361			
-S00138F	raw	20.9931			
-S00138F	trim	20.9931			
-S001416	raw	239.199956	51	20	51
-S001416	trim	239.199956	44	20	43
-S001417	raw	249.510862	51	20	51
-S001417	trim	249.510862	43	20	43
-S001418	raw	254.177118	51	20	51
-S001418	trim	254.177118	45.5	20	45
-S001419	raw	188.907452	51	20	51
-S001419	trim	188.907452	43	20	43
-S00141A	raw	231.781192	51	100	47
-S00141A	trim	231.781192	44	100	39
-S00141B	raw	217.339772	51	100	47
-S00141B	trim	217.339772	45	100	41
+Organism	Genotype	Biomaterial Type	Sample Name	Trim/raw	Num_reads_(M)	Avg_readlen_(bp)	Est_genome_size_(Mbp)	Advised_kmer
+Globodera rostochiensis		Genomic	A066581	raw	65.083903	100	100	81
+Globodera rostochiensis		Genomic	A066581	trim	65.089769	92	100	73
+Globodera rostochiensis		Genomic	A066585	raw	121.815947	100	100	91
+Globodera rostochiensis		Genomic	A066585	trim	121.812266	92	100	83
+Tilletia walkeri	DAOM 236422	Genomic	 S001713 	raw				
+Tilletia walkeri	DAOM 236422	Genomic	 S001713 	trim				
+Pectobacterium wasabiae	Ecw1002	Genomic	S000CFE	raw	8.68264	101	5	95
+Pectobacterium wasabiae	Ecw1002	Genomic	S000CFE	trim	8.68264	96	5	89
+Ralstonia solanacearum	NCPPB 909 race 3 biovar 2	Genomic	S000CFF	raw	27.309024	101	5.8	99
+Ralstonia solanacearum	NCPPB 909 race 3 biovar 2	Genomic	S000CFF	trim	27.309024	97	5.8	95
+Pantoea stewartii	strain DOAB 021	Genomic	S000D00	raw	11.7687	101	5	97
+Pantoea stewartii	strain DOAB 021	Genomic	S000D00	trim	11.7687	96.5	5	93
+Tilletia walkeri	DAOM 236422	Genomic	S000D01	raw	26.684998	101	20	93
+Tilletia walkeri	DAOM 236422	Genomic	S000D01	trim	26.684998	93	20	85
+Streptomyces scabies	CG-1	Genomic	S000D02	raw	18.40905	101	10.1	95
+Streptomyces scabies	CG-1	Genomic	S000D02	trim	18.40905	92	10.1	87
+Tilletia caries	DAOM 238032	Genomic	S000D03	raw	28.622682	101	20	93
+Tilletia caries	DAOM 238032	Genomic	S000D03	trim	28.622682	97	20	89
+Tilletia indica	DAOM 236416	Genomic	S000D04	raw	19.41872	101	20	89
+Tilletia indica	DAOM 236416	Genomic	S000D04	trim	19.41872	97	20	85
+Tilletia controversa	DAOM 236426	Genomic	S000D05	raw	19.405294	101	20	89
+Tilletia controversa	DAOM 236426	Genomic	S000D05	trim	19.405294	97	20	85
+Penicillium verrucosum 	strain DAOM 211566	Genomic	S001068 	raw	29.8428	101	32.19	89
+Penicillium verrucosum 	strain DAOM 211566	Genomic	S001068 	trim	29.8428	95	32.19	83
+Penicillium verrucosum 	 strain KAS 4251	Genomic	S001069 	raw	32.170356	101	32.19	89
+Penicillium verrucosum 	 strain KAS 4251	Genomic	S001069 	trim	32.170356	94	32.19	83
+Penicillium verrucosum 	strain KAS 4382	Genomic	S00106A 	raw	5.02756	101	32.19	21
+Penicillium verrucosum 	strain KAS 4382	Genomic	S00106A 	trim	5.02756	93.5	32.19	13
+Penicillium thymicola 	strain DAOM 180753	Genomic	S00106B 	raw	28.22159	101	32.19	87
+Penicillium thymicola 	strain DAOM 180753	Genomic	S00106B 	trim	28.22159	96	32.19	83
+Pantoea stewartii	subsp. Nov. S301	Genomic	S00106C 	raw	11.384236	101	5	97
+Pantoea stewartii	subsp. Nov. S301	Genomic	S00106C 	trim	11.384236	95.5	5	91
+Basidioascus undulatus		Genomic	S00106D 	raw	12.16858	101	20	81
+Basidioascus undulatus		Genomic	S00106D 	trim	12.16858	92.5	20	73
+Penicillium verrucosum 	strain KAS 4260	Genomic	S00106E 	raw	63.505978	101	32.19	95
+Penicillium verrucosum 	strain KAS 4260	Genomic	S00106E 	trim	63.505978	96.5	32.19	91
+Ditylenchus destructor		Genomic	S00106F 	raw	105.663022	101	100	91
+Ditylenchus destructor		Genomic	S00106F 	trim	105.663022	95.5	100	85
+Streptomyces scabies 	CG-1	Genomic	S001079 	raw	36.216966	101	10.1	99
+Streptomyces scabies 	CG-1	Genomic	S001079 	trim	36.216966	92.5	10.1	89
+Pantoea stewartii 	strain DOAB 230	Genomic	S00107A 	raw	7.567952	101	5	93
+Pantoea stewartii 	strain DOAB 230	Genomic	S00107A 	trim	7.567952	97	5	89
+Arcobacter lanthierii 	strain AF 1430	Genomic	S00107D 	raw	13.318554	101	1.641481	101
+Arcobacter lanthierii 	strain AF 1430	Genomic	S00107D 	trim	13.318554	95	1.641481	95
+Puccinia graminis	race TMRTK (RSA2053)	Genomic	S001376 					
+Puccinia graminis	race TMRTK (RSA2053)	Genomic	S001376 					
+Puccinia graminis	CF12WGA1_100pg DNA_0%PEG	Genomic	S001377 					
+Puccinia graminis	CF12WGA1_100pg DNA_0%PEG	Genomic	S001377 					
+Puccinia graminis	 race QTHJT (RSA2051)	Genomic	S001378 					
+Puccinia graminis	 race QTHJT (RSA2051)	Genomic	S001378 					
+Puccinia graminis	CF12WGA2_10ng DNA_0%PEG	Genomic	S00137A 					
+Puccinia graminis	CF12WGA2_10ng DNA_0%PEG	Genomic	S00137A 					
+Puccinia graminis	 race RHTSK (RSA2052)	Genomic	S00137B 					
+Puccinia graminis	 race RHTSK (RSA2052)	Genomic	S00137B 					
+Globodera pallida	strain A2 Cyprus, pathotype Pa2/3	Genomic	S00137C 					
+Globodera pallida	strain A2 Cyprus, pathotype Pa2/3	Genomic	S00137C 					
+Puccinia triticina	 race MBDS (RSA2119)	Genomic	S00137D 					
+Puccinia triticina	 race MBDS (RSA2119)	Genomic	S00137D 					
+Globodera pallida	strain B1 INRA LeRheu France, pathotype Pa2/3	Genomic	S00137E 					
+Globodera pallida	strain B1 INRA LeRheu France, pathotype Pa2/3	Genomic	S00137E 					
+Puccinia triticina	race MFDS (RSA2117)	Genomic	S001380 					
+Puccinia triticina	race MFDS (RSA2117)	Genomic	S001380 					
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S001381 					
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S001381 					
+Puccinia graminis	CF12WGA3_100pg DNA_1%PEG	Genomic	S001382 					
+Puccinia graminis	CF12WGA3_100pg DNA_1%PEG	Genomic	S001382 					
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1033	Genomic	S001383 	raw	40.195334			
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1033	Genomic	S001383 	trim	40.195334			
+Globodera rostochiensis	SCRIR03, pathotype Ro3	Genomic	S001384 	raw	141.886676	101	100	93
+Globodera rostochiensis	SCRIR03, pathotype Ro3	Genomic	S001384 	trim	141.886676	95	100	87
+Globodera rostochiensis	Nfld isolate	Genomic	S001385 	raw	66.682944	101	100	83
+Globodera rostochiensis	Nfld isolate	Genomic	S001385 	trim	66.682944	94	100	77
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1009	Genomic	S001386 	raw	14.617664			
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1009	Genomic	S001386 	trim	14.617664			
+Tilletia caries	DAOM 238032	Genomic	S001387 	raw	30.406426	101	20	93
+Tilletia caries	DAOM 238032	Genomic	S001387 	trim	30.406426	92	20	85
+Globodera rostochiensis 	strain Ro19, pathotype Ro1	Genomic	S001388 	raw	157.631698	101	100	95
+Globodera rostochiensis 	strain Ro19, pathotype Ro1	Genomic	S001388 	trim	157.631698	92	100	85
+Globodera rostochiensis 	Isolate Mar149,  pathotype Ro1	Genomic	S001389 	raw	89.222926	101	100	87
+Globodera rostochiensis 	Isolate Mar149,  pathotype Ro1	Genomic	S001389 	trim	89.222926	95	100	81
+Globodera rostochiensis	SCRIR04, pathotype Ro4	Genomic	S00138A 	raw	66.03751	101	100	83
+Globodera rostochiensis	SCRIR04, pathotype Ro4	Genomic	S00138A 	trim	66.03751	92	100	73
+Ralstonia solanacearum - resequencing	NCPPB 909 race 3 biovar 2	Genomic	S00138B 	raw	49.492302	101	5.8	101
+Ralstonia solanacearum - resequencing	NCPPB 909 race 3 biovar 2	Genomic	S00138B 	trim	49.492302	92	5.8	91
+Tilletia indica	DAOM 236416	Genomic	S00138C 	raw	74.002222	101	20	99
+Tilletia indica	DAOM 236416	Genomic	S00138C 	trim	74.002222	98	20	95
+Globodera rostochiensis	SCRIR05, pathotype Ro5	Genomic	S00138D 	raw	81.408544	101	100	87
+Globodera rostochiensis	SCRIR05, pathotype Ro5	Genomic	S00138D 	trim	81.408544	92	100	77
+Arcobacter cibarius 	strain LMG 21996	Genomic	S00138E 	raw	30.30361			
+Arcobacter cibarius 	strain LMG 21996	Genomic	S00138E 	trim	30.30361			
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1001	Genomic	S00138F 	raw	20.9931			
+Pectobacterium carotovorum 	subsp. brasiliensis, isolate 1001	Genomic	S00138F 	trim	20.9931			
+Tilletia indica	DAOM 236416	Genomic	S001416 	raw	239.199956	51	20	51
+Tilletia indica	DAOM 236416	Genomic	S001416 	trim	239.199956	44	20	43
+Tilletia caries	DAOM 238032	Genomic	S001417 	raw	249.510862	51	20	51
+Tilletia caries	DAOM 238032	Genomic	S001417 	trim	249.510862	43	20	43
+Tilletia walkeri	DAOM 236422	Genomic	S001418 	raw	254.177118	51	20	51
+Tilletia walkeri	DAOM 236422	Genomic	S001418 	trim	254.177118	45.5	20	45
+Tilletia controversa	DAOM 236426	Genomic	S001419 	raw	188.907452	51	20	51
+Tilletia controversa	DAOM 236426	Genomic	S001419 	trim	188.907452	43	20	43
+Globodera rostochiensis 	QC strain, pathotype Ro1	Genomic	S00141B 	raw	217.339772	51	100	47
+Globodera rostochiensis 	QC strain, pathotype Ro1	Genomic	S00141B 	trim	217.339772	45	100	41
+Ditylenchus destructor		Genomic	S00141C 					
+Ditylenchus destructor		Genomic	S00141C 					
+Pantoea ananatis 	strain LMG 2665	Genomic	S0016FD 					
+Pantoea ananatis 	strain LMG 2665	Genomic	S0016FD 					
+Globodera rostochiensis	QC strain, pathotype Ro1	Genomic	S0016FE 					
+Globodera rostochiensis	QC strain, pathotype Ro1	Genomic	S0016FE 					
+Penicillium nordicum	strain DAOM 185683	Genomic	S0016FF 					
+Penicillium nordicum	strain DAOM 185683	Genomic	S0016FF 					
+Ditylenchus dipsaci		Genomic	S001700 					
+Ditylenchus dipsaci		Genomic	S001700 					
+Penicillium verrucosum 	strain DAOM 213195	Genomic	S001701 					
+Penicillium verrucosum 	strain DAOM 213195	Genomic	S001701 					
+Penicillium verrucosum 	strain DAOM 214801	Genomic	S001702 					
+Penicillium verrucosum 	strain DAOM 214801	Genomic	S001702 					
+Globodera rostochiensis	 QC strain, pathotype Ro1	Genomic	S001703 					
+Globodera rostochiensis	 QC strain, pathotype Ro1	Genomic	S001703 					
+Ditylenchus dipsaci		Genomic	S001705 					
+Ditylenchus dipsaci		Genomic	S001705 					
+Synchytrium endobioticum 	2012 PEI outbreak, unknown pathotype	Genomic	S001707					
+Synchytrium endobioticum 	2012 PEI outbreak, unknown pathotype	Genomic	S001707					
+Tilletia indica	DAOM 236416	Genomic	S001710 					
+Tilletia indica	DAOM 236416	Genomic	S001710 					
+Tilletia caries	DAOM 238032	Genomic	S001711 					
+Tilletia caries	DAOM 238032	Genomic	S001711 					
+Tilletia controversa	DAOM 236426	Genomic	S001712 					
+Tilletia controversa	DAOM 236426	Genomic	S001712 					
+Penicillium verrucosum	KAS 4260	Genomic	S001714 					
+Penicillium verrucosum	KAS 4260	Genomic	S001714 					
+Penicillium verrucosum 	KAS 4260	Genomic	S001715 					
+Penicillium verrucosum 	KAS 4260	Genomic	S001715 					
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S00171C 					
+Synchytrium endobioticum	mixed strains from Newfoundland	Genomic	S00171C 					
+Ditylenchus destructor 		Genomic	S00171D 					
+Ditylenchus destructor 		Genomic	S00171D 					

@@ -57,8 +57,8 @@ sub format_strain_key
 {
     my $strain = shift;
     $strain =~ s/^\s+|\s+$//g;
-    $strain =~ s/strain\s+//i;
     $strain =~ s/[^0-9A-Za-z ]//g;
+    $strain =~ s/\bstrain\b\s*//i;
     $strain =~ s/\s+/_/g;
     return $strain;
 }
