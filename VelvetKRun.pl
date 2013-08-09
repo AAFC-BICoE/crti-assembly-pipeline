@@ -91,7 +91,7 @@ sub run_velvetk
             my $trimdata = $rec{trim_raw} . "data";
             my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
             if ($genome_size and not $rec{velvetk_kmer}) {
-                my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " ";
+                my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
                 for my $sample_type (qw(PE PER MP MP3 MP8)) {
                     #my $hr = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type]);
                     my $r1data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "R1", $trimdata]);
