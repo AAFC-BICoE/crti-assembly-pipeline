@@ -122,7 +122,7 @@ sub parse_log_n50
         while (<FIN>) { 
             if (/n50\s+of\s+(\d+)/i) {
                 $n50 = $1;
-                print "kmer $kmer - found n50 " . $n50 . "\n";
+                #print "kmer $kmer - found n50 " . $n50 . "\n";
             }
         }
         close (FIN);
@@ -147,11 +147,18 @@ sub get_max_kmer
                     $max{n50} = $n50;
                     $max{kmer} = $kmer;
                 }
+                if ($n50 < 2000) {
+                    print $rec->{species} . "\t" . $rec->{sample} . "\t$tr\t" . $kmer . "\t" . $n50 . "\t";
+                    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
+                    #print $kdir . "\t";
+                    my $du = `du -h $kdir`;
+                    print "Disk usage: $du\n";
+                }
             }
         }
         if ($max{n50} > 0) {
             my $sample = $rec->{sample};
-            print "For sample $sample $tr got max n50 kmer " . $max{kmer} . " value " . $max{n50} . "\n";
+            #print "For sample $sample $tr got max n50 kmer " . $max{kmer} . " value " . $max{n50} . "\n";
             set_check_record($rec, ["velvet", $tr], "max_n50_kmer", $max{kmer});
             set_check_record($rec, ["velvet", $tr], "max_n50_value", $max{n50});
         }
