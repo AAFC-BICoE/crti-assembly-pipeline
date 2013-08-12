@@ -14,12 +14,7 @@ use Assembly::Utils;
 # e.g. the different genome lengths, QC trims etc. that we try?
 
 my $options = {};
-my $records = {};
-my @genomic_samples = ();
-my $tr;
-my $trdata;
-my $velvet_bin_dir = "/opt/bio/velvet";
-my @kbins = (0, 31, 63, 127, 145); 
+
 # @ kbins is only used by get_kmer_bin function below.
 # Assumes we have binaries of form
 # velvetg_x and velveth_x for x>0 and x in @kbins.
@@ -79,18 +74,19 @@ sub gather_opts
 
 sub get_coverage_vars
 {
-    my $rec = shift;
+    my $records = shift;
+    my $species = shift;
     my $strain = shift;
     my $sample = shift;
     my $trimraw = shift;
     my $trdata = $trimraw . "data";
     print "Getting cov vars for " . $sample . "\n";
     my $var = {};
-    $var->{R1_nreads} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R1", $trdata, "num_reads"]);
-    $var->{R1_readlen} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R1", $trdata, "read_length"]);
-    $var->{R2_nreads} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R2", $trdata, "num_reads"]);
-    $var->{R2_readlen} = Assembly::Utils::get_check_record($rec, [$strain, "samples", $sample, "data_stats", "R2", $trdata, "read_length"]);
-    $var->{genome_length} = Assembly::Utils::get_check_record($rec, [$strain, "related_genome_length", "RG_Est_Genome_Length"]);
+    $var->{R1_nreads} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R1", $trdata, "num_reads"]);
+    $var->{R1_readlen} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R1", $trdata, "read_length"]);
+    $var->{R2_nreads} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R2", $trdata, "num_reads"]);
+    $var->{R2_readlen} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R2", $trdata, "read_length"]);
+    $var->{genome_length} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
     my $pass = 1;
     for my $key (keys %$var) {
         if ($var->{$key} !~ /^\s*\d+\s*$/) {
@@ -101,8 +97,8 @@ sub get_coverage_vars
     if ($pass) {
         $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
         $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
-        Assembly::Utils::set_check_record($rec, [$strain, "velvet", $trimraw], "total_coverage", $var->{total_coverage});
-        Assembly::Utils::set_check_record($rec, [$strain, "velvet", $trimraw], "average_read_length", $var->{avg_readlen});
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "total_coverage", $var->{total_coverage});
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "average_read_length", $var->{avg_readlen});
         return $var;
     } else {
         return '';
@@ -118,47 +114,8 @@ sub calc_exp_cov
     return $exp_cov_rounded_int;
 } 
 
-sub get_assembly_outdir
-{
-    my $rec = shift;
-    my $trimraw = shift;
-    my $assembly_outdir = $rec->{sample_dir} . "/assemblies/velvet/$trimraw";
-    mkpath $assembly_outdir;
-    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw], "assembly_outdir", $assembly_outdir);
-    return $assembly_outdir;
-}
 
-sub get_velvet_kdir
-{
-    my $rec = shift;
-    my $trimraw = shift;
-    my $assembly_outdir = shift;
-    my $kmer = shift;
-    my $exp_cov = shift;
-    my $kmer_dir = $assembly_outdir . "/assem_kmer-" . $kmer . "_exp-" . $exp_cov . "_covcutoff-auto";
-    mkpath $kmer_dir;
-    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw, "kmer", $kmer], "kmer_dir", $kmer_dir);
-    return $kmer_dir;
-}
 
-sub get_kmer_bin
-{
-    my $kmer = shift;
-    my $bin = '';
-    if ($kmer < $kbins[0]) { 
-        print "Error: kmer value $kmer must be a positive integer!\n";
-    } elsif ($kmer > $kbins[$#kbins]) {
-        print "kmer value $kmer not supported. Recompile velvet for higher kmer.\n";
-    } else {
-        for (my $i = 0; $i < $#kbins; $i++) {
-            if ($kbins[$i] < $kmer and $kmer <= $kbins[$i+1]) {
-                $bin = $kbins[$i+1];
-            }
-        }
-    }
-    return $bin;
-}
-    
 
 sub get_velveth_cmd
 {
@@ -210,38 +167,48 @@ sub get_velvet_cmds
     return ($vh_cmd, $vg_cmd);
 }
 
-sub get_kmer_range
+sub add_velveth_files
 {
-    my $rec = shift;
-    my $trimraw = shift;
-    my $kmer_range = [];
-    if ($options->{use_velvetk} and $options->{velvetk_radius}) {
-        my $velvetk_best = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
-        my $rad = $options->{velvetk_radius} * 2;
-        if ($velvetk_best =~ /^\s*\d+\s*$/ and $rad =~ /^\s*\d+\s*$/) {
-            if ($velvetk_best - $rad < 21) {
-                $options->{min_kmer} = 21;
-            } else {
-                $options->{min_kmer} = $velvetk_best - $rad;
+	my $sample_ref = shift;
+	my $sample_type = shift;
+	my $trimraw = shift;
+	my $trdata = $trimraw . "data";
+	if ($sample_type =~ /MP/) {
+		$trdata = "rev" . $trdata;
+	}
+	my $r1file = Assembly::Utils::get_check_record($sample_ref, [$sample_type, "R1", $trdata]);
+	my $r2file = Assembly::Utils::get_check_record($sample_ref, [$sample_type, "R2", $trdata]);
+	return $r1file . " " . $r2file;
+}
+
+sub build_strain_cmds
+{
+	my $records = shift;
+	my $species = shift;
+	my $strain = shift;
+	my $trimraw = shift;
+    my $kmer_range = Assembly::Velvet::get_kmer_range($records, $species, $strain, $trimraw);
+    for my $kmer (@$kmer_range) {
+        my $velveth_cmd = $velveth_bin . " -fastq ";
+        my $i = 0;
+        for my $sample_type (qw(PE PER MP MP3 MP8)) {
+            my $sample_ref = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type]);
+            if ($sample_ref) {
+                $velveth_cmd .= "-shortPaired";
+                if ($i) { $velveth_cmd .= $i+1; }
+                $i++;
+                $velveth_cmd .= " -separate ";
+                $velveth_cmd .= add_velveth_files($sample_ref, $sample_type, $trimraw);
             }
-            if ($velvetk_best + $rad > 101) {
-                $options->{max_kmer} = 101;
-            } else {
-                $options->{max_kmer} = $velvetk_best + $rad;
-            }
-        } else {
-            # If no velvetk value found, don't create any commands.
-            $options->{min_kmer} = 1;
-            $options->{max_kmer} = 0;
+		}
+        if ($i) {
+            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "velveth_cmd");
+            push (vh_cmds
         }
-    }
-    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw], "min_kmer", $options->{min_kmer});
-    Assembly::Utils::set_check_record($rec, ["velvet", $trimraw], "max_kmer", $options->{max_kmer});
-    for (my $i = $options->{min_kmer}; $i <= $options->{max_kmer}; $i = $i+2) {
-        push (@$kmer_range, $i);
-    }
-    return $kmer_range;
-}        
+	}
+	 
+}
+	
 
 sub build_assembly_cmds
 {
@@ -249,6 +216,14 @@ sub build_assembly_cmds
     for my $species (keys %$records) {
         my $spec_ref = $records->{$species}->{DNA};
         for my $strain (keys %$spec_ref) {
+			for my $trimraw (qw(trim raw)) {
+				if ($options->{$trimraw}) {
+					build_strain_cmds($records, $species, $strain, $trimraw);
+				}
+			}
+		}
+	}
+}
             my $samp_ref = $spec_ref->{$strain}->{samples};
             my @sample_list = keys %$samp_ref;
             if (scalar @sample_list == 1)  {
@@ -275,6 +250,5 @@ sub build_assembly_cmds
 
 gather_opts;
 $records = LoadFile($options->{yaml_in});
-get_genomic_records;
 build_assembly_cmds;
 DumpFile($options->{yaml_out}, $records);
