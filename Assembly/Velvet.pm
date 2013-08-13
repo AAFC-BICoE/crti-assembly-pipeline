@@ -27,22 +27,6 @@ sub get_assembly_outdir
     return $assembly_outdir;
 }
 
-sub get_velvet_kdir
-{
-    my $records = shift;
-    my $strain = shift;
-    my $trimraw = shift;
-    my $kmer = shift;
-    my $exp_cov = shift;
-    my $assembly_outdir = get_assembly_outdir($records, $species, $strain, $trimraw);
-    my $kmer_dir = $assembly_outdir . "/assem_kmer-" . $kmer . "_exp-" . $exp_cov . "_covcutoff-auto";
-    unless (-e $assembly_outdir) {
-        mkpath $kmer_dir;
-    }
-    Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "kmer_dir", $kmer_dir);
-    return $kmer_dir;
-}
-
 sub create_kmer_range
 {
     my $records = shift;
@@ -117,5 +101,47 @@ sub get_kmer_bin
     }
     return $bin;
 }
+
+sub get_coverage_vars
+{
+    my $records = shift;
+    my $species = shift;
+    my $strain = shift;
+    my $trimraw = shift;
+    my $trdata = $trimraw . "data";
+    
+    
+    my $var = {};
+    $var->{R1_nreads} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R1", $trdata, "num_reads"]);
+    $var->{R1_readlen} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R1", $trdata, "read_length"]);
+    $var->{R2_nreads} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R2", $trdata, "num_reads"]);
+    $var->{R2_readlen} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R2", $trdata, "read_length"]);
+    $var->{genome_length} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
+    my $pass = 1;
+    for my $key (keys %$var) {
+        if ($var->{$key} !~ /^\s*\d+\s*$/) {
+            print "Got bad var " . $var->{$key} . " at key " . $key . "\n";
+            $pass = 0;
+        }
+    }
+    if ($pass) {
+        $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
+        $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "total_coverage", $var->{total_coverage});
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "average_read_length", $var->{avg_readlen});
+        return $var;
+    } else {
+        return '';
+    }
+}
+
+sub calc_exp_cov
+{
+    my $var = shift;
+    my $kmer = shift;
+    my $exp_cov_float = $var->{total_coverage} * ($var->{avg_readlen} - $kmer + 1) / $var->{avg_readlen};
+    my $exp_cov_rounded_int = int($exp_cov_float + 0.5);
+    return $exp_cov_rounded_int;
+} 
 
 return 1;  
