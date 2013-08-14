@@ -87,8 +87,8 @@ sub add_velveth_idx
 	my $r2file = Assembly::Utils::get_check_record($sample_ref, [$sample_type, "R2", $trdata]);
 
 	my $cmd_str = "-shortPaired";
-    if ($i) { 
-        $cmd_str .= $i+1;
+    if ($idx) { 
+        $cmd_str .= $idx+1;
     }
     $cmd_str .= " " . $r1file . " " . $r2file;
 	
@@ -103,8 +103,8 @@ sub add_velvetg_idx
     my $idx = shift;
     
     my $cmd_str = "-ins_length";
-    if ($i) {
-        $cmd_str .= $i+1;
+    if ($idx) {
+        $cmd_str .= $idx+1;
     }
     if ($sample_type =~ /PE/) {
         $cmd_str .= " 300";
@@ -118,8 +118,8 @@ sub add_velvetg_idx
     }
     if ($sample_type =~ /MP/) {
         $cmd_str .= " -shortMatePaired";
-        if ($i) {
-            $cmd_str .= ($i+1);
+        if ($idx) {
+            $cmd_str .= ($idx+1);
         }
     }
     return $cmd_str;
@@ -127,9 +127,10 @@ sub add_velvetg_idx
 
 sub base_velveth_cmd
 {
+    my $kmer = shift;
     my $kmer_bin = shift;
     my $outdir = shift;
-    my $velveth_bin = $velvet_bin_dir . "/velveth_" . $kmer_bin;
+    my $velveth_bin = $Assembly::Velvet::velvet_bin_dir . "/velveth_" . $kmer_bin;
 
     my $velveth_cmd = $velveth_bin . " " . $outdir . " " . $kmer . 
         "  -fastq -create_binary ";
@@ -143,7 +144,7 @@ sub base_velvetg_cmd
     my $exp_cov = shift;
     my $min_contig_opt = " ";
     my $scaffolding_opt = " -scaffolding yes ";    
-    my $velvetg_bin = $velvet_bin_dir . "/velvetg_" . $kmer_bin;
+    my $velvetg_bin = $Assembly::Velvet::velvet_bin_dir . "/velvetg_" . $kmer_bin;
     my $velvetg_cmd = $velvetg_bin . " " . $outdir . " -exp_cov " . $exp_cov .
         " " . $min_contig_opt . $scaffolding_opt . " -amos_file no -cov_cutoff auto";
     return $velvetg_cmd;
@@ -151,6 +152,7 @@ sub base_velvetg_cmd
 
 sub get_velvet_cmds
 {
+    my $records = shift;
     my $species = shift;
     my $strain = shift;
     my $trimraw = shift;
@@ -169,14 +171,14 @@ sub get_velvet_cmds
     }
     Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "kmer_dir", $kmer_dir);
     
-    my $velveth_cmd = base_velveth_cmd($kmer_bin, $outdir, $kmer);
-    my $velvetg_cmd = base_velvetg_cmd($kmer_bin, $outdir);
+    my $velveth_cmd = base_velveth_cmd($kmer, $kmer_bin, $kmer_dir, $kmer);
+    my $velvetg_cmd = base_velvetg_cmd($kmer_bin, $kmer_dir);
     my $i = 0;
     for my $sample_type (qw(PE PER MP MP3 MP8)) {
         my $sample_ref = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type]);
         if ($sample_ref) {
-            $velveth_cmd .= add_velveth_idx($sample_rec, $sample_type, $trimraw, $i);
-            $velvetg_cmd .= add_velvetg_idx($sample_rec, $sample_type, $trimraw, $i);
+            $velveth_cmd .= add_velveth_idx($sample_ref, $sample_type, $trimraw, $i);
+            $velvetg_cmd .= add_velvetg_idx($sample_ref, $sample_type, $trimraw, $i);
             $i++;
         }
     }
@@ -202,7 +204,10 @@ sub build_assembly_cmds
                     my $cov_vars = get_coverage_vars($records, $species, $strain, $trimraw);
                     my $kmer_list = Assembly::Velvet::create_kmer_range($records, $species, $strain, $trimraw);
                     for my $kmer (@$kmer_list) {
-					    get_velvet_cmds($species, $strain, $trimraw, $kmer, $cov_vars, $assembly_dir);
+					    my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $cov_vars, $assembly_dir);
+					    print "Got velveth command " . $velveth_cmd . "\n";
+					    print "Got velvetg command " . $velvetg_cmd . "\n";
+					}
 				}
 			}
 		}
@@ -210,6 +215,6 @@ sub build_assembly_cmds
 }
 
 gather_opts;
-$records = LoadFile($options->{yaml_in});
-build_assembly_cmds;
+my $records = LoadFile($options->{yaml_in});
+build_assembly_cmds($records);;
 DumpFile($options->{yaml_out}, $records);

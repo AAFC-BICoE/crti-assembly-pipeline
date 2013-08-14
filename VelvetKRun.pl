@@ -11,14 +11,14 @@ my $velvetk_bin = "./velvetk.pl";
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/07_genome_lengths.yml
-        yaml_out yaml_files/08_velvetk.yml
+        yaml_in yaml_files/08_reverse_complement.yml
+        yaml_out yaml_files/09_velvetk.yml
         trim 1
         raw 0
         verbose 0
         run 0
-        velvetk_infile input_data/VK.tab
-        velvetk_outfile output_files/VKOut.tab
+        velvetk_infile input_data/VelvetKBest.tab
+        velvetk_outfile output_files/VelvetKBestOut.tab
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -73,7 +73,7 @@ sub run_velvetk
     if ($fname) {
         open (FIN, '<', $fname) or die "Error: couldn't open file $fname\n";
         <FIN>;
-        my @headers = qw (Species Strain PE PER MP MP3 MP8 trim_raw velvetk_kmer velveth_done velvetg_done best_kmer best_n50);
+        my @headers = qw (Species Strain Biotype Sample trim/raw PE PER MP MP3 MP8 trim_raw velvetk_kmer velveth_done velvetg_done best_kmer best_n50);
         while (my $line = <FIN>) {
             chomp $line;
             my @fields = split (/\t/, $line);
@@ -85,12 +85,13 @@ sub run_velvetk
                 my $val = ($fields[$i] ? $fields[$i] : '');
                 $rec{$key} = $val; 
             }
-            my $species = $rec{Species};
-            my $strain = $rec{Strain};
+            my $species = Assembly::Utils::format_species_key($rec{Species});
+            my $strain = Assembly::Utils::format_strain_key($rec{Strain});
             my $trimraw = $rec{trim_raw};
             my $trimdata = $rec{trim_raw} . "data";
+            print "trdata: $trimdata\n";
             my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
-            if ($genome_size and not $rec{velvetk_kmer}) {
+            if ($genome_size and not $rec{velvetk_kmer}) { 
                 my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
                 for my $sample_type (qw(PE PER MP MP3 MP8)) {
                     #my $hr = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type]);
@@ -108,6 +109,9 @@ sub run_velvetk
                     Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best);
                     push (@newbest, [$species, "DNA", $strain, $best]);
                 }
+            } elsif ($rec{velvetk_kmer}) {
+                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $rec{velvetk_kmer});
+                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", "");
             }
         }
     }
