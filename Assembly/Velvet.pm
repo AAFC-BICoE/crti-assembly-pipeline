@@ -8,6 +8,7 @@ package Assembly::Velvet;
 use strict;
 use warnings;
 use Assembly::Utils;
+use File::Path;
 
 my $velvet_bin_dir = "/opt/bio/velvet";
 my @kbins = (0, 31, 63, 127, 145); 
@@ -18,7 +19,7 @@ sub get_assembly_outdir
     my $species = shift;
     my $strain = shift;
     my $trimraw = shift;
-    my $species_dir = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "PE", "species_dir"];
+    my $species_dir = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "PE", "species_dir"]);
     my $assembly_outdir = $species_dir . "DNA/assemblies/" . $strain . "/velvet/";
     unless (-e $assembly_outdir) {
         mkpath $assembly_outdir;
@@ -109,37 +110,45 @@ sub get_coverage_vars
     my $strain = shift;
     my $trimraw = shift;
     my $trdata = $trimraw . "data";
-    
-    
-    my $var = {};
-    $var->{R1_nreads} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R1", $trdata, "num_reads"]);
-    $var->{R1_readlen} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R1", $trdata, "read_length"]);
-    $var->{R2_nreads} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R2", $trdata, "num_reads"]);
-    $var->{R2_readlen} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "samples", $sample, "data_stats", "R2", $trdata, "read_length"]);
-    $var->{genome_length} = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
-    my $pass = 1;
-    for my $key (keys %$var) {
-        if ($var->{$key} !~ /^\s*\d+\s*$/) {
-            print "Got bad var " . $var->{$key} . " at key " . $key . "\n";
-            $pass = 0;
+    my $read_total = 0;
+    my $rl_sum = 0;
+    my $rl_count = 0;
+    for my $sample_type (qw(PE PER MP MP3 MP8)) {
+        if ($sample_type =~ /MP/) {
+            #$trdata = "rev" . $trdata; # don't do this yet - we don't yet get the reads stats for reversed files.
+        }
+        for my $rval (qw(R1 R2)) {
+            my $numreads = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "data_stats", $rval, $trdata, "num_reads"]);
+            my $readlen = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "data_stats", $rval, $trdata, "read_length"]);
+            if ($numreads =~ /\d+/ and $readlen =~ /\d+/) {
+                $read_total += ($numreads * $readlen);
+                $rl_sum += $readlen;
+                $rl_count++;
+            }
         }
     }
-    if ($pass) {
-        $var->{total_coverage} = ($var->{R1_nreads} * $var->{R1_readlen} + $var->{R2_nreads} * $var->{R2_readlen}) / $var->{genome_length};
-        $var->{avg_readlen} = ($var->{R1_readlen} + $var->{R2_readlen}) / 2;
-        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "total_coverage", $var->{total_coverage});
-        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "average_read_length", $var->{avg_readlen});
-        return $var;
-    } else {
-        return '';
+    
+    my $avg_readlen = 0;
+    if ($rl_count) {
+        $avg_readlen = $rl_sum/$rl_count;
     }
+    my $genome_length = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
+    my $total_coverage = 0;
+    if ($genome_length) {
+        $total_coverage = $read_total / $genome_length;
+    }
+    return ($avg_readlen, $total_coverage);
 }
 
 sub calc_exp_cov
 {
-    my $var = shift;
+    my $total_coverage = shift;
+    my $avg_readlen = shift;
     my $kmer = shift;
-    my $exp_cov_float = $var->{total_coverage} * ($var->{avg_readlen} - $kmer + 1) / $var->{avg_readlen};
+    my $exp_cov_float = -0.5;
+    if ($avg_readlen) {
+        $exp_cov_float = $total_coverage * ($avg_readlen - $kmer + 1) / $avg_readlen;
+    }
     my $exp_cov_rounded_int = int($exp_cov_float + 0.5);
     return $exp_cov_rounded_int;
 } 

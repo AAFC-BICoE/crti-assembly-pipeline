@@ -17,7 +17,7 @@ sub set_default_opts
         raw 0
         verbose 0
         run 0
-        velvetk_infile input_data/VelvetKBest.tab
+        velvetk_infile input_data/AssemblySetup.tab
         velvetk_outfile output_files/VelvetKBestOut.tab
         );
     for my $kdef (keys %defaults) {
@@ -73,7 +73,7 @@ sub run_velvetk
     if ($fname) {
         open (FIN, '<', $fname) or die "Error: couldn't open file $fname\n";
         <FIN>;
-        my @headers = qw (Species Strain Biotype Sample trim/raw PE PER MP MP3 MP8 trim_raw velvetk_kmer velveth_done velvetg_done best_kmer best_n50);
+        my @headers = qw (Species Strain PE PER MP MP3 MP8 trim_raw velvetk_kmer velveth_done velvetg_done best_kmer best_n50);
         while (my $line = <FIN>) {
             chomp $line;
             my @fields = split (/\t/, $line);
@@ -89,7 +89,6 @@ sub run_velvetk
             my $strain = Assembly::Utils::format_strain_key($rec{Strain});
             my $trimraw = $rec{trim_raw};
             my $trimdata = $rec{trim_raw} . "data";
-            print "trdata: $trimdata\n";
             my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
             if ($genome_size and not $rec{velvetk_kmer}) { 
                 my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
