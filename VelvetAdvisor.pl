@@ -12,8 +12,8 @@ my @col_headers = ("Species", "Strain", "Bio_type", "Sample", "Trim/raw", "Num r
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/07_genome_lengths.yml
-        yaml_out yaml_files/07_velvet_advisor.yml
+        yaml_in yaml_files/08_reverse_complement.yml
+        yaml_out yaml_files/09_velvet_advisor.yml
         trim 1
         verbose 0
         advisor_infile input_data/VelvetAdvisorKmers.tab

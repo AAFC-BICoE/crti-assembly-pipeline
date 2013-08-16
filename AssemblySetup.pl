@@ -4,6 +4,7 @@ use warnings;
 use Getopt::Long;
 use YAML::XS qw(LoadFile DumpFile);
 use Assembly::Utils;
+use File::Path;
 
 my $options = {};
 
@@ -14,6 +15,7 @@ sub set_default_opts
         yaml_out yaml_files/06_assembly_setup.yml
         table_out output_files/AssemblySetupOut.tab
         verbose 0
+        create_strain_dirs 0
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -28,6 +30,7 @@ sub check_opts
             Optional:
                 --verbose
                 --table_out <filename>
+                --create_strain_dirs
                 ";
     }
 }
@@ -39,10 +42,18 @@ sub gather_opts
         'yaml_in|i=s',
         'yaml_out|o=s',
         'table_out=s',
+        'create_strain_dirs',
         'verbose',
         );
     set_default_opts;
     check_opts;
+}
+
+sub print_verbose
+{
+    if ($options->{verbose}) {
+        print (@_);
+    }
 }
 
 sub get_sample_type
@@ -75,6 +86,9 @@ sub alter_super_records
         my $species = Assembly::Utils::get_check_record($rec, ["species"]);
         my $species_key = Assembly::Utils::format_species_key($species);
         my $strain = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Genotype"]);
+        unless ($strain =~ /\S/) {
+            $strain = "na_" . $sample;
+        }
         my $strain_key = Assembly::Utils::format_strain_key($strain);
         my $sample_type = get_sample_type($rec);
         my $type_filled = Assembly::Utils::get_check_record($super_records, [$species_key, $bio_type, $strain_key, $sample_type]);
@@ -84,6 +98,14 @@ sub alter_super_records
                 #"strain: $strain_key, sample type: $sample_type\nbut another sample already exists there: $prev_sample\n";
         } else {
             Assembly::Utils::set_check_record ($super_records, [$species_key, $bio_type, $strain_key], $sample_type, $rec);
+            my $strain_dir = Assembly::Utils::get_check_record($rec, ["species_dir"]);
+            $strain_dir .= "/DNA/assemblies/" . $strain_key;
+            unless (-e $strain_dir) {
+                print_verbose "Creating strain dir: " . $strain_dir . "\n";
+                if ($options->{create_strain_dirs}) {
+                    mkpath $strain_dir;
+                }
+            }
         }
     }
     return $super_records;

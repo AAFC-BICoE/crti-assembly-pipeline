@@ -1,0 +1,27 @@
+AAFC Sample		Related genome			Relation Evidence		
+Organism	Kingdom	Organism	Strain	Est Genome Length (bp)	Source	Citation	URL
+Arcobacter cibarius	Bacteria	Arcobacter butzlieri	RM4018	2300000			http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0001358, http://ijsb.sgmjournals.org/content/55/2/713.short
+Arcobacter lanthierii	Bacteria	Campylobacter jejuni	NCTC11168	1700000	Sanger		http://www.magma.ca/~scimat/Arcobacter.htm, http://www.sanger.ac.uk/resources/downloads/bacteria/campylobacter-jejuni.html
+Arcobacter septicus	Bacteria	Arcobacter butzlieri	RM4018	2300000			http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0001358, http://ijsb.sgmjournals.org/content/55/2/713.short
+Basidioascus undulatus	Fungi	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf
+Ditylenchus destructor	Animalia (Nematode)	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Ditylenchus dipsaci	Animalia (Nematode)	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Globodera pallida	Animalia (Nematode)	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Globodera rostochiensis	Animalia (Nematode)	Globodera rostochiensis	R0-19	100000000			http://www.nematodes.org/nematodegenomes/index.php/Globodera_rostochiensis_R0-19
+Pantoea ananatis	Bacteria	Pantoeia ananatis	LMG20103	4700000			http://jb.asm.org/content/192/11/2936.full
+Pantoea stewartii	Bacteria	Pantoea stewartii	DC283	5000000			
+Pectobacterium carotovorum	Bacteria	Pectobacterium carotovorum	PCC21	5000000			http://jb.asm.org/content/194/22/6345.full
+Pectobacterium wasabiae	Bacteria	Pectobacterium wasabiae	WPP163	5000000	JGI		http://genome.ornl.gov/microbial/pcar_was/, http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=TaxonDetail&page=taxonDetail&taxon_oid=646311947
+Penicillium nordicum	Fungi	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank		
+Penicillium thymicola	Fungi	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank		
+Penicillium verrucosum	Fungi	Penicillium chrysogenum	Wisconsin 54-1255	32190000	Genbank		
+Phytophthora infestans	Oomycete	Phytophthora infestans	T30-4	237000000	Broad		http://www.broadinstitute.org/annotation/genome/phytophthora_infestans/GenomeDescriptions.html
+Puccinia graminis	Fungi	Puccinia graminis		80000000	Broad		http://www.broadinstitute.org/annotation/genome/puccinia_group/MultiHome.html
+Puccinia triticina	Fungi	Puccinia triticina		110000000	Broad		http://www.broadinstitute.org/annotation/genome/puccinia_group/MultiHome.html
+Ralstonia solanacearum	Bacteria	Ralstonia solanacearum	GMI1000	5800000	NCBI		http://www.ncbi.nlm.nih.gov/bioproject/57593
+Streptomyces scabies	Bacteria	Streptomyces scabies		10100000			
+Synchytrium endobioticum	Fungi	Family Chytridium		25000000			http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3207900/, http://taxonomicon.taxonomy.nl/TaxonTree.aspx?id=2529
+Tilletia caries	Fungi	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf
+Tilletia controversa	Fungi	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf
+Tilletia indica	Fungi	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf
+Tilletia walkeri	Fungi	Ustilago maydis	521	20000000			http://www.pnas.org/content/suppl/2007/10/29/0706756104.DC1/06756Table3.pdf

@@ -41,7 +41,7 @@
 ./FastQC --trim --submit
 
 # Calculate all raw/trimmed read length and num reads.
-# This can be a very slow step. Use the --no_raw_reads option
+# This can be a very slow step. Use the --no_raw_stats option
 # if you only wish to incorporate already-known values into the 
 # output yaml file.
 ./GetReadInfo.pl
@@ -50,6 +50,8 @@
 # mv output_files/ReadDataOut.tab input_data/ReadData.tab
 # svn commit
 
+# Change format of yaml files and (optionally) create assembly output dirs by strain key.
+./AssemblySetup.pl
 
 # Add any new estimated genome sizes to the file
 # input_data/GenomeLengthEst.tab
@@ -58,6 +60,10 @@
 # Run the following to pull this information into the YAML data for 
 # availability in the next steps of the pipeline.
 ./GenomeLengths.pl
+
+# Reverse mate-paired reads so velvet can accept as paired-end read (no mate-paired 
+# option in velvet).
+./ReverseComplement.pl
 
 # Pull best kmers found from velvet advisor
 # http://dna.med.monash.edu.au/~torsten/velvet_advisor/

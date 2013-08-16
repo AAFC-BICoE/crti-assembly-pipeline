@@ -11,8 +11,8 @@ my $velvetk_bin = "./velvetk.pl";
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/08_reverse_complement.yml
-        yaml_out yaml_files/09_velvetk.yml
+        yaml_in yaml_files/09_velvet_advisor.yml
+        yaml_out yaml_files/10_velvetk.yml
         trim 1
         raw 0
         verbose 0
@@ -91,6 +91,7 @@ sub run_velvetk
             my $trimdata = $rec{trim_raw} . "data";
             my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
             if ($genome_size and not $rec{velvetk_kmer}) { 
+                
                 my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
                 for my $sample_type (qw(PE PER MP MP3 MP8)) {
                     #my $hr = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type]);
@@ -104,7 +105,7 @@ sub run_velvetk
                 if ($options->{run} and $vk_cmd) {
                     my $best = `$vk_cmd`;
                     chomp $best;
-                    print_verbose "velvetk.pl found best kmer: " . $best . "\n";
+                    print "velvetk.pl found best kmer: " . $best . "\n";
                     Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best);
                     push (@newbest, [$species, "DNA", $strain, $best]);
                 }

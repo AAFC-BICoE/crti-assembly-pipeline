@@ -16,7 +16,7 @@ use Assembly::Utils;
 my $options = {};
 my $records = {};
 my @genomic_samples = ();
-my @glen_col_headers = qw(IL_Species IL_Biomaterial_type IL_Kingdom IL_Resident_Expert 
+my @glen_col_headers = qw(IL_Species IL_Kingdom 
         RG_Species RG_Strain RG_Est_Genome_Length RG_Source RG_Citation RG_URL RG_Notes);
 
 sub set_default_opts
@@ -24,7 +24,7 @@ sub set_default_opts
     my %defaults = qw(
             yaml_in yaml_files/06_assembly_setup.yml
             yaml_out yaml_files/07_genome_lengths.yml
-            genome_length_infile input_data/GenomeLengthEst.tab
+            genome_length_infile input_data/GenomeLengths.tab
             genome_length_outfile output_files/GenomeLengthEstOut.tab
             verbose 1
             );
