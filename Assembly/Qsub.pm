@@ -7,10 +7,61 @@ package Assembly::Qsub;
 
 use strict;
 use warnings;
-use Assembly::Utils;
+
+sub build_slot_info
+{
+    my $self = shift;
+    my $slot_info = [];
+    my $host_numbers = [];
+    for (my $i=0; $i<4; $i++) {
+        push (@$host_numbers, $i+4) for (1..2);
+    }
+    push (@$host_numbers, 9) for (1..4);
+    push (@$host_numbers, 10) for (1..8);
+    $self->{num_slots} = scalar @$host_numbers;
+    my $job_ids = [];
+    for (my $i=0; $i<$self->{num_slots}; $i++) {
+        my $rec = {
+                hostname => "biocomp-0-" . $host_numbers->[$i],
+                hold_jid => 0,
+                };
+        push (@$slot_info, $rec);
+    }
+    $self->{slot_info} = $slot_info;
+}
+
+sub new
+{
+    my $class = shift;
+    my $qsub_script = shift;
+    my $submit = shift;
+    my $submit_max = shift;
+    my $verbose = shift;
+    my $self = {
+        qsub_script => $qsub_script,
+        submit => $submit,
+        submit_max => $submit_max,
+        verbose => $verbose,
+        counter => 0,
+        total_submitted => 0,
+        qsub_bin => "/opt/gridengine/bin/lx26-amd64/qsub",
+        };
+    build_slot_info($self);
+    bless $self, $class;
+    return $self;
+}
+
+sub print_verbose
+{
+    my $self = shift;
+    if ($self->{verbose}) {
+        print (@_);
+    }
+}
 
 sub get_jobid
 {
+    my $self = shift;
     my $qsub_str = shift;
     my $hold_jobid = '';
     if ($qsub_str =~ /Your job[^\s]*\s(\d+)[\.\s]/) {
@@ -19,60 +70,78 @@ sub get_jobid
     return $hold_jobid;
 }
 
-sub get_processor_slots
+sub inc_counter
 {
-    my $slots = [];
-    for (my $i=0; $i<4; $i++) {
-        push (@$slots, $i+4) for (1..2);
-    }
-    push (@$slots, 9) for (1..4);
-    push (@$slots, 10) for (1..8);
-    return $slots;
+    my $self = shift;
+    $self->{counter} = ($self->{counter} + 1) % $self->{num_slots};
 }
 
-sub do_host_qsub
+sub inc_total
 {
-    my $trimraw = shift;
-    my $host = shift;
-    my $cmd = shift;
-    my $hold_jid = shift;
+    my $self = shift;
+    $self->{total_submitted} = $self->{total_submitted} + 1;
+}
+
+sub submit_velvet
+{
+    my $self = shift;
+    my $velvet_cmd = shift;
+    my $velvet_type = shift; # type=velveth or velvetg
+    my $count = $self->{counter};
+    my $hostname = $self->{slot_info}->[$count]->{hostname};
+    my $hold_jid = $self->{slot_info}->[$count]->{hold_jid};
     my $hold_param_str = ($hold_jid ? " -hold_jid " . $hold_jid . " " : "");
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velveth_" . $trimraw . 
-            " -l h=" . $host . "  " . $hold_param_str . $options->{qsub_script} . " '" . $cmd . "'";
-    my ($jobid, $qsub_str) = ('','');
-    print $qsub_cmd . "\n";
-    if ($options->{submit}) {
+    my $qsub_cmd = $self->{qsub_bin} . " -N " . $velvet_type . " -l h=" . $hostname . 
+            " " . $hold_param_str . $self->{qsub_script} . " '" . $velvet_cmd . "'";
+    my ($jobid, $qsub_str) = ('',''); 
+    print_verbose $self, $qsub_cmd . "\n";
+    if ($self->{submit} and $count < $self->{submit_max}) {
         $qsub_str = `$qsub_cmd`;
-        print_verbose $qsub_str . "\n";
-        $jobid = get_jobid($qsub_str);
-        print_verbose "Got jobid " . $jobid . "\n";
+        print_verbose $self, $qsub_str . "\n";
+        $jobid = get_jobid($self, $qsub_str);
+        print_verbose $self, "Got jobid " . $jobid . "\n";
     }
-    return ($qsub_cmd, $jobid);
+    $self->{slot_info}->[$count]->{hold_jid} = $jobid; 
+    my $cmd_id = [$qsub_cmd, $jobid];
+    return $cmd_id;    
 }
 
-sub qsub_cmds
+sub submit_vh
 {
-    my $records = shift;
-    my $qsub_param_list = shift;
-    my $jobid_list = shift;
-    my $slots = get_processor_slots;
-    my $num_slots = scalar @$slots;
-    my @holds = ();
-    push (@holds, 0) for (1..$num_slots);
-    my $num_to_submit = scalar @$qsub_param_list;
-    if ($options->{submit_max} and $options->{submit_max} < $num_to_submit) {
-        $num_to_submit = $options->{submit_max};
-    }
-    for (my $i=0; $i<$num_to_submit; $i++) {
-        my ($sample, $trimraw, $kmer, $cmd) = @{$qsub_param_list->[$i]};
-        my $j = $i % $num_slots;
-        my $host = "biocomp-0-" . $slots->[$j];
-        my ($qsub_cmd, $jobid) = do_host_qsub($trimraw, $host, $cmd, $holds[$j]);
-        $holds[$j] = $jobid;
-        set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velveth_qsub_cmd", $qsub_cmd);
-        set_check_record($records, [$sample, "velvet", $trimraw, "kmer", $kmer], "velveth_qsub_jobid", $jobid);
-        push (@$jobid_list, [$sample, $trimraw, $kmer, $jobid, $cmd]);
-    }
+    my $self = shift;
+    my $velveth_cmd = shift;
+    my $trimraw = shift;
+    my $velvet_type = "velveth_" . $trimraw;
+    my $cmd_id = submit_velvet($self, $velveth_cmd, $velvet_type);
+    inc_counter($self);
+    return $cmd_id
+}
+
+sub submit_vg
+{
+    my $self = shift;
+    my $velvetg_cmd = shift;
+    my $trimraw = shift;
+    my $velvet_type = "velvetg_" . $trimraw;
+    my $cmd_id = submit_velvet($self, $velvetg_cmd, $velvet_type);
+    inc_counter($self);
+    return $cmd_id;
+}
+
+sub submit_vhg
+{
+    my $self = shift;
+    my $velveth_cmd = shift;
+    my $velvetg_cmd = shift;
+    my $trimraw = shift;
+    
+    my $vh_type = "velveth_" . $trimraw;
+    my $vg_type = "velvetg_" . $trimraw;
+    my $vh_cmd_id = submit_velvet($self, $velveth_cmd, $vh_type);
+    my $vg_cmd_id = submit_velvet($self, $velvetg_cmd, $vg_type);
+    inc_counter($self);
+    my $merged_cmd_id = [@$vh_cmd_id, @$vg_cmd_id];
+    return $merged_cmd_id;
 }
 
 return 1;

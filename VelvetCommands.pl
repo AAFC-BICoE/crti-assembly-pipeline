@@ -6,6 +6,7 @@ use File::Path;
 use Getopt::Long;
 use Assembly::Utils;
 use Assembly::Velvet;
+use Assembly::Qsub;
 
 # From the records, pull just the genomic data
 # Read in genome lengths from file
@@ -16,6 +17,8 @@ use Assembly::Velvet;
 
 my $options = {};
 my $velvet_bin_dir = "/opt/bio/velvet";
+my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
+my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
 
 # @ kbins is only used by get_kmer_bin function below.
 # Assumes we have binaries of form
@@ -24,11 +27,14 @@ my $velvet_bin_dir = "/opt/bio/velvet";
 sub set_default_opts
 {
     my %defaults = qw(
-            yaml_in yaml_files/09_velvetk.yml
-            yaml_out yaml_files/10_velvet_cmds.yml
+            yaml_in yaml_files/10_velvetk.yml
+            yaml_out yaml_files/11_velvet_cmds.yml
+            qsub_script qsub_script.sh
+            submit 0
+            submit_max 1
             min_kmer 21 
             max_kmer 95
-            trim 1
+            trim 0
             raw 1
             use_velvetk 1
             velvetk_radius 6
@@ -45,7 +51,9 @@ sub check_opts
             Optional:
                 --trim
                 --raw
+                --qsub_script <filename>
                 --submit
+                --submit_max <#>
                 --verbose
                 --min_kmer <value (default 21)>
                 --max_kmer <value (default 95)>
@@ -61,9 +69,11 @@ sub gather_opts
     GetOptions($options,
             'yaml_in|i=s',
             'yaml_out|o=s',
+            'qsub_script=s',
             'trim',
             'raw',
             'submit',
+            'submit_max=s',
             'verbose',
             'min_kmer',
             'max_kmer',
@@ -92,14 +102,17 @@ sub add_velveth_idx
 	if ($sample_type =~ /MP/) {
 		$trdata = "rev" . $trdata;
 	}
-	my $r1file = Assembly::Utils::get_check_record($sample_ref, [$sample_type, "R1", $trdata]);
-	my $r2file = Assembly::Utils::get_check_record($sample_ref, [$sample_type, "R2", $trdata]);
+	my $r1file = Assembly::Utils::get_check_record($sample_ref, ["R1", $trdata]);
+	my $r2file = Assembly::Utils::get_check_record($sample_ref, ["R2", $trdata]);
 
-	my $cmd_str = "-shortPaired";
-    if ($idx) { 
-        $cmd_str .= $idx+1;
+	my $cmd_str = '';
+	if ($r1file and $r2file) {
+        $cmd_str .= "-shortPaired";
+        if ($idx) { 
+            $cmd_str .= $idx+1;
+        }
+        $cmd_str .= " " . $r1file . " " . $r2file. " ";
     }
-    $cmd_str .= " " . $r1file . " " . $r2file;
 	
 	return $cmd_str;
 }
@@ -111,26 +124,29 @@ sub add_velvetg_idx
     my $trimraw = shift;
     my $idx = shift;
     
-    my $cmd_str = "-ins_length";
+    my $cmd_str = " -ins_length";
     if ($idx) {
         $cmd_str .= $idx+1;
     }
     if ($sample_type =~ /PE/) {
-        $cmd_str .= " 300";
+        $cmd_str .= " 300 ";
     } elsif ($sample_type =~ /MP3/) {
-        $cmd_str .= " 3000";
+        $cmd_str .= " 3000 ";
     } elsif ($sample_type =~ /MP8/) {
-        $cmd_str .= " 8000";
+        $cmd_str .= " 8000 ";
     } else {
         print "Warning: unknown insert length for sample_type " . $sample_type . " using 300\n";
-        $cmd_str = " 300";
+        $cmd_str = " 300 ";
     }
-    if ($sample_type =~ /MP/) {
-        $cmd_str .= " -shortMatePaired";
-        if ($idx) {
-            $cmd_str .= ($idx+1);
-        }
-    }
+    # Assume we don't need the below code since default is no and 
+    # mate-paired reads are not contaminated with paired-end reads.
+    #if ($sample_type =~ /MP/) {
+    #   $cmd_str .= " -shortMatePaired";
+    #   if ($idx) {
+    #       $cmd_str .= ($idx+1);
+    #   }
+    #   $cmd_str .= " no ";
+    #}
     return $cmd_str;
 }
 
@@ -155,7 +171,7 @@ sub base_velvetg_cmd
     my $scaffolding_opt = " -scaffolding yes ";    
     my $velvetg_bin = $velvet_bin_dir . "/velvetg_" . $kmer_bin;
     my $velvetg_cmd = $velvetg_bin . " " . $outdir . " -exp_cov " . $exp_cov .
-        " " . $min_contig_opt . $scaffolding_opt . " -amos_file no -cov_cutoff auto";
+        " " . $min_contig_opt . $scaffolding_opt . " -amos_file no -cov_cutoff auto ";
     return $velvetg_cmd;
 }
 
@@ -175,7 +191,7 @@ sub get_velvet_cmds
     my $exp_cov = Assembly::Velvet::calc_exp_cov($total_coverage, $avg_readlen, $kmer);
     
     # Create the kmer directory
-    my $kmer_dir = $assembly_outdir . "/velvet/" . $trimraw . "/assem_kmer-" . $kmer . "_exp_cov-" . $exp_cov . "_covcutoff-auto";
+    my $kmer_dir = $assembly_outdir . "/" . $trimraw . "/assem_kmer-" . $kmer . "_exp_cov-" . $exp_cov . "_covcutoff-auto";
     unless (-e $kmer_dir) {
         mkpath $kmer_dir;
     }
@@ -193,8 +209,8 @@ sub get_velvet_cmds
         }
     }
     if ($i) {
-        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "velveth_cmd");
-        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "velvetg_cmd");
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "velveth_cmd", $velveth_cmd);
+        Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer], "velvetg_cmd", $velvetg_cmd);
     } else {
         $velveth_cmd = '';
         $velvetg_cmd = '';
@@ -202,9 +218,56 @@ sub get_velvet_cmds
     return ($velveth_cmd, $velvetg_cmd);
 }
 
+# check that a set of filenames exist in a given directory.
+sub outfiles_exist
+{
+    my $kdir = shift;
+    my $filenames = shift;
+    my $outputs_exist = 1;
+    for my $fname (@$filenames) {
+        my $fpath = $kdir . "/" . $fname;
+        if (!-e $fpath or !-s $fpath) { # file nonexistent or empty
+            $outputs_exist = 0;
+        }
+    }
+    return $outputs_exist;
+} 
+
+sub submit_cmds
+{
+    my $vqs = shift;
+    my $rec = shift;
+    my $trimraw = shift;
+    my $kdir = Assembly::Utils::get_check_record($rec, ["kmer_dir"]);
+    my $vh_cmd = Assembly::Utils::get_check_record($rec, ["velveth_cmd"]);
+    my $vg_cmd = Assembly::Utils::get_check_record($rec, ["velvetg_cmd"]);
+    
+    my $vh_files_exist = outfiles_exist($kdir, $vh_outfiles);
+    my $vg_files_exist = outfiles_exist($kdir, $vg_outfiles);
+
+    if ($vh_files_exist and !$vg_files_exist) {
+        my $sub_cmds = $vqs->submit_velvetg($vh_cmd, $trimraw);
+        my ($vg_qsub_cmd, $vg_jobid) = $sub_cmds;
+        Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_cmd", $vg_qsub_cmd);
+        Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_jobid", $vg_jobid);
+    } elsif (!$vh_files_exist) {
+        my $sub_cmds = $vqs->submit_vhg($vh_cmd, $vg_cmd, $trimraw);
+        my ($vh_qsub_cmd, $vh_jobid, $vg_qsub_cmd, $vg_jobid) = @$sub_cmds;
+        Assembly::Utils::set_check_record($rec, [], "velveth_qsub_cmd", $vh_qsub_cmd);
+        Assembly::Utils::set_check_record($rec, [], "velveth_qsub_jobid", $vh_jobid);
+        Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_cmd", $vg_qsub_cmd);
+        Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_jobid", $vg_jobid);
+    } elsif ($vh_files_exist and $vg_files_exist) {
+        print_verbose "Not running for this kmer - found valid velvetg output files\n";
+    }
+}
+        
+
 sub build_assembly_cmds
 {
     my $records = shift;
+    print $options->{qsub_script} . "\n";
+    my $vqs = new Assembly::Qsub($options->{qsub_script}, $options->{submit}, $options->{submit_max}, $options->{verbose});
     for my $species (keys %$records) {
         my $spec_ref = $records->{$species}->{DNA};
         for my $strain (keys %$spec_ref) {
@@ -217,6 +280,11 @@ sub build_assembly_cmds
 					    my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $total_coverage, $avg_readlen, $assembly_dir);
 					    print_verbose "Got velveth command " . $velveth_cmd . "\n" if ($velveth_cmd);
 					    print_verbose "Got velvetg command " . $velvetg_cmd . "\n" if ($velvetg_cmd);
+					    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
+					    if ($rec) {
+					        print "GOT RECORD\n";
+					        submit_cmds($vqs, $rec, $trimraw);
+					    }
 					}
 				}
 			}
