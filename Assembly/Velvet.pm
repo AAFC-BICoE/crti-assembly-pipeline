@@ -20,7 +20,7 @@ sub get_assembly_outdir
     my $strain = shift;
     my $trimraw = shift;
     my $species_dir = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "PE", "species_dir"]);
-    my $assembly_outdir = $species_dir . "DNA/assemblies/" . $strain . "/velvet/";
+    my $assembly_outdir = $species_dir . "/DNA/assemblies/" . $strain . "/velvet/";
     unless (-e $assembly_outdir) {
         mkpath $assembly_outdir;
     }

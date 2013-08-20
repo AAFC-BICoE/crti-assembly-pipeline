@@ -281,8 +281,8 @@ sub build_assembly_cmds
 					    print_verbose "Got velveth command " . $velveth_cmd . "\n" if ($velveth_cmd);
 					    print_verbose "Got velvetg command " . $velvetg_cmd . "\n" if ($velvetg_cmd);
 					    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
-					    if ($rec) {
-					        print "GOT RECORD\n";
+					    if ($rec and $velveth_cmd =~ /aired2/) {
+					        print "Submit pooled!!!\n";
 					        submit_cmds($vqs, $rec, $trimraw);
 					    }
 					}
