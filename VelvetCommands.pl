@@ -31,7 +31,7 @@ sub set_default_opts
             yaml_out yaml_files/11_velvet_cmds.yml
             qsub_script qsub_script.sh
             submit 0
-            submit_max 1
+            submit_max 0
             min_kmer 21 
             max_kmer 95
             trim 0
@@ -99,12 +99,16 @@ sub add_velveth_idx
 	my $idx = shift;
 	
 	my $trdata = $trimraw . "data";
+	my ($r1file, $r2file) = ('','');
 	if ($sample_type =~ /MP/) {
-		$trdata = "rev" . $trdata;
+		my $revtrdata = "rev" . $trdata;
+	    $r1file = Assembly::Utils::get_check_record($sample_ref, ["fastx_rc", "R1", $revtrdata]);
+	    $r2file = Assembly::Utils::get_check_record($sample_ref, ["fastx_rc", "R2", $revtrdata]);
+	} else {
+	    $r1file = Assembly::Utils::get_check_record($sample_ref, ["R1", $trdata]);
+	    $r2file = Assembly::Utils::get_check_record($sample_ref, ["R2", $trdata]);
 	}
-	my $r1file = Assembly::Utils::get_check_record($sample_ref, ["R1", $trdata]);
-	my $r2file = Assembly::Utils::get_check_record($sample_ref, ["R2", $trdata]);
-
+    #unless ($r1file and $r2file) { print "Missing data for r1file and r2file sample type is $sample_type\n"; }
 	my $cmd_str = '';
 	if ($r1file and $r2file) {
         $cmd_str .= "-shortPaired";
@@ -246,7 +250,7 @@ sub submit_cmds
     my $vg_files_exist = outfiles_exist($kdir, $vg_outfiles);
 
     if ($vh_files_exist and !$vg_files_exist) {
-        my $sub_cmds = $vqs->submit_velvetg($vh_cmd, $trimraw);
+        my $sub_cmds = $vqs->submit_vg($vh_cmd, $trimraw);
         my ($vg_qsub_cmd, $vg_jobid) = $sub_cmds;
         Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_cmd", $vg_qsub_cmd);
         Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_jobid", $vg_jobid);
@@ -266,7 +270,6 @@ sub submit_cmds
 sub build_assembly_cmds
 {
     my $records = shift;
-    print $options->{qsub_script} . "\n";
     my $vqs = new Assembly::Qsub($options->{qsub_script}, $options->{submit}, $options->{submit_max}, $options->{verbose});
     for my $species (keys %$records) {
         my $spec_ref = $records->{$species}->{DNA};
@@ -274,17 +277,20 @@ sub build_assembly_cmds
 			for my $trimraw (qw(trim raw)) {
 				if ($options->{$trimraw}) {
                     my $assembly_dir = Assembly::Velvet::get_assembly_outdir($records, $species, $strain, $trimraw);
+                    if ($assembly_dir) {
                     my ($total_coverage, $avg_readlen) = Assembly::Velvet::get_coverage_vars($records, $species, $strain, $trimraw);
                     my $kmer_list = Assembly::Velvet::create_kmer_range($records, $species, $strain, $trimraw);
                     for my $kmer (@$kmer_list) {
 					    my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $total_coverage, $avg_readlen, $assembly_dir);
-					    print_verbose "Got velveth command " . $velveth_cmd . "\n" if ($velveth_cmd);
-					    print_verbose "Got velvetg command " . $velvetg_cmd . "\n" if ($velvetg_cmd);
+					    #print_verbose "Got velveth command " . $velveth_cmd . "\n" if ($velveth_cmd);
+					    #print_verbose "Got velvetg command " . $velvetg_cmd . "\n" if ($velvetg_cmd);
 					    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
-					    if ($rec and $velveth_cmd =~ /aired2/) {
-					        print "Submit pooled!!!\n";
-					        submit_cmds($vqs, $rec, $trimraw);
+					    if ($rec) {
+					        if ($velveth_cmd =~ /shortPaired2/ and $velvetg_cmd =~ /ins_length2/) {
+					            submit_cmds($vqs, $rec, $trimraw);
+					        }
 					    }
+					}
 					}
 				}
 			}
