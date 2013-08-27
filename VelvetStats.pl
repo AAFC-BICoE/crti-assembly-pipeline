@@ -3,18 +3,17 @@ use strict;
 use warnings;
 use Getopt::Long;
 use YAML::XS qw (LoadFile DumpFile);
+use Assembly::Utils;
 
 my $options = {};
 # output files created by velvetg
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
-my @col_headers = ("Sample", "Trim/raw", "Species", "Seq type", "Total num reads (M)", "Avg. read len (bp)",
-        "Est. Genome Length", "Min kmer", "Max kmer", "Best kmer", "Best N50", "VelvetK kmer", "VelvetK N50",
-        "Advisor kmer", "Advisor N50", "Missing kmers"); 
+my @col_headers = ("Species", "Strain", "Trim/raw", "VelvetK", "Best Kmer", "Best N50", "Missing Kmers");
 
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/11_velvetg_qsub.yml
+        yaml_in yaml_files/11_velvet_cmds.yml
         yaml_out yaml_files/12_velvet_stats.yml
         stats_outfile output_files/VelvetStats.tab
         verbose 0
@@ -22,7 +21,6 @@ sub set_default_opts
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
     }
-    $options->{qsub_opts} = $options->{qsub_opts} . ""; # . -N velvet_hg ";
 }
 
 sub check_opts
@@ -38,7 +36,6 @@ sub check_opts
 
 sub gather_opts
 {
-    $options->{qsub_opts} = '';
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
@@ -49,44 +46,13 @@ sub gather_opts
     check_opts;
 }
 
-sub get_check_record
-{
-    my $ref = shift;
-    my $kref = shift;
-    for my $key (@$kref) {
-        if (ref($ref) eq "HASH" and defined ($ref->{$key})) {
-            $ref = $ref->{$key};
-        } else {
-            return '';
-        }
-    }
-    return $ref;
-}
-
-sub set_check_record
-{
-    my $ref = shift;
-    my $kref = shift;
-    my $last_key = shift;
-    my $value = shift;
-    for my $key (@$kref) {
-        if (defined ($ref->{$key})) {
-            $ref = $ref->{$key};
-        } else {
-            $ref->{$key} = {};
-            $ref = $ref->{$key};
-        }
-    }
-    $ref->{$last_key} = $value;
-}
-
 # Get an array of all the kmer values
 sub get_kmer_range
 {
     my $rec = shift;
     my $tr = shift;
-    my $kmin = get_check_record($rec, ["velvet", $tr, "min_kmer"]);
-    my $kmax = get_check_record($rec, ["velvet", $tr, "max_kmer"]);
+    my $kmin = Assembly::Utils::get_check_record($rec, ["velvet", $tr, "min_kmer"]);
+    my $kmax = Assembly::Utils::get_check_record($rec, ["velvet", $tr, "max_kmer"]);
     my $krange = [];
     if ($kmin =~ /^\d+$/ and $kmax =~ /^\d+$/) {
         for (my $kmer = $kmin; $kmer <= $kmax; $kmer = $kmer + 2) {
@@ -96,24 +62,12 @@ sub get_kmer_range
     return $krange;
 }
 
-sub get_genomic_samples
-{
-    my $records = shift;
-    my $sample_list = [];
-    for my $sample (keys %$records) {
-        if ($records->{$sample}->{bio_type} =~ /DNA/) {
-            push (@$sample_list, $sample);
-        }
-    }
-    return $sample_list;
-}
-
 sub parse_log_n50
 {
     my $rec = shift;
     my $tr = shift;
     my $kmer = shift;
-    my $kmer_dir = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
+    my $kmer_dir = Assembly::Utils::get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
     my $log_file = $kmer_dir . "/Log";
     my $contig_file = $kmer_dir . "/contigs.fa";
     my $n50 = '';
@@ -142,25 +96,23 @@ sub get_max_kmer
         for my $kmer (@$kmer_range) {
             my $n50 = parse_log_n50($rec, $tr, $kmer);
             if ($n50) {
-                set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "N50", $n50);
+                Assembly::Utils::set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "N50", $n50);
                 if ($n50 > $max{n50}) {
                     $max{n50} = $n50;
                     $max{kmer} = $kmer;
                 }
-                if ($n50 < 2000) {
-                    print $rec->{species} . "\t" . $rec->{sample} . "\t$tr\t" . $kmer . "\t" . $n50 . "\t";
-                    my $kdir = get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
+                #if ($n50 < 2000) {
+                 #   print $rec->{species} . "\t" . $rec->{sample} . "\t$tr\t" . $kmer . "\t" . $n50 . "\t";
+                 #   my $kdir = Assembly::Utils::get_check_record($rec, ["velvet", $tr, "kmer", $kmer, "kmer_dir"]);
                     #print $kdir . "\t";
-                    my $du = `du -h $kdir`;
-                    print "Disk usage: $du\n";
-                }
+                    #my $du = `du -h $kdir`;
+                    #print "Disk usage: $du\n";
+                #}
             }
         }
         if ($max{n50} > 0) {
-            my $sample = $rec->{sample};
-            #print "For sample $sample $tr got max n50 kmer " . $max{kmer} . " value " . $max{n50} . "\n";
-            set_check_record($rec, ["velvet", $tr], "max_n50_kmer", $max{kmer});
-            set_check_record($rec, ["velvet", $tr], "max_n50_value", $max{n50});
+            Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_kmer", $max{kmer});
+            Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_value", $max{n50});
         }
     }
 }
@@ -168,12 +120,12 @@ sub get_max_kmer
 sub get_all_max
 {
     my $records = shift;
-    my $sample_list = shift;
-    for my $sample (@$sample_list) {
-        print $sample . "\n";
-        my $rec = $records->{$sample};
-        for my $tr (qw(trim raw)) {
-            get_max_kmer($rec, $tr);
+    for my $species (keys %$records) {
+        for my $strain (keys %{$records->{$species}->{DNA}}) {
+            my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain]);
+            for my $tr (qw(trim raw)) {
+                get_max_kmer($rec, $tr);
+            }
         }
     }
 }   
@@ -187,7 +139,7 @@ sub get_missing_kmers
     my @missing = ();
     if ($kmin and $kmax) {
         for (my $k=$kmin; $k<=$kmax; $k+= 2) {
-            my $n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $k, "N50"]);
+            my $n50 = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "kmer", $k, "N50"]);
             unless ($n50 =~ /\d/) {
                 push (@missing, $k);
             }
@@ -198,48 +150,24 @@ sub get_missing_kmers
 
 sub get_stats_line
 {
-    my $rec = shift;
+    my $records = shift;
+    my $species = shift;
+    my $strain = shift;
     my $trimraw = shift;
     my $trimdata = $trimraw . "data";
-    my $sample = $rec->{sample};
-    
-    my $species = $rec->{species};
-    my $bio_type = $rec->{bio_type};
-    
-    my $r1_numreads = get_check_record($rec, ["data_stats", "R1", $trimdata, "num_reads"]);
-    my $r2_numreads = get_check_record($rec, ["data_stats", "R2", $trimdata, "num_reads"]);
-    
-    my $total_numreads = '';
-    if ($r1_numreads and $r2_numreads) {
-        $total_numreads = ($r1_numreads + $r2_numreads) / 1000000;
-    }
-    my $avg_readlen = get_check_record($rec, ["velvet", $trimraw, "average_read_length"]);
-    my $genome_len = get_check_record($rec, ["related_genome_length", "RG_Est_Genome_Length"]);
-    if ($genome_len) {
-        $genome_len = $genome_len / 1000000;
-    }
-    
-    my $advisor_kmer = get_check_record($rec, ["velvet", $trimraw, "velvet_advisor_best_kmer"]);
-    my $advisor_n50 ='';
-    if ($advisor_kmer) {
-        $advisor_n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $advisor_kmer, "N50"]);
-    }
 
-    my $vk_kmer = get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
-    my $vk_n50 = '';
-    if ($vk_kmer) {
-        $vk_n50 = get_check_record($rec, ["velvet", $trimraw, "kmer", $vk_kmer, "N50"]);
-    }
-    
-    my $best_kmer = get_check_record($rec, ["velvet", $trimraw, "max_n50_kmer"]);
-    my $best_n50 = get_check_record($rec, ["velvet", $trimraw, "max_n50_value"]);
+    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain]);
 
-    my $kmin = get_check_record($rec, ["velvet", $trimraw, "min_kmer"]);
-    my $kmax = get_check_record($rec, ["velvet", $trimraw, "max_kmer"]);
+    my $vk_kmer = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
+    
+    my $best_kmer = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_kmer"]);
+    my $best_n50 = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_value"]);
+
+    my $kmin = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "min_kmer"]);
+    my $kmax = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_kmer"]);
     my $missing_kmers = get_missing_kmers($rec, $trimraw, $kmin, $kmax);
     
-    my $out_str = join ("\t", ($sample, $trimraw, $species, $bio_type, $total_numreads, $avg_readlen, $genome_len,
-            $kmin, $kmax, $best_kmer, $best_n50, $vk_kmer, $vk_n50, $advisor_kmer, $advisor_n50, $missing_kmers));
+    my $out_str = join ("\t", ($species, $strain, $trimraw, $vk_kmer, $best_kmer, $best_n50, $missing_kmers));
     
     return $out_str;
 }
@@ -247,16 +175,16 @@ sub get_stats_line
 sub write_stats_file
 {
     my $records = shift;
-    my $sample_list = shift;
     my $fname = ($options->{stats_outfile} ? $options->{stats_outfile} : '');
     if ($fname) {
         open (FSTATS, '>', $fname) or die "Error: couldn't open output stats file $fname.\n";
         print FSTATS join ("\t", @col_headers) . "\n";
-        for my $sample (@$sample_list) {
-            my $rec = $records->{$sample};
-            for my $trimraw (qw(trim raw)) {
-                my $stats_line = get_stats_line ($rec, $trimraw);
-                print FSTATS $stats_line . "\n";
+        for my $species (keys %$records) {
+            for my $strain (keys %{$records->{$species}->{DNA}}) {
+                for my $trimraw (qw(trim raw)) {
+                    my $stats_line = get_stats_line ($records, $species, $strain, $trimraw);
+                    print FSTATS $stats_line . "\n";
+                }
             }
         }
         close (FSTATS);
@@ -267,9 +195,8 @@ sub run_all
 {          
     gather_opts;
     my $records = LoadFile($options->{yaml_in});
-    my $sample_list = get_genomic_samples($records);
-    get_all_max($records, $sample_list);
-    write_stats_file($records, $sample_list);
+    get_all_max($records);
+    write_stats_file($records);
     DumpFile($options->{yaml_out}, $records);
 }
 

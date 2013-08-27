@@ -115,7 +115,7 @@ sub add_velveth_idx
         if ($idx) { 
             $cmd_str .= $idx+1;
         }
-        $cmd_str .= " " . $r1file . " " . $r2file. " ";
+        $cmd_str .= " -separate -fastq " . $r1file . " " . $r2file. " ";
     }
 	
 	return $cmd_str;
@@ -286,9 +286,9 @@ sub build_assembly_cmds
 					    #print_verbose "Got velvetg command " . $velvetg_cmd . "\n" if ($velvetg_cmd);
 					    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
 					    if ($rec) {
-					        if ($velveth_cmd =~ /shortPaired2/ and $velvetg_cmd =~ /ins_length2/) {
+					        #if ($velveth_cmd =~ /shortPaired2/ and $velvetg_cmd =~ /ins_length2/) {
 					            submit_cmds($vqs, $rec, $trimraw);
-					        }
+					        #}
 					    }
 					}
 					}

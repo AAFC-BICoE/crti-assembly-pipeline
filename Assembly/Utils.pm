@@ -13,7 +13,7 @@ sub get_check_record
     my $ref = shift;
     my $kref = shift;
     for my $key (@$kref) {
-        if (defined ($ref->{$key})) {
+        if ($ref and defined ($ref->{$key})) {
             $ref = $ref->{$key};
         } else {
             return '';
