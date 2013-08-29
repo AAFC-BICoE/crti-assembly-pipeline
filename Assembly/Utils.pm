@@ -61,7 +61,7 @@ sub format_strain_key
     $strain =~ s/\bstrain\b\s*//i;
     $strain =~ s/\s+/_/g;
     unless ($strain =~ /\S/) {
-        $strain = "unknown_strain";
+        $strain = "unknown";
     }
     return $strain;
 }

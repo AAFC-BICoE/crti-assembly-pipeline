@@ -38,6 +38,7 @@ sub set_default_opts
             raw 1
             use_velvetk 1
             velvetk_radius 6
+            specimen_dir ../../processing_test2
             );
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
@@ -59,6 +60,7 @@ sub check_opts
                 --max_kmer <value (default 95)>
                 --use_velvetk
                 --velvetk_radius <nearby kmers max>
+                --specimen_dir <dirname>
                 ";
     }
 }
@@ -79,6 +81,7 @@ sub gather_opts
             'max_kmer',
             'use_velvetk',
             'velvetk_radius=s',
+            'specimen_dir=s',
             );
     set_default_opts;
     check_opts;
@@ -282,13 +285,11 @@ sub build_assembly_cmds
                     my $kmer_list = Assembly::Velvet::create_kmer_range($records, $species, $strain, $trimraw);
                     for my $kmer (@$kmer_list) {
 					    my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $total_coverage, $avg_readlen, $assembly_dir);
-					    #print_verbose "Got velveth command " . $velveth_cmd . "\n" if ($velveth_cmd);
-					    #print_verbose "Got velvetg command " . $velvetg_cmd . "\n" if ($velvetg_cmd);
 					    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
 					    if ($rec) {
-					        #if ($velveth_cmd =~ /shortPaired2/ and $velvetg_cmd =~ /ins_length2/) {
+					        if ($velveth_cmd !~ /shortPaired2/ and $velvetg_cmd !~ /ins_length2/) {
 					            submit_cmds($vqs, $rec, $trimraw);
-					        #}
+					        }
 					    }
 					}
 					}

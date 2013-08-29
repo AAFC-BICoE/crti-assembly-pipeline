@@ -76,6 +76,7 @@ sub parse_genome_lengths
             if ($species and $records->{$species} and $records->{$species}->{DNA}) {
                 my $spec_rec = $records->{$species}->{DNA};
                 for my $strain (keys %$spec_rec) {
+                    print "Working on species $species, strain $strain\n";
                     $records->{$species}->{DNA}->{$strain}->{related_genome_length} = {};
                     my $rgl_ref = $records->{$species}->{DNA}->{$strain}->{related_genome_length};
                     for my $ch (@glen_col_headers) {

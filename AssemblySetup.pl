@@ -63,18 +63,20 @@ sub get_sample_type
     my $species_long = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Organism"]);
     my $notes = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Notes"]);
     my $type = "PE";
-    if ($biomaterial =~ /\b3\s*kb\b/i) {
-        $type = "MP3";
-    } elsif ($biomaterial =~ /\b8\s*kb\b/i) {
-        $type = "MP8";
+    if ($biomaterial =~ /\b([38])\s*kb\b/i) {
+        $type = "MP" . $1;
     } elsif ($biomaterial =~ /\bMP\b/) {
-        $type = "MP";
+        my $seqspec = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Sequencing_Specifications"]);
+        if ($seqspec =~ /([38])\s*kb/i) {
+            $type = "MP" . $1;
+        } else {
+            $type = "MP";
+        }
     } elsif ($species_long =~ /resequencing/i or $notes =~ /resequencing/i) {
         $type = "PER";
     }
     return $type;
 }
-
 
 sub alter_super_records
 {
@@ -86,10 +88,10 @@ sub alter_super_records
         my $species = Assembly::Utils::get_check_record($rec, ["species"]);
         my $species_key = Assembly::Utils::format_species_key($species);
         my $strain = Assembly::Utils::get_check_record($rec, ["sequencing_metadata", "Genotype"]);
-        unless ($strain =~ /\S/) {
-            $strain = "na_" . $sample;
-        }
         my $strain_key = Assembly::Utils::format_strain_key($strain);
+        if ($strain_key =~ /unknown_strain/) {
+            $strain_key = $strain_key . "_" . $sample;
+        }
         my $sample_type = get_sample_type($rec);
         my $type_filled = Assembly::Utils::get_check_record($super_records, [$species_key, $bio_type, $strain_key, $sample_type]);
         if ($type_filled) {

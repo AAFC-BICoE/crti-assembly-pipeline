@@ -33,6 +33,8 @@ sub get_assembly_outdir
     return $assembly_outdir;
 }
 
+
+
 sub create_kmer_range
 {
     my $records = shift;

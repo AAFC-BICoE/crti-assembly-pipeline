@@ -4,9 +4,12 @@ use warnings;
 use Getopt::Long;
 use YAML::XS qw (LoadFile DumpFile);
 use Assembly::Utils;
+use Cwd;
 
 my $options = {};
-my $velvetk_bin = "./velvetk.pl";
+my $cdir = getcwd;
+my $velvetk_bin = $cdir . "/velvetk.pl";
+my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
 
 sub set_default_opts
 {
@@ -19,6 +22,7 @@ sub set_default_opts
         run 0
         velvetk_infile input_data/AssemblySetup.tab
         velvetk_outfile output_files/VelvetKBestOut.tab
+        qsub_script qsub_script.sh
         );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -37,12 +41,14 @@ sub check_opts
                 --run
                 --velvetk_infile <filename>
                 --velvetk_outfile <filename>
+                --qsub_script <filename>
                 ";
     }
 }
 
 sub gather_opts
 {
+    $options->{qsub_opts} = '';
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
@@ -53,6 +59,7 @@ sub gather_opts
         'velvetk_infile=s',
         'velvetk_outfile=s',
         'run',
+        'qsub_script=s',
         );
     set_default_opts;
     check_opts;
@@ -63,6 +70,14 @@ sub print_verbose
     if ($options->{verbose}) {
         print (@_);
     }
+}
+
+sub get_qsub_cmd
+{
+    my $cmd = shift;
+    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N velvetk " . 
+            " " . $options->{qsub_script} . " '" . $cmd . "'";
+    return $qsub_cmd;
 }
 
 sub run_velvetk
@@ -90,7 +105,11 @@ sub run_velvetk
             my $trimraw = $rec{trim_raw};
             my $trimdata = $rec{trim_raw} . "data";
             my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
-            if ($genome_size and not $rec{velvetk_kmer}) { 
+            unless ($genome_size) {
+                print "Couldn't get genome size for species $species strain $strain\n";
+            }
+            
+            if ($genome_size ) { 
                 
                 my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
                 for my $sample_type (qw(PE PER MP MP3 MP8)) {
@@ -101,13 +120,22 @@ sub run_velvetk
                     $vk_cmd .= $r1data . " " . $r2data . " ";
                 }
                 print "got velvetk_cmd: $vk_cmd\n";
+                my $vk_qsub_cmd = get_qsub_cmd($vk_cmd);
                 Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", $vk_cmd);
+                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_qsub_cmd", $vk_qsub_cmd);
+                print "got qsub_cmd: $vk_qsub_cmd\n";
+                
                 if ($options->{run} and $vk_cmd) {
                     my $best = `$vk_cmd`;
                     chomp $best;
                     print "velvetk.pl found best kmer: " . $best . "\n";
                     Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best);
                     push (@newbest, [$species, "DNA", $strain, $best]);
+                    
+                    # qsub version:
+                    # have to pull the jobid, then submit another job that holds on this one
+                    # and then goes through the qsub output files for this jobid and pulls out
+                    # the best kmer from that.
                 }
             } elsif ($rec{velvetk_kmer}) {
                 Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $rec{velvetk_kmer});
