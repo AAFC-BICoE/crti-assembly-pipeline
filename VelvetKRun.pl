@@ -80,6 +80,16 @@ sub get_qsub_cmd
     return $qsub_cmd;
 }
 
+sub get_jobid
+{
+    my $qsub_str = shift;
+    my $hold_jobid = '';
+    if ($qsub_str =~ /Your job[^\s]*\s(\d+)[\.\s]/) {
+        $hold_jobid = $1;
+    }
+    return $hold_jobid;
+}
+
 sub run_velvetk
 {
     my $records = shift;
@@ -136,6 +146,9 @@ sub run_velvetk
                     # have to pull the jobid, then submit another job that holds on this one
                     # and then goes through the qsub output files for this jobid and pulls out
                     # the best kmer from that.
+                    # my $qsub_str = `$vk_qsub_cmd`;
+                    # my $jobid = get_jobid($qsub_str);
+                    # get_best_from_outfile_in_cwd(hold on $jobid)
                 }
             } elsif ($rec{velvetk_kmer}) {
                 Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $rec{velvetk_kmer});

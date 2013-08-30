@@ -14,12 +14,11 @@ sub build_slot_info
     my $self = shift;
     my $slot_info = [];
     my $host_numbers = [];
-    for (my $i=0; $i<4; $i++) {
-        push (@$host_numbers, $i+4) for (1..2);
+    for (my $i=0; $i<8; $i++) {
+        push (@$host_numbers, $i) for (1..2);
     }
     push (@$host_numbers, 9) for (1..8);
     push (@$host_numbers, 10) for (1..8);
-    #push (@$host_numbers, 9) for (1..8);
     $self->{num_slots} = scalar @$host_numbers;
     my $job_ids = [];
     for (my $i=0; $i<$self->{num_slots}; $i++) {
