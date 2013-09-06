@@ -20,7 +20,7 @@ sub set_default_opts
         raw 0
         verbose 0
         run 0
-        velvetk_infile input_data/AssemblySetup.tab
+        velvetk_infile input_data/VelvetKBest.tab
         velvetk_outfile output_files/VelvetKBestOut.tab
         qsub_script qsub_script.sh
         );
@@ -98,7 +98,7 @@ sub run_velvetk
     if ($fname) {
         open (FIN, '<', $fname) or die "Error: couldn't open file $fname\n";
         <FIN>;
-        my @headers = qw (Species Strain PE PER MP MP3 MP8 trim_raw velvetk_kmer velveth_done velvetg_done best_kmer best_n50);
+        my @headers = qw (Species Strain PE PER MP MP3 MP8 trim_raw velvetk_kmer);
         while (my $line = <FIN>) {
             chomp $line;
             my @fields = split (/\t/, $line);
@@ -118,8 +118,7 @@ sub run_velvetk
             unless ($genome_size) {
                 print "Couldn't get genome size for species $species strain $strain\n";
             }
-            
-            if ($genome_size ) { 
+            if ($genome_size and not $rec{velvetk_kmer}) { 
                 
                 my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
                 for my $sample_type (qw(PE PER MP MP3 MP8)) {
@@ -129,16 +128,16 @@ sub run_velvetk
                     
                     $vk_cmd .= $r1data . " " . $r2data . " ";
                 }
-                print "got velvetk_cmd: $vk_cmd\n";
+                #print "got velvetk_cmd: $vk_cmd\n";
                 my $vk_qsub_cmd = get_qsub_cmd($vk_cmd);
                 Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", $vk_cmd);
                 Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_qsub_cmd", $vk_qsub_cmd);
-                print "got qsub_cmd: $vk_qsub_cmd\n";
+                #print "got qsub_cmd: $vk_qsub_cmd\n";
                 
                 if ($options->{run} and $vk_cmd) {
+                    print "Running command $vk_cmd\n";
                     my $best = `$vk_cmd`;
                     chomp $best;
-                    print "velvetk.pl found best kmer: " . $best . "\n";
                     Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best);
                     push (@newbest, [$species, "DNA", $strain, $best]);
                     
@@ -162,30 +161,36 @@ sub run_velvetk
     }
 }
 
-sub write_new_kmers
+sub write_vk_kmers
 {
     my $records = shift;
     my $sample = '';
     my $fname = ($options->{velvetk_outfile} ? $options->{velvetk_outfile} : '');
     if ($fname) {
         open (FTAB, '>', $fname) or die "Error: couldn't open file $fname\n";
-        print FTAB join("\t", qw(Species Strain Trim/Raw VK_Best_Kmer VK_Command)) . "\n";
+        print FTAB join("\t", qw(Species Strain PE PER MP MP3 MP8 Trim/Raw VK_Best_Kmer)) . "\n";
         for my $species (keys %$records) {
             my $ss = $records->{$species}->{DNA};
             for my $strain (keys %$ss) {
+                my $out_str = $species . "\t" . $strain . "\t";
+                for my $sample_type (qw(PE PER MP MP3 MP8)) {
+                    my $sample_id = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "sample"]);
+                    $out_str .= $sample_id . "\t";
+                }
                 for my $trimraw (qw(trim raw)) {
-                    my $vk_cmd = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_cmd"]);
                     my $vk_best = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_best_kmer"]);
-                    print FTAB join("\t", ($species, $strain,$trimraw, $vk_best, $vk_cmd)) . "\n";
+                    print FTAB $out_str . $trimraw . "\t" . $vk_best . "\n";
                 }
             }
         }
+        close (FTAB);
     }
 }
 
 gather_opts;
 my $records = LoadFile($options->{yaml_in});
 run_velvetk($records);
+write_vk_kmers($records);
 DumpFile($options->{yaml_out}, $records);
 
 

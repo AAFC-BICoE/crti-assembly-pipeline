@@ -60,8 +60,8 @@ sub print_verbose
 sub get_qsub_cmd
 {
     my $cmd = shift;
-    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N revcomp" . 
-            " " . $options->{qsub_script} . " '" . $cmd . "'";
+    my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N revcomp " . 
+            " -l h=biocomp-0-5 " . $options->{qsub_script} . " '" . $cmd . "'";
     return $qsub_cmd;
 }
 

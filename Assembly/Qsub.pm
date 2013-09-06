@@ -24,7 +24,7 @@ sub build_slot_info
     for (my $i=0; $i<$self->{num_slots}; $i++) {
         my $rec = {
                 hostname => "biocomp-0-" . $host_numbers->[$i],
-                hold_jid => 0,
+                hold_jid => 93975,
                 };
         push (@$slot_info, $rec);
     }
@@ -91,12 +91,11 @@ sub submit_velvet
     my $count = $self->{counter};
     my $hostname = $self->{slot_info}->[$count]->{hostname};
     my $hold_jid = $self->{slot_info}->[$count]->{hold_jid};
-    print "Got hostname $hostname, hold jid $hold_jid\n";
     my $hold_param_str = ($hold_jid ? " -hold_jid " . $hold_jid . " " : "");
     my $qsub_cmd = $self->{qsub_bin} . " -N " . $velvet_type . " -l h=" . $hostname . 
             " " . $hold_param_str . $self->{qsub_script} . " '" . $velvet_cmd . "'";
     my ($jobid, $qsub_str) = ('',''); 
-    print $qsub_cmd . "\n";
+    #print $qsub_cmd . "\n";
     if ($self->{submit}) {
         my $exceed_max = 0;
         if ($self->{submit_max} and $self->{total_submitted} > $self->{submit_max}) {
@@ -106,7 +105,6 @@ sub submit_velvet
             $qsub_str = `$qsub_cmd`;
             print_verbose $self, $qsub_str . "\n";
             $jobid = get_jobid($self, $qsub_str);
-            print "Got jobid $jobid\n";
             print_verbose $self, "Got jobid " . $jobid . "\n";
             inc_total($self);
         }
@@ -147,7 +145,7 @@ sub submit_vhg
     my $velveth_cmd = shift;
     my $velvetg_cmd = shift;
     my $trimraw = shift;
-    print "Submitting cmds $velveth_cmd \n\n $velvetg_cmd \n\n";
+    #print "Submitting cmds $velveth_cmd \n\n $velvetg_cmd \n\n";
     my $vh_type = "velveth_" . $trimraw;
     my $vg_type = "velvetg_" . $trimraw;
     my $vh_cmd_id = submit_velvet($self, $velveth_cmd, $vh_type);

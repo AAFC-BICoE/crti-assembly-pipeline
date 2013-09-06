@@ -32,9 +32,9 @@ sub set_default_opts
             qsub_script qsub_script.sh
             submit 0
             submit_max 0
-            min_kmer 21 
-            max_kmer 95
-            trim 0
+            min_kmer 75 
+            max_kmer 75
+            trim 1
             raw 1
             use_velvetk 1
             velvetk_radius 6
