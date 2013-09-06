@@ -1,0 +1,115 @@
+Species	Strain	PE	PER	MP	MP3	MP8	Trim/Raw	VK_Best_Kmer
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	trim	87
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	raw	93
+Synchytrium_endobioticum	unknown					S00180A	trim	
+Synchytrium_endobioticum	unknown					S00180A	raw	
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					trim	49
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					raw	49
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809		trim	
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809		raw	
+Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					trim	65
+Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					raw	73
+Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					trim	79
+Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					raw	85
+Penicillium_nordicum	DAOM_185683	S0016FF					trim	57
+Penicillium_nordicum	DAOM_185683	S0016FF					raw	65
+Globodera_rostochiensis	SCRIR04_pathotype_Ro4	S00138A					trim	55
+Globodera_rostochiensis	SCRIR04_pathotype_Ro4	S00138A					raw	65
+Globodera_rostochiensis	unknown_strain2						trim	73
+Globodera_rostochiensis	unknown_strain2						raw	81
+Globodera_rostochiensis	SCRIR03_pathotype_Ro3	S001384					trim	79
+Globodera_rostochiensis	SCRIR03_pathotype_Ro3	S001384					raw	85
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	S001389			S001808		trim	67
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	S001389			S001808		raw	73
+Globodera_rostochiensis	unknown_strain1						trim	55
+Globodera_rostochiensis	unknown_strain1						raw	63
+Globodera_rostochiensis	SCRIR05_pathotype_Ro5	S00138D					trim	63
+Globodera_rostochiensis	SCRIR05_pathotype_Ro5	S00138D					raw	71
+Globodera_rostochiensis	Ro19_pathotype_Ro1	S001388					trim	77
+Globodera_rostochiensis	Ro19_pathotype_Ro1	S001388					raw	87
+Globodera_rostochiensis	QC_pathotype_Ro1	S0016FE			S001703	S00141B	trim	75
+Globodera_rostochiensis	QC_pathotype_Ro1	S0016FE			S001703	S00141B	raw	81
+Globodera_rostochiensis	unknown	A066581					trim	
+Globodera_rostochiensis	unknown	A066581					raw	
+Globodera_rostochiensis	Nfld_isolate	S001385					trim	57
+Globodera_rostochiensis	Nfld_isolate	S001385					raw	65
+Arcobacter_cibarius	LMG_21996	S00138E					trim	91
+Arcobacter_cibarius	LMG_21996	S00138E					raw	101
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1001	S00138F					trim	87
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1001	S00138F					raw	97
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1033	S001383					trim	93
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1033	S001383					raw	99
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1009	S001386					trim	85
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1009	S001386					raw	93
+Pantoea_stewartii	subsp_Nov_S301	S00106C					trim	85
+Pantoea_stewartii	subsp_Nov_S301	S00106C					raw	91
+Pantoea_stewartii	DOAB_230	S00107A					trim	81
+Pantoea_stewartii	DOAB_230	S00107A					raw	85
+Pantoea_stewartii	DOAB_021	S000D00					trim	87
+Pantoea_stewartii	DOAB_021	S000D00					raw	91
+Tilletia_walkeri	DAOM_236422	S000D01			S001418	S001713	trim	7
+Tilletia_walkeri	DAOM_236422	S000D01			S001418	S001713	raw	83
+Penicillium_verrucosum	KAS_4260	S00106E			S001715	S001714	trim	85
+Penicillium_verrucosum	KAS_4260	S00106E			S001715	S001714	raw	89
+Penicillium_verrucosum	KAS_4251	S001069					trim	69
+Penicillium_verrucosum	KAS_4251	S001069					raw	77
+Penicillium_verrucosum	DAOM_214801	S001702					trim	73
+Penicillium_verrucosum	DAOM_214801	S001702					raw	81
+Penicillium_verrucosum	DAOM_211566	S001068					trim	69
+Penicillium_verrucosum	DAOM_211566	S001068					raw	75
+Penicillium_verrucosum	KAS_4382	S00106A					trim	1
+Penicillium_verrucosum	KAS_4382	S00106A					raw	1
+Penicillium_verrucosum	KAS_4370	S0017AF					trim	37
+Penicillium_verrucosum	KAS_4370	S0017AF					raw	69
+Penicillium_verrucosum	DAOM_213195	S001701					trim	53
+Penicillium_verrucosum	DAOM_213195	S001701					raw	59
+Pectobacterium_wasabiae	Ecw1002	S000CFE					trim	83
+Pectobacterium_wasabiae	Ecw1002	S000CFE					raw	87
+Arcobacter_lanthierii	AF_1430	S00107D					trim	93
+Arcobacter_lanthierii	AF_1430	S00107D					raw	99
+Puccinia_triticina	race_MFDS_RSA2117	S001380					trim	71
+Puccinia_triticina	race_MFDS_RSA2117	S001380					raw	77
+Puccinia_triticina	race_MBDS_RSA2119	S00137D					trim	71
+Puccinia_triticina	race_MBDS_RSA2119	S00137D					raw	77
+Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	trim	73
+Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	raw	91
+Puccinia_graminis	race_TMRTK_RSA2053	S001376					trim	71
+Puccinia_graminis	race_TMRTK_RSA2053	S001376					raw	75
+Puccinia_graminis	race_QTHJT_RSA2051	S001378					trim	45
+Puccinia_graminis	race_QTHJT_RSA2051	S001378					raw	51
+Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	S001377					trim	55
+Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	S001377					raw	61
+Puccinia_graminis	race_RHTSK_RSA2052	S00137B					trim	55
+Puccinia_graminis	race_RHTSK_RSA2052	S00137B					raw	57
+Puccinia_graminis	CF12WGA3_100pg_DNA_1PEG	S001382					trim	63
+Puccinia_graminis	CF12WGA3_100pg_DNA_1PEG	S001382					raw	69
+Puccinia_graminis	CF12WGA2_10ng_DNA_0PEG	S00137A					trim	47
+Puccinia_graminis	CF12WGA2_10ng_DNA_0PEG	S00137A					raw	55
+Ditylenchus_destructor	unknown						trim	
+Ditylenchus_destructor	unknown						raw	
+Ditylenchus_destructor	Jiangsu_01	S00106F			S00171D	S00141C	trim	73
+Ditylenchus_destructor	Jiangsu_01	S00106F			S00171D	S00141C	raw	79
+Pantoea_ananatis	LMG_2665	S0016FD					trim	87
+Pantoea_ananatis	LMG_2665	S0016FD					raw	95
+Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	S0017B2					trim	59
+Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	S0017B2					raw	91
+Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	S000CFF	S00138B				trim	93
+Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	S000CFF	S00138B				raw	101
+Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	trim	87
+Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	raw	93
+Streptomyces_scabies	CG-1	S000D02					trim	79
+Streptomyces_scabies	CG-1	S000D02					raw	89
+Arcobacter_septicus	AF_1028	S0017B3					trim	
+Arcobacter_septicus	AF_1028	S0017B3					raw	
+Arcobacter_septicus	AF_1078	S0017B4					trim	
+Arcobacter_septicus	AF_1078	S0017B4					raw	
+Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	trim	79
+Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	raw	85
+Basidioascus_undulatus	unknown_strain						trim	53
+Basidioascus_undulatus	unknown_strain						raw	61
+Basidioascus_undulatus	unknown	S00106D					trim	
+Basidioascus_undulatus	unknown	S00106D					raw	
+Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	trim	93
+Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	raw	97
+Penicillium_thymicola	DAOM_180753	S00106B					trim	69
+Penicillium_thymicola	DAOM_180753	S00106B					raw	73
