@@ -1,8 +1,7 @@
 Species	Strain	PE	PER	MP	MP3	MP8
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	
-Synchytrium_endobioticum	unknown					S00180A	
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809		
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					
 Penicillium_nordicum	DAOM_185683	S0016FF					

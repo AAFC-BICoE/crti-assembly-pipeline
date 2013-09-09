@@ -11,10 +11,10 @@ S000D07	trimdata	R1	../../processing_test2/P_wasabiae/RNA/data/Pw_S000D07/S000D0
 S000D07	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D07_TGACCA_L001_R1.fq	101	4438432
 S000D07	trimdata	R2	../../processing_test2/P_wasabiae/RNA/data/Pw_S000D07/S000D07_TGACCA_L001_trim_8-0-0_R2.fq	93	4438432
 S000D07	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D07_TGACCA_L001_R2.fq	101	4438432
-S00180B	trimdata	R1			
-S00180B	rawdata	R1			
-S00180B	trimdata	R2			
-S00180B	rawdata	R2			
+S00180B	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S00180B/S00180B_NoIndex_L006_trim_6-0-0_R1.fq	45	197396373
+S00180B	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S00180B_NoIndex_L006_R1.fq	51	197396373
+S00180B	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S00180B/S00180B_NoIndex_L006_trim_6-0-0_R2.fq	45	197396373
+S00180B	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S00180B_NoIndex_L006_R2.fq	51	197396373
 S001384	trimdata	R1	../../processing_test2/G_rostochiensis/DNA/data/Gr_S001384/S001384_GTGGCC_L002_trim_6-0-0_R1.fq	95	70943338
 S001384	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001384_GTGGCC_L002_R1.fq	101	70943338
 S001384	trimdata	R2	../../processing_test2/G_rostochiensis/DNA/data/Gr_S001384/S001384_GTGGCC_L002_trim_6-0-0_R2.fq	95	70943338
@@ -23,10 +23,10 @@ S00137A	trimdata	R1	../../processing_test2/P_graminis/DNA/data/Pg_S00137A/S00137
 S00137A	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S00137A_AGTCAA_L005_R1.fq	101	20853337
 S00137A	trimdata	R2	../../processing_test2/P_graminis/DNA/data/Pg_S00137A/S00137A_AGTCAA_L005_trim_7-0-0_R2.fq	94	20853880
 S00137A	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S00137A_AGTCAA_L005_R2.fq	101	20853337
-S001808	trimdata	R1			
-S001808	rawdata	R1			
-S001808	trimdata	R2			
-S001808	rawdata	R2			
+S001808	trimdata	R1	../../processing_test2/G_rostochiensis/DNA/data/Gr_S001808/S001808_NoIndex_L002_trim_6-0-0_R1.fq	45	182835905
+S001808	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001808_NoIndex_L002_R1.fq	51	182835905
+S001808	trimdata	R2	../../processing_test2/G_rostochiensis/DNA/data/Gr_S001808/S001808_NoIndex_L002_trim_6-0-0_R2.fq	45	182835905
+S001808	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001808_NoIndex_L002_R2.fq	51	182835905
 S000D02	trimdata	R1	../../processing_test2/S_scabies/DNA/data/Ss_S000D02/S000D02_GAGTGG_L001_trim_9-0-0_R1.fq	92	9204525
 S000D02	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D02_GAGTGG_L001_R1.fq	101	9204525
 S000D02	trimdata	R2	../../processing_test2/S_scabies/DNA/data/Ss_S000D02/S000D02_GAGTGG_L001_trim_9-0-0_R2.fq	92	9204525
@@ -47,13 +47,13 @@ S001079	trimdata	R1	../../processing_test2/S_scabies/DNA/data/Ss_S001079/S001079
 S001079	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001079_ATCACG_L007_R1.fq	101	18108483
 S001079	trimdata	R2	../../processing_test2/S_scabies/DNA/data/Ss_S001079/S001079_ATCACG_L007_trim_9-0-0_R2.fq	92	18108483
 S001079	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001079_ATCACG_L007_R2.fq	101	18108483
-S001374	trimdata	R1	../../processing_test2/A_cibarius/RNA/data/Ac_S001374/S001374_ATCACG_L008_trim_32-0-0_R1.fq	69	6033853
+S001374	trimdata	R1	../../processing_test2/A_cibarius/RNA/data/Ac_S001374/S001374_ATCACG_L008_trim_9-0-0_R1.fq	69	6033853
 S001374	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001374_ATCACG_L008_R1.fq	101	6032353
-S001374	trimdata	R2	../../processing_test2/A_cibarius/RNA/data/Ac_S001374/S001374_ATCACG_L008_trim_32-0-0_R2.fq	69	6033940
+S001374	trimdata	R2	../../processing_test2/A_cibarius/RNA/data/Ac_S001374/S001374_ATCACG_L008_trim_9-0-0_R2.fq	69	6033940
 S001374	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001374_ATCACG_L008_R2.fq	101	6032353
-S001273	trimdata	R1	../../processing_test2/P_carotovorum/RNA/data/Pcb_S001273/S001273_ACTTGA_L008_trim_32-0-0_R1.fq	69	6483981
+S001273	trimdata	R1	../../processing_test2/P_carotovorum/RNA/data/Pcb_S001273/S001273_ACTTGA_L008_trim_9-0-0_R1.fq	69	6483981
 S001273	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001273_ACTTGA_L008_R1.fq	101	6482995
-S001273	trimdata	R2	../../processing_test2/P_carotovorum/RNA/data/Pcb_S001273/S001273_ACTTGA_L008_trim_32-0-0_R2.fq	69	6484399
+S001273	trimdata	R2	../../processing_test2/P_carotovorum/RNA/data/Pcb_S001273/S001273_ACTTGA_L008_trim_9-0-0_R2.fq	69	6484399
 S001273	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001273_ACTTGA_L008_R2.fq	101	6482995
 S001380	trimdata	R1	../../processing_test2/P_triticina/DNA/data/Pt_S001380/S001380_TTAGGC_L006_trim_6-0-0_R1.fq	95	54146458
 S001380	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001380_TTAGGC_L006_R1.fq	101	54146458
@@ -99,17 +99,17 @@ S000D15	trimdata	R1	../../processing_test2/P_verrucosum/RNA/data/Pv_S000D15/S000
 S000D15	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D15_ACTTGA_L002_R1.fq	101	23747050
 S000D15	trimdata	R2	../../processing_test2/P_verrucosum/RNA/data/Pv_S000D15/S000D15_ACTTGA_L002_trim_10-0-0_R2.fq	91	23747050
 S000D15	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D15_ACTTGA_L002_R2.fq	101	23747050
-S00142F	trimdata	R1	../../processing_test2/P_ananatis/RNA/data/Pa_S00142F/S00142F_GTCCGC_L008_trim_32-0-0_R1.fq	69	1765746
+S00142F	trimdata	R1	../../processing_test2/P_ananatis/RNA/data/Pa_S00142F/S00142F_GTCCGC_L008_trim_1-0-0_R1.fq	69	1765746
 S00142F	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142F_GTCCGC_L008_R1.fq	101	1765360
-S00142F	trimdata	R2	../../processing_test2/P_ananatis/RNA/data/Pa_S00142F/S00142F_GTCCGC_L008_trim_32-0-0_R2.fq	69	1765707
+S00142F	trimdata	R2	../../processing_test2/P_ananatis/RNA/data/Pa_S00142F/S00142F_GTCCGC_L008_trim_1-0-0_R2.fq	69	1765707
 S00142F	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142F_GTCCGC_L008_R2.fq	101	1765360
 S000D0F	trimdata	R1	../../processing_test2/P_verrucosum/RNA/data/Pv_S000D0F/S000D0F_TTAGGC_L003_trim_10-0-0_R1.fq	91	10856960
 S000D0F	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D0F_TTAGGC_L003_R1.fq	101	10856960
 S000D0F	trimdata	R2	../../processing_test2/P_verrucosum/RNA/data/Pv_S000D0F/S000D0F_TTAGGC_L003_trim_10-0-0_R2.fq	91	10856960
 S000D0F	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D0F_TTAGGC_L003_R2.fq	101	10856960
-S0017AF	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S0017AF/S0017AF_CCGTCC_L008_trim_32-0-0_R1.fq	69	12530462
+S0017AF	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S0017AF/S0017AF_CCGTCC_L008_trim_4-0-0_R1.fq	69	12530462
 S0017AF	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017AF_CCGTCC_L008_R1.fq	101	12528014
-S0017AF	trimdata	R2	../../processing_test2/P_verrucosum/DNA/data/Pv_S0017AF/S0017AF_CCGTCC_L008_trim_32-0-0_R2.fq	69	12530778
+S0017AF	trimdata	R2	../../processing_test2/P_verrucosum/DNA/data/Pv_S0017AF/S0017AF_CCGTCC_L008_trim_4-0-0_R2.fq	69	12530778
 S0017AF	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017AF_CCGTCC_L008_R2.fq	101	12528014
 S001388	trimdata	R1	../../processing_test2/G_rostochiensis/DNA/data/Gr_S001388/S001388_TAGCTT_L001_trim_9-0-0_R1.fq	92	78815849
 S001388	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001388_TAGCTT_L001_R1.fq	101	78815849
@@ -143,9 +143,9 @@ S001069	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S001069/S001
 S001069	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001069_GCCAAT_L002_R1.fq	101	16085178
 S001069	trimdata	R2	../../processing_test2/P_verrucosum/DNA/data/Pv_S001069/S001069_GCCAAT_L002_trim_7-0-0_R2.fq	94	16085178
 S001069	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001069_GCCAAT_L002_R2.fq	101	16085178
-S001465	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S001465/S001465_CTTGTA_L008_trim_32-0-0_R1.fq	69	3530054
+S001465	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S001465/S001465_CTTGTA_L008_trim_9-0-0_R1.fq	69	3530054
 S001465	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001465_CTTGTA_L008_R1.fq	101	3529567
-S001465	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S001465/S001465_CTTGTA_L008_trim_32-0-0_R2.fq	69	3530203
+S001465	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S001465/S001465_CTTGTA_L008_trim_9-0-0_R2.fq	69	3530203
 S001465	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001465_CTTGTA_L008_R2.fq	101	3529567
 S001707	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S001707/S001707_GTGAAA_L007_trim_6-0-0_R1.fq	95	36687427
 S001707	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001707_GTGAAA_L007_R1.fq	101	36687427
@@ -223,17 +223,17 @@ S00107E	trimdata	R1	../../processing_test2/D_dipsaci/RNA/data/Ddi_S00107E/S00107
 S00107E	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107E_CAGATC_L007_R1.fq	101	15559985
 S00107E	trimdata	R2	../../processing_test2/D_dipsaci/RNA/data/Ddi_S00107E/S00107E_CAGATC_L007_trim_11-0-0_R2.fq	90	15559985
 S00107E	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107E_CAGATC_L007_R2.fq	101	15559985
-S0017B4	trimdata	R1	../../processing_test2/A_septicus/DNA/data/As_S0017B4/S0017B4_GCCAAT_L008_trim_32-0-0_R1.fq	69	6877922
+S0017B4	trimdata	R1	../../processing_test2/A_septicus/DNA/data/As_S0017B4/S0017B4_GCCAAT_L008_trim_6-0-0_R1.fq	69	6877922
 S0017B4	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B4_GCCAAT_L008_R1.fq	101	6875727
-S0017B4	trimdata	R2	../../processing_test2/A_septicus/DNA/data/As_S0017B4/S0017B4_GCCAAT_L008_trim_32-0-0_R2.fq	69	6878148
+S0017B4	trimdata	R2	../../processing_test2/A_septicus/DNA/data/As_S0017B4/S0017B4_GCCAAT_L008_trim_6-0-0_R2.fq	69	6878148
 S0017B4	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B4_GCCAAT_L008_R2.fq	101	6875727
-S001728	trimdata	R1			
-S001728	rawdata	R1			
-S001728	trimdata	R2			
-S001728	rawdata	R2			
-S00142D	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142D/S00142D_TAGCTT_L008_trim_32-0-0_R1.fq	69	9776400
+S001728	trimdata	R1	../../processing_test2/D_dipsaci/DNA/data/Ddi_S001728/S001728_NoIndex_L001_trim_6-0-0_R1.fq	45	135044663
+S001728	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001728_NoIndex_L001_R1.fq	51	135044663
+S001728	trimdata	R2	../../processing_test2/D_dipsaci/DNA/data/Ddi_S001728/S001728_NoIndex_L001_trim_6-0-0_R2.fq	45	135044663
+S001728	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001728_NoIndex_L001_R2.fq	51	135044663
+S00142D	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142D/S00142D_TAGCTT_L008_trim_9-0-0_R1.fq	69	9776400
 S00142D	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142D_TAGCTT_L008_R1.fq	101	9773755
-S00142D	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142D/S00142D_TAGCTT_L008_trim_32-0-0_R2.fq	69	9776149
+S00142D	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142D/S00142D_TAGCTT_L008_trim_9-0-0_R2.fq	69	9776149
 S00142D	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142D_TAGCTT_L008_R2.fq	101	9773755
 S00141C	trimdata	R1	../../processing_test2/D_destructor/DNA/data/Dd_S00141C/S00141C_NoIndex_L006_trim_2-0-0_R1.fq	49	115890596
 S00141C	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D20DTACXX/S00141C_NoIndex_L006_R1.fq	51	115890596
@@ -255,17 +255,17 @@ HI.0735.004.Index_5	trimdata	R1	../../processing_test2/G_rostochiensis/RNA/data/
 HI.0735.004.Index_5	rawdata	R1	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_5.kyste_Gros_1h_R1.fq	100	15925285
 HI.0735.004.Index_5	trimdata	R2	../../processing_test2/G_rostochiensis/RNA/data/Gr_HI.0735.004.Index_5/HI.0735.004.Index_5.kyste_Gros_1h_trim_56-0-0_R2.fq	44	15929974
 HI.0735.004.Index_5	rawdata	R2	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_5.kyste_Gros_1h_R2.fq	100	15925285
-S001430	trimdata	R1	../../processing_test2/T_caries/RNA/data/Tca_S001430/S001430_GAGTGG_L008_trim_32-0-0_R1.fq	69	5370959
+S001430	trimdata	R1	../../processing_test2/T_caries/RNA/data/Tca_S001430/S001430_GAGTGG_L008_trim_9-0-0_R1.fq	69	5370959
 S001430	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001430_GAGTGG_L008_R1.fq	101	5369989
-S001430	trimdata	R2	../../processing_test2/T_caries/RNA/data/Tca_S001430/S001430_GAGTGG_L008_trim_32-0-0_R2.fq	69	5371208
+S001430	trimdata	R2	../../processing_test2/T_caries/RNA/data/Tca_S001430/S001430_GAGTGG_L008_trim_9-0-0_R2.fq	69	5371208
 S001430	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001430_GAGTGG_L008_R2.fq	101	5369989
 S001701	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S001701/S001701_GTCCGC_L008_trim_6-0-0_R1.fq	95	9456980
 S001701	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001701_GTCCGC_L008_R1.fq	101	9456980
 S001701	trimdata	R2	../../processing_test2/P_verrucosum/DNA/data/Pv_S001701/S001701_GTCCGC_L008_trim_6-0-0_R2.fq	95	9456980
 S001701	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001701_GTCCGC_L008_R2.fq	101	9456980
-S0017B2	trimdata	R1	../../processing_test2/R_solanacearum/DNA/data/Rs_S0017B2/S0017B2_CGATGT_L008_trim_32-0-0_R1.fq	69	6703600
+S0017B2	trimdata	R1	../../processing_test2/R_solanacearum/DNA/data/Rs_S0017B2/S0017B2_CGATGT_L008_trim_3-0-0_R1.fq	69	6703600
 S0017B2	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B2_CGATGT_L008_R1.fq	101	6702569
-S0017B2	trimdata	R2	../../processing_test2/R_solanacearum/DNA/data/Rs_S0017B2/S0017B2_CGATGT_L008_trim_32-0-0_R2.fq	69	6704061
+S0017B2	trimdata	R2	../../processing_test2/R_solanacearum/DNA/data/Rs_S0017B2/S0017B2_CGATGT_L008_trim_3-0-0_R2.fq	69	6704061
 S0017B2	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B2_CGATGT_L008_R2.fq	101	6702569
 S000D03	trimdata	R1	../../processing_test2/T_caries/DNA/data/Tca_S000D03/S000D03_ATGTCA_L001_trim_4-0-0_R1.fq	97	14311341
 S000D03	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D03_ATGTCA_L001_R1.fq	101	14311341
@@ -275,18 +275,18 @@ S001383	trimdata	R1	../../processing_test2/P_carotovorum/DNA/data/Pcb_S001383/S0
 S001383	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001383_CGTACG_L001_R1.fq	101	20097667
 S001383	trimdata	R2	../../processing_test2/P_carotovorum/DNA/data/Pcb_S001383/S001383_CGTACG_L001_trim_5-0-0_R2.fq	96	20097667
 S001383	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231CACXX/S001383_CGTACG_L001_R2.fq	101	20097667
-S0017B3	trimdata	R1	../../processing_test2/A_septicus/DNA/data/As_S0017B3/S0017B3_ACAGTG_L008_trim_32-0-0_R1.fq	69	6952145
+S0017B3	trimdata	R1	../../processing_test2/A_septicus/DNA/data/As_S0017B3/S0017B3_ACAGTG_L008_trim_5-0-0_R1.fq	69	6952145
 S0017B3	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B3_ACAGTG_L008_R1.fq	101	6949991
-S0017B3	trimdata	R2	../../processing_test2/A_septicus/DNA/data/As_S0017B3/S0017B3_ACAGTG_L008_trim_32-0-0_R2.fq	69	6952481
+S0017B3	trimdata	R2	../../processing_test2/A_septicus/DNA/data/As_S0017B3/S0017B3_ACAGTG_L008_trim_5-0-0_R2.fq	69	6952481
 S0017B3	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B3_ACAGTG_L008_R2.fq	101	6949991
 S001702	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S001702/S001702_GTGAAA_L008_trim_8-0-0_R1.fq	93	18672646
 S001702	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001702_GTGAAA_L008_R1.fq	101	18672189
 S001702	trimdata	R2	../../processing_test2/P_verrucosum/DNA/data/Pv_S001702/S001702_GTGAAA_L008_trim_8-0-0_R2.fq	93	18672795
 S001702	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001702_GTGAAA_L008_R2.fq	101	18672189
-S001809	trimdata	R1			
-S001809	rawdata	R1			
-S001809	trimdata	R2			
-S001809	rawdata	R2			
+S001809	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S001809/S001809_NoIndex_L003_trim_6-0-0_R1.fq	45	191607012
+S001809	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001809_NoIndex_L003_R1.fq	51	191607012
+S001809	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S001809/S001809_NoIndex_L003_trim_6-0-0_R2.fq	45	191607012
+S001809	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001809_NoIndex_L003_R2.fq	51	191607012
 HI.0735.004.Index_7	trimdata	R1	../../processing_test2/G_rostochiensis/RNA/data/Gr_HI.0735.004.Index_7/HI.0735.004.Index_7.kyste_Gros_24h_trim_10-0-0_R1.fq	90	21872699
 HI.0735.004.Index_7	rawdata	R1	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_7.kyste_Gros_24h_R1.fq	100	21872699
 HI.0735.004.Index_7	trimdata	R2	../../processing_test2/G_rostochiensis/RNA/data/Gr_HI.0735.004.Index_7/HI.0735.004.Index_7.kyste_Gros_24h_trim_10-0-0_R2.fq	90	21872699
@@ -299,9 +299,9 @@ HI.0735.004.Index_4	trimdata	R1	../../processing_test2/G_rostochiensis/RNA/data/
 HI.0735.004.Index_4	rawdata	R1	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_4.kyste_Gros_15m_R1.fq	100	16601653
 HI.0735.004.Index_4	trimdata	R2	../../processing_test2/G_rostochiensis/RNA/data/Gr_HI.0735.004.Index_4/HI.0735.004.Index_4.kyste_Gros_15m_trim_56-0-0_R2.fq	44	16601653
 HI.0735.004.Index_4	rawdata	R2	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_4.kyste_Gros_15m_R2.fq	100	16601653
-S001431	trimdata	R1	../../processing_test2/P_stewartii/RNA/data/Ps_S001431/S001431_GTTTCG_L008_trim_32-0-0_R1.fq	69	2225456
+S001431	trimdata	R1	../../processing_test2/P_stewartii/RNA/data/Ps_S001431/S001431_GTTTCG_L008_trim_0-0-0_R1.fq	69	2225456
 S001431	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001431_GTTTCG_L008_R1.fq	101	2225093
-S001431	trimdata	R2	../../processing_test2/P_stewartii/RNA/data/Ps_S001431/S001431_GTTTCG_L008_trim_32-0-0_R2.fq	69	2225485
+S001431	trimdata	R2	../../processing_test2/P_stewartii/RNA/data/Ps_S001431/S001431_GTTTCG_L008_trim_0-0-0_R2.fq	69	2225485
 S001431	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001431_GTTTCG_L008_R2.fq	101	2225093
 S000D1B	trimdata	R1	../../processing_test2/P_stewartii/RNA/data/Ps_S000D1B/S000D1B_ATCACG_L001_trim_10-0-0_R1.fq	91	7169945
 S000D1B	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D1B_ATCACG_L001_R1.fq	101	7169945
@@ -311,9 +311,9 @@ A066585	trimdata	R1	../../processing_test2/G_rostochiensis/DNA/data/Gr_A066585/A
 A066585	rawdata	R1	/isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066585_D0D8DABXX_5_R1.fq	100	60883815
 A066585	trimdata	R2	../../processing_test2/G_rostochiensis/DNA/data/Gr_A066585/A066585_D0D8DABXX_5_trim_8-0-0_R2.fq	92	60919892
 A066585	rawdata	R2	/isilon/biodiversity/data/raw/illumina/rott/A06658/pipeline_copy/A066585_D0D8DABXX_5_R2.fq	100	60932132
-S0017B1	trimdata	R1	../../processing_test2/T_controversa/DNA/data/Tc_S0017B1/S0017B1_CAGATC_L008_trim_32-0-0_R1.fq	69	13188591
+S0017B1	trimdata	R1	../../processing_test2/T_controversa/DNA/data/Tc_S0017B1/S0017B1_CAGATC_L008_trim_3-0-0_R1.fq	69	13188591
 S0017B1	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B1_CAGATC_L008_R1.fq	101	13186085
-S0017B1	trimdata	R2	../../processing_test2/T_controversa/DNA/data/Tc_S0017B1/S0017B1_CAGATC_L008_trim_32-0-0_R2.fq	69	13189244
+S0017B1	trimdata	R2	../../processing_test2/T_controversa/DNA/data/Tc_S0017B1/S0017B1_CAGATC_L008_trim_3-0-0_R2.fq	69	13189244
 S0017B1	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B1_CAGATC_L008_R2.fq	101	13186085
 S00107A	trimdata	R1	../../processing_test2/P_stewartii/DNA/data/Ps_S00107A/S00107A_CGATGT_L007_trim_5-0-0_R1.fq	96	3783976
 S00107A	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107A_CGATGT_L007_R1.fq	101	3783976
@@ -331,11 +331,11 @@ S001067	trimdata	R1	../../processing_test2/D_destructor/RNA/data/Dd_S001067/S001
 S001067	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001067_AGTTCC_L002_R1.fq	101	32218318
 S001067	trimdata	R2	../../processing_test2/D_destructor/RNA/data/Dd_S001067/S001067_AGTTCC_L002_trim_10-0-0_R2.fq	91	32218318
 S001067	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001067_AGTTCC_L002_R2.fq	101	32218318
-S001807	trimdata	R1			
-S001807	rawdata	R1			
-S001807	trimdata	R2			
-S001807	rawdata	R2			
-S001713	trimdata	R1			
+S001807	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S001807/S001807_NoIndex_L007_trim_6-0-0_R1.fq	45	172470005
+S001807	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001807_NoIndex_L007_R1.fq	51	172470005
+S001807	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S001807/S001807_NoIndex_L007_trim_6-0-0_R2.fq	45	172470005
+S001807	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S001807_NoIndex_L007_R2.fq	51	172470005
+S001713	trimdata	R1	../../processing_test2/T_walkeri/DNA/data/Tw_S001713/S001713_NoIndex_L003_trim_7-0-0_R1.fq	44	156666714
 S001713	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C1MUCACXX/S001713_NoIndex_L003_R1.fq	51	156660045
 S001713	trimdata	R2	../../processing_test2/T_walkeri/DNA/data/Tw_S001713/S001713_NoIndex_L003_trim_7-0-0_R2.fq	44	156666600
 S001713	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C1MUCACXX/S001713_NoIndex_L003_R2.fq	51	156660045
@@ -375,9 +375,9 @@ S001714	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S001714/S001
 S001714	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C1MUCACXX/S001714_NoIndex_L005_R1.fq	51	200110507
 S001714	trimdata	R2	../../processing_test2/P_verrucosum/DNA/data/Pv_S001714/S001714_NoIndex_L005_trim_6-0-0_R2.fq	45	200110507
 S001714	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C1MUCACXX/S001714_NoIndex_L005_R2.fq	51	200110507
-S001466	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S001466/S001466_AGTCAA_L008_trim_32-0-0_R1.fq	69	4866607
+S001466	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S001466/S001466_AGTCAA_L008_trim_0-0-0_R1.fq	69	4866607
 S001466	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001466_AGTCAA_L008_R1.fq	101	4865842
-S001466	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S001466/S001466_AGTCAA_L008_trim_32-0-0_R2.fq	69	4866752
+S001466	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S001466/S001466_AGTCAA_L008_trim_0-0-0_R2.fq	69	4866752
 S001466	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001466_AGTCAA_L008_R2.fq	101	4865842
 S00171C	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S00171C/S00171C_NoIndex_L001_trim_0-0-0_R1.fq	51	104293040
 S00171C	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D24LKACXX/S00171C_NoIndex_L001_R1.fq	51	104293040
@@ -411,9 +411,9 @@ S001705	trimdata	R1	../../processing_test2/D_dipsaci/DNA/data/Ddi_S001705/S00170
 S001705	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D24LKACXX/S001705_NoIndex_L005_R1.fq	51	107060361
 S001705	trimdata	R2	../../processing_test2/D_dipsaci/DNA/data/Ddi_S001705/S001705_NoIndex_L005_trim_5-0-0_R2.fq	46	107060361
 S001705	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D24LKACXX/S001705_NoIndex_L005_R2.fq	51	107060361
-S00142C	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142C/S00142C_GATCAG_L008_trim_32-0-0_R1.fq	69	3682361
+S00142C	trimdata	R1	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142C/S00142C_GATCAG_L008_trim_0-0-0_R1.fq	69	3682361
 S00142C	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142C_GATCAG_L008_R1.fq	101	3681739
-S00142C	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142C/S00142C_GATCAG_L008_trim_32-0-0_R2.fq	69	3682450
+S00142C	trimdata	R2	../../processing_test2/R_solanacearum/RNA/data/Rs_S00142C/S00142C_GATCAG_L008_trim_0-0-0_R2.fq	69	3682450
 S00142C	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142C_GATCAG_L008_R2.fq	101	3681739
 S001271	trimdata	R1	../../processing_test2/D_destructor/RNA/data/Dd_S001271/S001271_ACTTGA_L006_trim_8-0-0_R1.fq	93	33514549
 S001271	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001271_ACTTGA_L006_R1.fq	101	33513690
@@ -455,9 +455,9 @@ S001381	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S001381/S0
 S001381	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001381_ATTCCT_L006_R1.fq	101	37220327
 S001381	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S001381/S001381_ATTCCT_L006_trim_6-0-0_R2.fq	95	37220327
 S001381	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C231FACXX/S001381_ATTCCT_L006_R2.fq	101	37220327
-S001464	trimdata	R1	../../processing_test2/A_lanthierii/RNA/data/Al_S001464/S001464_GGCTAC_L008_trim_32-0-0_R1.fq	69	6270464
+S001464	trimdata	R1	../../processing_test2/A_lanthierii/RNA/data/Al_S001464/S001464_GGCTAC_L008_trim_9-0-0_R1.fq	69	6270464
 S001464	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001464_GGCTAC_L008_R1.fq	101	6269174
-S001464	trimdata	R2	../../processing_test2/A_lanthierii/RNA/data/Al_S001464/S001464_GGCTAC_L008_trim_32-0-0_R2.fq	69	6270659
+S001464	trimdata	R2	../../processing_test2/A_lanthierii/RNA/data/Al_S001464/S001464_GGCTAC_L008_trim_9-0-0_R2.fq	69	6270659
 S001464	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001464_GGCTAC_L008_R2.fq	101	6269174
 S00107F	trimdata	R1	../../processing_test2/P_infestans/RNA/data/Pi_S00107F/S00107F_GCCAAT_L007_trim_10-0-0_R1.fq	91	12734215
 S00107F	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00107F_GCCAAT_L007_R1.fq	101	12734215
@@ -467,9 +467,9 @@ S00106D	trimdata	R1	../../processing_test2/B_undulatus/DNA/data/Bu_S00106D/S0010
 S00106D	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106D_CTTGTA_L002_R1.fq	101	6084290
 S00106D	trimdata	R2	../../processing_test2/B_undulatus/DNA/data/Bu_S00106D/S00106D_CTTGTA_L002_trim_9-0-0_R2.fq	92	6084290
 S00106D	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106D_CTTGTA_L002_R2.fq	101	6084290
-S00142E	trimdata	R1	../../processing_test2/P_stewartii/RNA/data/Ps_S00142E/S00142E_GTGAAA_L008_trim_32-0-0_R1.fq	69	2623855
+S00142E	trimdata	R1	../../processing_test2/P_stewartii/RNA/data/Ps_S00142E/S00142E_GTGAAA_L008_trim_0-0-0_R1.fq	69	2623855
 S00142E	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142E_GTGAAA_L008_R1.fq	101	2623347
-S00142E	trimdata	R2	../../processing_test2/P_stewartii/RNA/data/Ps_S00142E/S00142E_GTGAAA_L008_trim_32-0-0_R2.fq	69	2624086
+S00142E	trimdata	R2	../../processing_test2/P_stewartii/RNA/data/Ps_S00142E/S00142E_GTGAAA_L008_trim_0-0-0_R2.fq	69	2624086
 S00142E	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S00142E_GTGAAA_L008_R2.fq	101	2623347
 S001068	trimdata	R1	../../processing_test2/P_verrucosum/DNA/data/Pv_S001068/S001068_TGACCA_L002_trim_5-0-0_R1.fq	96	14921400
 S001068	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S001068_TGACCA_L002_R1.fq	101	14921400
@@ -491,13 +491,13 @@ S00106B	trimdata	R1	../../processing_test2/P_thymicola/DNA/data/Pth_S00106B/S001
 S00106B	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106B_CGATGT_L002_R1.fq	101	14110795
 S00106B	trimdata	R2	../../processing_test2/P_thymicola/DNA/data/Pth_S00106B/S00106B_CGATGT_L002_trim_5-0-0_R2.fq	96	14110795
 S00106B	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0AH9ACXX/S00106B_CGATGT_L002_R2.fq	101	14110795
-S0017B7	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S0017B7/S0017B7_AGTTCC_L008_trim_32-0-0_R1.fq	69	24919591
+S0017B7	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S0017B7/S0017B7_AGTTCC_L008_trim_9-0-0_R1.fq	69	24919591
 S0017B7	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B7_AGTTCC_L008_R1.fq	101	24902333
-S0017B7	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S0017B7/S0017B7_AGTTCC_L008_trim_32-0-0_R2.fq	69	24916670
+S0017B7	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S0017B7/S0017B7_AGTTCC_L008_trim_9-0-0_R2.fq	69	24916670
 S0017B7	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B7_AGTTCC_L008_R2.fq	101	24902333
-S001375	trimdata	R1	../../processing_test2/A_septicus/RNA/data/As_S001375/S001375_TTAGGC_L008_trim_32-0-0_R1.fq	69	5000301
+S001375	trimdata	R1	../../processing_test2/A_septicus/RNA/data/As_S001375/S001375_TTAGGC_L008_trim_9-0-0_R1.fq	69	5000301
 S001375	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001375_TTAGGC_L008_R1.fq	101	4999247
-S001375	trimdata	R2	../../processing_test2/A_septicus/RNA/data/As_S001375/S001375_TTAGGC_L008_trim_32-0-0_R2.fq	69	5000377
+S001375	trimdata	R2	../../processing_test2/A_septicus/RNA/data/As_S001375/S001375_TTAGGC_L008_trim_9-0-0_R2.fq	69	5000377
 S001375	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S001375_TTAGGC_L008_R2.fq	101	4999247
 S000D12	trimdata	R1	../../processing_test2/P_verrucosum/RNA/data/Pv_S000D12/S000D12_GGCTAC_L002_trim_10-0-0_R1.fq	91	24348307
 S000D12	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D12_GGCTAC_L002_R1.fq	101	24348307
@@ -519,10 +519,10 @@ HI.0735.004.Index_10	trimdata	R1	../../processing_test2/G_rostochiensis/RNA/data
 HI.0735.004.Index_10	rawdata	R1	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_10.J2_Gros_1mois_R1.fq	100	17118802
 HI.0735.004.Index_10	trimdata	R2	../../processing_test2/G_rostochiensis/RNA/data/Gr_HI.0735.004.Index_10/HI.0735.004.Index_10.J2_Gros_1mois_trim_9-0-0_R2.fq	91	17120469
 HI.0735.004.Index_10	rawdata	R2	/isilon/biodiversity/data/raw/illumina/GQC/HI.0735.004/pipeline_copy/HI.0735.004.Index_10.J2_Gros_1mois_R2.fq	100	17118802
-S00180A	trimdata	R1			
-S00180A	rawdata	R1			
-S00180A	trimdata	R2			
-S00180A	rawdata	R2			
+S00180A	trimdata	R1	../../processing_test2/S_endobioticum/DNA/data/Se_S00180A/S00180A_NoIndex_L005_trim_3-0-0_R1.fq	48	203089168
+S00180A	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S00180A_NoIndex_L005_R1.fq	51	203089168
+S00180A	trimdata	R2	../../processing_test2/S_endobioticum/DNA/data/Se_S00180A/S00180A_NoIndex_L005_trim_3-0-0_R2.fq	48	203089168
+S00180A	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2DRAACXX/S00180A_NoIndex_L005_R2.fq	51	203089168
 S000D04	trimdata	R1	../../processing_test2/T_indica/DNA/data/Ti_S000D04/S000D04_GTCCGC_L001_trim_4-0-0_R1.fq	97	9709360
 S000D04	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D0ULDACXX/S000D04_GTCCGC_L001_R1.fq	101	9709360
 S000D04	trimdata	R2	../../processing_test2/T_indica/DNA/data/Ti_S000D04/S000D04_GTCCGC_L001_trim_4-0-0_R2.fq	97	9709360
