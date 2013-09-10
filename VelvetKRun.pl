@@ -208,79 +208,6 @@ sub check_velvetk_records
             }
         }
     }
-}    
-
-
-# The old function
-sub run_velvetk
-{
-    my $records = shift;
-    my @newbest = ();
-    my $fname = ($options->{velvetk_infile} ? $options->{velvetk_infile} : '');
-    if ($fname) {
-        open (FIN, '<', $fname) or die "Error: couldn't open file $fname\n";
-        <FIN>;
-        my @headers = qw (Species Strain PE PER MP MP3 MP8 trim_raw velvetk_kmer);
-        while (my $line = <FIN>) {
-            chomp $line;
-            my @fields = split (/\t/, $line);
-            my $num_headers = scalar @headers;
-            my $num_fields = scalar @fields;
-            my %rec;
-            for (my $i=0; $i<$num_headers; $i++) { 
-                my $key = $headers[$i];
-                my $val = ($fields[$i] ? $fields[$i] : '');
-                $rec{$key} = $val; 
-            }
-            my $species = Assembly::Utils::format_species_key($rec{Species});
-            my $strain = Assembly::Utils::format_strain_key($rec{Strain});
-            my $trimraw = $rec{trim_raw};
-            my $trimdata = $rec{trim_raw} . "data";
-            my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
-            unless ($genome_size) {
-                print "Couldn't get genome size for species $species strain $strain\n";
-            }
-            if ($genome_size and not $rec{velvetk_kmer}) { 
-                
-                my $vk_cmd = $velvetk_bin . " --size " . $genome_size . " --best ";
-                for my $sample_type (qw(PE PER MP MP3 MP8)) {
-                    #my $hr = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type]);
-                    my $r1data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "R1", $trimdata]);
-                    my $r2data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "R2", $trimdata]);
-                    
-                    $vk_cmd .= $r1data . " " . $r2data . " ";
-                }
-                #print "got velvetk_cmd: $vk_cmd\n";
-                my $vk_qsub_cmd = get_qsub_cmd($vk_cmd);
-                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", $vk_cmd);
-                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_qsub_cmd", $vk_qsub_cmd);
-                #print "got qsub_cmd: $vk_qsub_cmd\n";
-                
-                if ($options->{run} and $vk_cmd) {
-                    print "Running command $vk_cmd\n";
-                    my $best = `$vk_cmd`;
-                    chomp $best;
-                    Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $best);
-                    push (@newbest, [$species, "DNA", $strain, $best]);
-                    
-                    # qsub version:
-                    # have to pull the jobid, then submit another job that holds on this one
-                    # and then goes through the qsub output files for this jobid and pulls out
-                    # the best kmer from that.
-                    # my $qsub_str = `$vk_qsub_cmd`;
-                    # my $jobid = get_jobid($qsub_str);
-                    # get_best_from_outfile_in_cwd(hold on $jobid)
-                }
-            } elsif ($rec{velvetk_kmer}) {
-                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_best_kmer", $rec{velvetk_kmer});
-                Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", "");
-            }
-        }
-    }
-    close (FIN);
-    foreach my $arr (@newbest) {
-        print join("\t", @$arr) . "\n";
-    }
 }
 
 sub write_vk_kmers
@@ -311,7 +238,6 @@ sub write_vk_kmers
 
 gather_opts;
 my $records = LoadFile($options->{yaml_in});
-#run_velvetk($records);
 read_velvetk_table ($records);
 read_prev_best_table ($records);
 check_velvetk_records ($records);

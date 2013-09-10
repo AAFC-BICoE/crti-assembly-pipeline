@@ -281,17 +281,17 @@ sub build_assembly_cmds
 				if ($options->{$trimraw}) {
                     my $assembly_dir = Assembly::Velvet::get_assembly_outdir($records, $species, $strain, $trimraw);
                     if ($assembly_dir) {
-                    my ($total_coverage, $avg_readlen) = Assembly::Velvet::get_coverage_vars($records, $species, $strain, $trimraw);
-                    my $kmer_list = Assembly::Velvet::create_kmer_range($records, $species, $strain, $trimraw);
-                    for my $kmer (@$kmer_list) {
-					    my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $total_coverage, $avg_readlen, $assembly_dir);
-					    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
-					    if ($rec) {
-					        if ($velveth_cmd !~ /shortPaired2/ and $velvetg_cmd !~ /ins_length2/) {
-					            submit_cmds($vqs, $rec, $trimraw);
-					        }
-					    }
-					}
+                        my ($total_coverage, $avg_readlen) = Assembly::Velvet::get_coverage_vars($records, $species, $strain, $trimraw);
+                        my $kmer_list = Assembly::Velvet::create_kmer_range($records, $species, $strain, $trimraw);
+                        for my $kmer (@$kmer_list) {
+                            my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $total_coverage, $avg_readlen, $assembly_dir);
+                            my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
+                            if ($rec) {
+                                if ($velveth_cmd !~ /shortPaired2/ and $velvetg_cmd !~ /ins_length2/) {
+                                    submit_cmds($vqs, $rec, $trimraw);
+                                }
+                            }
+                        }
 					}
 				}
 			}
