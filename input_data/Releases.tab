@@ -1,0 +1,6 @@
+Species	Strain	Read Type(s)	Trim/raw	Best kmer	Best N50
+Penicillium verrucosum	KAS 4251	PE	raw	65	71091
+Penicillium verrucosum	DAOM 214801	PE	raw	71	190299
+Penicillium verrucosum	DAOM 211566	PE	raw	63	67361
+Penicillium verrucosum	KAS 4370	PE	raw	57	87205
+Penicillium verrucosum	DAOM 213195	PE	trim	41	97973
