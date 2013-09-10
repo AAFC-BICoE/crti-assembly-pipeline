@@ -3,10 +3,12 @@ Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	raw	93
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					trim	49
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					raw	49
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	trim	81
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	raw	89
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	trim	
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	raw	
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					trim	65
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					raw	73
+Globodera_pallida	A1_INRA_St-Malo_France	S00137F					trim	
+Globodera_pallida	A1_INRA_St-Malo_France	S00137F					raw	
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					trim	79
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					raw	85
 Penicillium_nordicum	DAOM_185683	S0016FF					trim	57
@@ -27,8 +29,8 @@ Globodera_rostochiensis	Ro19_pathotype_Ro1	S001388					trim	77
 Globodera_rostochiensis	Ro19_pathotype_Ro1	S001388					raw	87
 Globodera_rostochiensis	QC_pathotype_Ro1	S0016FE			S001703	S00141B	trim	75
 Globodera_rostochiensis	QC_pathotype_Ro1	S0016FE			S001703	S00141B	raw	81
-Globodera_rostochiensis	unknown	A066581					trim	55
-Globodera_rostochiensis	unknown	A066581					raw	63
+Globodera_rostochiensis	unknown	A066581					trim	
+Globodera_rostochiensis	unknown	A066581					raw	
 Globodera_rostochiensis	Nfld_isolate	S001385					trim	57
 Globodera_rostochiensis	Nfld_isolate	S001385					raw	65
 Arcobacter_cibarius	LMG_21996	S00138E					trim	91
@@ -63,6 +65,8 @@ Penicillium_verrucosum	DAOM_213195	S001701					trim	53
 Penicillium_verrucosum	DAOM_213195	S001701					raw	59
 Pectobacterium_wasabiae	Ecw1002	S000CFE					trim	83
 Pectobacterium_wasabiae	Ecw1002	S000CFE					raw	87
+Arcobacter_lanthierii	AF_1581	S0016FC					trim	
+Arcobacter_lanthierii	AF_1581	S0016FC					raw	
 Arcobacter_lanthierii	AF_1430	S00107D					trim	93
 Arcobacter_lanthierii	AF_1430	S00107D					raw	99
 Puccinia_triticina	race_MFDS_RSA2117	S001380					trim	71
@@ -73,6 +77,8 @@ Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	trim	73
 Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	raw	91
 Puccinia_graminis	race_TMRTK_RSA2053	S001376					trim	71
 Puccinia_graminis	race_TMRTK_RSA2053	S001376					raw	75
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	S001379					trim	
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	S001379					raw	
 Puccinia_graminis	race_QTHJT_RSA2051	S001378					trim	45
 Puccinia_graminis	race_QTHJT_RSA2051	S001378					raw	51
 Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	S001377					trim	55
@@ -97,16 +103,16 @@ Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	trim	87
 Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	raw	93
 Streptomyces_scabies	CG-1	S000D02					trim	79
 Streptomyces_scabies	CG-1	S000D02					raw	89
-Arcobacter_septicus	AF_1028	S0017B3					trim	93
-Arcobacter_septicus	AF_1028	S0017B3					raw	97
-Arcobacter_septicus	AF_1078	S0017B4					trim	91
-Arcobacter_septicus	AF_1078	S0017B4					raw	97
+Arcobacter_septicus	AF_1028	S0017B3					trim	
+Arcobacter_septicus	AF_1028	S0017B3					raw	
+Arcobacter_septicus	AF_1078	S0017B4					trim	
+Arcobacter_septicus	AF_1078	S0017B4					raw	
 Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	trim	79
 Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	raw	85
 Basidioascus_undulatus	unknown_strain						trim	53
 Basidioascus_undulatus	unknown_strain						raw	61
-Basidioascus_undulatus	unknown	S00106D					trim	53
-Basidioascus_undulatus	unknown	S00106D					raw	61
+Basidioascus_undulatus	unknown	S00106D					trim	
+Basidioascus_undulatus	unknown	S00106D					raw	
 Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	trim	93
 Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	raw	97
 Penicillium_thymicola	DAOM_180753	S00106B					trim	69
