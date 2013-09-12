@@ -8,7 +8,7 @@ use Assembly::Utils;
 my $options = {};
 # output files created by velvetg
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
-my @col_headers = ("Species", "Strain", "Trim/raw", "VelvetK", "Best Kmer", "Best N50", "Missing Kmers");
+my @col_headers = ("Species", "Strain", "Trim/raw", "VelvetK", "Best Kmer", "Best N50", "Max Contig", "Total Length", "Reads Used", "Missing Kmers");
 
 sub set_default_opts
 {
@@ -71,6 +71,9 @@ sub parse_log_n50
     my $log_file = $kmer_dir . "/Log";
     my $contig_file = $kmer_dir . "/contigs.fa";
     my $n50 = '';
+    my $max_len = '';
+    my $total_len = '';
+    my $reads_used = '';
     if (-e $log_file and -e $contig_file and -s $contig_file > 0) {
         open (FIN, '<', $log_file) or die "Error: couldn't open file ${log_file}\n";
         while (<FIN>) { 
@@ -78,10 +81,13 @@ sub parse_log_n50
                 $n50 = $1;
                 #print "kmer $kmer - found n50 " . $n50 . "\n";
             }
+            if (/n50 of (\d+), max (\d+), total (\d+), using ([0-9\/]+) reads/) {
+                ($n50, $max_len, $total_len, $reads_used) = ($1, $2, $3, $4);
+            }
         }
         close (FIN);
     }
-    return $n50;
+    return ($n50, $max_len, $total_len, $reads_used);
 }
 
 sub get_max_kmer
@@ -94,12 +100,15 @@ sub get_max_kmer
         $max{kmer} = $kmer_range->[0];
         $max{n50} = 0;
         for my $kmer (@$kmer_range) {
-            my $n50 = parse_log_n50($rec, $tr, $kmer);
+            my ($n50, $max_contig_len, $total_len, $reads_used) = parse_log_n50($rec, $tr, $kmer);
             if ($n50) {
                 Assembly::Utils::set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "N50", $n50);
                 if ($n50 > $max{n50}) {
                     $max{n50} = $n50;
                     $max{kmer} = $kmer;
+                    $max{max_contig_len} = $max_contig_len;
+                    $max{total_len} = $total_len;
+                    $max{reads_used} = $reads_used;
                 }
                 #if ($n50 < 2000) {
                  #   print $rec->{species} . "\t" . $rec->{sample} . "\t$tr\t" . $kmer . "\t" . $n50 . "\t";
@@ -113,6 +122,9 @@ sub get_max_kmer
         if ($max{n50} > 0) {
             Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_kmer", $max{kmer});
             Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_value", $max{n50});
+            Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_max_contig", $max{max_contig_len});
+            Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_total_len", $max{total_len});
+            Assembly::Utils::set_check_record($rec, ["velvet", $tr], "max_n50_reads_used", $max{reads_used});
         }
     }
 }
@@ -157,17 +169,22 @@ sub get_stats_line
     my $trimdata = $trimraw . "data";
 
     my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain]);
+    my $sample = Assembly::Utils::get_check_record($rec, ["PE", "sample"]);
 
     my $vk_kmer = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "velvetk_best_kmer"]);
     
     my $best_kmer = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_kmer"]);
     my $best_n50 = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_value"]);
-
+    my $best_n50_max_contig_len = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_max_contig"]);
+    my $best_n50_total_len = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_total_len"]);
+    my $best_n50_reads_used = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_n50_reads_used"]);
+    
     my $kmin = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "min_kmer"]);
     my $kmax = Assembly::Utils::get_check_record($rec, ["velvet", $trimraw, "max_kmer"]);
     my $missing_kmers = get_missing_kmers($rec, $trimraw, $kmin, $kmax);
     
-    my $out_str = join ("\t", ($species, $strain, $trimraw, $vk_kmer, $best_kmer, $best_n50, $missing_kmers));
+    my $out_str = join ("\t", ($species, $strain, $sample, $trimraw, $vk_kmer, $best_kmer, $best_n50, $best_n50_max_contig_len, 
+            $best_n50_total_len, $best_n50_reads_used, $missing_kmers));
     
     return $out_str;
 }
