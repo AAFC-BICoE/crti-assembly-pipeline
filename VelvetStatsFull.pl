@@ -8,14 +8,14 @@ use Assembly::Utils;
 my $options = {};
 # output files created by velvetg
 my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt)];
-my @col_headers = ("Species", "Strain", "Trim/raw", "VelvetK", "Best Kmer", "Best N50", "Max Contig", "Total Length", "Reads Used", "Missing Kmers");
+my @col_headers = ("Species", "Strain", "Genome Size", "Trim/raw", "Kmer", "N50", "Max Contig", "Total Length", "Reads Used", "Trim 100 N50", "Trim 100 Total", "Trim 500 N50", "Trim 500 Total");
 
 sub set_default_opts
 {
     my %defaults = qw(
         yaml_in yaml_files/11_velvet_cmds.yml
         yaml_out yaml_files/12_velvet_stats.yml
-        stats_outfile output_files/VelvetStats.tab
+        stats_outfile output_files/VelvetStatsFull.tab
         verbose 0
         );
     for my $kdef (keys %defaults) {
@@ -103,6 +103,9 @@ sub get_max_kmer
             my ($n50, $max_contig_len, $total_len, $reads_used) = parse_log_n50($rec, $tr, $kmer);
             if ($n50) {
                 Assembly::Utils::set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "N50", $n50);
+                Assembly::Utils::set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "max_contig", $max_contig_len);
+                Assembly::Utils::set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "total_length", $total_len);
+                Assembly::Utils::set_check_record($rec, ["velvet", $tr, "kmer", $kmer], "reads_used", $reads_used);
                 if ($n50 > $max{n50}) {
                     $max{n50} = $n50;
                     $max{kmer} = $kmer;
@@ -189,7 +192,28 @@ sub get_stats_line
     return $out_str;
 }
 
-sub write_stats_file
+sub get_kmer_stats_line
+{
+    my $records = shift;
+    my $species = shift;
+    my $strain = shift;
+    my $trimraw = shift;
+    my $kmer = shift;
+    
+    my $trimdata = $trimraw . "data";
+    my $genome_size = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
+    my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
+    my $n50 = Assembly::Utils::get_check_record($rec, ["N50"]);;
+    my $max_contig_len = Assembly::Utils::get_check_record($rec, ["max_contig"]);
+    my $total_len = Assembly::Utils::get_check_record($rec, ["total_length"]);
+    my $reads_used = Assembly::Utils::get_check_record($rec, ["reads_used"]);
+
+    my $out_str = join ("\t", ($species, $strain, $genome_size, $trimraw, $kmer, $n50, $max_contig_len, $total_len, $reads_used, ));
+    
+    return $out_str;
+}
+
+sub write_kmer_stats_file
 {
     my $records = shift;
     my $fname = ($options->{stats_outfile} ? $options->{stats_outfile} : '');
@@ -198,9 +222,13 @@ sub write_stats_file
         print FSTATS join ("\t", @col_headers) . "\n";
         for my $species (keys %$records) {
             for my $strain (keys %{$records->{$species}->{DNA}}) {
+                my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain]);
                 for my $trimraw (qw(trim raw)) {
-                    my $stats_line = get_stats_line ($records, $species, $strain, $trimraw);
-                    print FSTATS $stats_line . "\n";
+                    my $kmer_range = get_kmer_range($rec, $trimraw);
+                    for my $kmer (@$kmer_range) {
+                        my $stats_line = get_kmer_stats_line ($records, $species, $strain, $trimraw, $kmer);
+                        print FSTATS $stats_line . "\n";
+                    }
                 }
             }
         }
@@ -213,7 +241,7 @@ sub run_all
     gather_opts;
     my $records = LoadFile($options->{yaml_in});
     get_all_max($records);
-    write_stats_file($records);
+    write_kmer_stats_file($records);
     DumpFile($options->{yaml_out}, $records);
 }
 
