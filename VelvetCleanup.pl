@@ -16,8 +16,10 @@ use Assembly::Utils;
 # do not explicitly parse the VelvetStats.tab file.
 
 my $options = {};
-my @del_files = qw(CnyUnifiedSeq CnyUnifiedSeq.names Graph2 LastGraph PreGraph);
-# push(@del_files, "stats.txt");
+my @del_files = qw(CnyUnifiedSeq.names Roadmaps stats.txt LastGraph);
+# push (@del_files, "CnyUnifiesSeq");
+# push (@del_files, "Graph2")
+# push (@del_files, "PreGraph");
 
 sub set_default_opts
 {
@@ -73,7 +75,7 @@ sub remove_files
             if (-e $fpath and (-M $fpath >= 1)) {
                 print_verbose("Removing file $fpath\n");
                 if ($options->{run}) {
-                    #system ("rm $fpath");
+                    system ("rm $fpath");
                 }
             } else {
                 print_verbose("No such file or file modified within the past 24 hours: $fpath\n");
