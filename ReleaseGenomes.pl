@@ -10,6 +10,8 @@ use File::Path;
 
 my $options = {};
 my @release_headers = qw (Species Strain Sequencing_Types Trim_Raw Release_Version Est_Genome_Size Best_Kmer Best_N50);
+my @wiki_genome = ();
+my @wiki_release = ();
 
 sub set_default_opts
 {
@@ -19,6 +21,9 @@ sub set_default_opts
         release_table input_data/Release.tab
         run 0
         verbose 1
+        testing 1
+        wiki_release_table output_files/wiki_release_table.txt
+        wiki_genome_table output_files/wiki_genome_table.txt
     );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -32,6 +37,9 @@ sub check_opts
             Optional:
                 --verbose
                 --run (create directories and yaml files and copy release data)
+                --testing (place output yaml files in /tmp)
+                --wiki_release_table (print out table of releases for pasting to wiki)
+                --wiki_genome_table (print table of genome stats for pasting to wiki)
             ";
     }
 }
@@ -45,6 +53,9 @@ sub gather_opts
         'release_table|r=s',
         'verbose',
         'run',
+        'testing',
+        'wiki_release_table',
+        'wiki_genome_table',
         );
     set_default_opts;
     check_opts;
@@ -215,7 +226,7 @@ sub get_sample_stanza
         }
     }
     unless (-e $r2_out and (-s $r2_in) == (-s $r2_out)) {
-        print_verbose "cp r2_in $r2_out\n";
+        print_verbose "cp $r2_in $r2_out\n";
         if ($options->{run}) {
             system("cp $r2_in $r2_out");
         }
@@ -403,6 +414,42 @@ sub create_release_yaml
     return $release_yaml_rec;
 }
 
+sub get_wiki_release_line
+{
+    my $release = shift;
+    my $release_dir = shift;
+    my $species = $release->{release}->{species};
+    my $strain = $release->{release}->{strain};
+    my $version = $release->{release}->{version};
+    my $type = "Genome";
+    my $link_target = "http://biocluster/project_data/CRTI-09S-462RD/specimen/";
+    if ($release_dir =~ /specimen\/(.*)/) {
+        $link_target = $link_target . $1;
+    } else {
+        $link_target = $link_target . $release_dir;
+    }
+    my $link_text = "Release"; # could also be the release prefix here.
+    my $link = "[[" . $link_target . "][" . $link_text . "]]";
+    my $line = "|" . join("|", ($species, $strain, $version, $type, $link)) . "|";
+    push (@wiki_release, $line);
+}
+
+sub get_wiki_genome_line
+{
+    my $release = shift;
+    my $species = $release->{release}->{species};
+    my $strain = $release->{release}->{strain};
+    my $N50 = $release->{genome_assembly}->{N50};
+    my $max_contig = $release->{genome_assembly}->{max_contig};
+    my $reads_used = $release->{genome_assembly}->{reads_used};
+    my $total_length = $release->{genome_assembly}->{total_length};
+    my $est_genome_length = $release->{genome_assembly}->{estimated_genome_length};
+    my @fields = ($species, $strain, $est_genome_length, $N50, $max_contig, $reads_used,
+            $total_length);
+    my $line = "|" . join("|", @fields) . "|";
+    push (@wiki_genome, $line);
+}
+
 sub create_release
 {
     my $species = shift;
@@ -421,12 +468,25 @@ sub create_release
     Assembly::Utils::set_check_record($yaml_rec, ["release"], "version", $cand_rec->{Release_Version});
     unless (release_exists($release_dir, $release_prefix)) {
         mkpath $release_dir;
-        #my $release_yaml_fname = $release_dir . "/" . $release_prefix . ".yml";
-        my $release_yaml_fname = "/tmp/" . $release_prefix . "_metadata.yml";
+        my $release_yaml_fname = '';
+        if ($options->{testing}) {
+            $release_yaml_fname = "/tmp/" . $release_prefix . "_metadata.yml";
+        } else {
+            $release_yaml_fname = $release_dir . "/" . $release_prefix . "_metadata.yml";
+        }
+        
         Assembly::Utils::set_check_record($yaml_rec, ["release"], "yaml_file", $release_yaml_fname);
         my $trimraw = $cand_rec->{Trim_Raw};
         my $release = create_release_yaml($species, $strain, $cand_rec, $yaml_rec);
         DumpFile($release_yaml_fname, $release);
+        # Optionally print out table of release info to paste into wiki data release
+        # section and genome assembly section.
+        if ($options->{wiki_release_table}) {
+            get_wiki_release_line($release, $release_dir);
+        }
+        if ($options->{wiki_genome_table}) {
+            get_wiki_genome_line($release, $release_dir);
+        }
         # add yml info to release yml record
         # write the release yml record
         # copy over the required files
@@ -458,10 +518,33 @@ sub create_all_releases
     }
 }
         
+sub print_wiki_tables
+{
+    if ($options->{wiki_release_table}) {
+        my @release_headers = ("Species", "Strain", "Release Version", "Type", "Link");
+        @wiki_release = sort @wiki_release; # I agree, this isn't pretty
+        my $fname = $options->{wiki_release_table};
+        open (FREL, '>', $fname) or die "Error: could not open output table file $fname\n";
+        print FREL "|" . join("|", @release_headers) . "|\n";
+        print FREL join("\n", @wiki_release) . "\n";
+        close (FREL);
+    }
+    if ($options->{wiki_genome_table}) {
+        my @genome_headers = ("Species", "Strain", "Estimated Genome Length", "N50", "Max Contig",
+            "Reads Used", "Total Length");
+        @wiki_genome = sort @wiki_genome;
+        my $fname = $options->{wiki_genome_table};
+        open (FGEN, '>', $fname) or die "Error: could not open output table file $fname\n";
+        print FGEN "|" . join("|", @genome_headers) . "|\n";
+        print FGEN join("\n", @wiki_genome) . "\n";
+        close (FGEN);
+    }
+}
 
 gather_opts;
 my $release_candidates = parse_release_table($options->{release_table});
 my $records = LoadFile($options->{yaml_in});
 create_all_releases($release_candidates, $records);
+print_wiki_tables;
 DumpFile($options->{yaml_out}, $records);
 
