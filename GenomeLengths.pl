@@ -80,9 +80,9 @@ sub parse_genome_lengths
                     $records->{$species}->{DNA}->{$strain}->{related_genome_length} = {};
                     my $rgl_ref = $records->{$species}->{DNA}->{$strain}->{related_genome_length};
                     for my $ch (@glen_col_headers) {
-                        if ($ch =~ /^RG/) {
+                        #if ($ch =~ /^RG/) {
                             $rgl_ref->{$ch} = $fh{$ch};
-                        }
+                        #}
                     }
                 }
             } else {

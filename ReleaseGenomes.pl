@@ -16,8 +16,8 @@ my @wiki_release = ();
 sub set_default_opts
 {
     my %defaults = qw(
-        yaml_in yaml_files/12_velvet_stats.yml
-        yaml_out yaml_files/13_velvet_release.yml
+        yaml_in yaml_files/13_contig_stats.yml
+        yaml_out yaml_files/14_velvet_release.yml
         release_table input_data/Release.tab
         run 0
         verbose 1
@@ -158,6 +158,7 @@ sub get_genome_stanza
     my $inrec = shift;
     my $release_kmer = shift;
     my $outrec = {};
+    $outrec->{kingdom} = Assembly::Utils::get_check_record($inrec, ["related_genome_length", "IL_Kingdom"]);
     $outrec->{species_dir} = Assembly::Utils::get_check_record($inrec, ["PE", "species_dir"]);
     $outrec->{estimated_genome_length} = Assembly::Utils::get_check_record($inrec, ["related_genome_length", "RG_Est_Genome_Length"]);
     $outrec->{release_kmer} = $release_kmer;
@@ -165,6 +166,9 @@ sub get_genome_stanza
     $outrec->{max_contig} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "max_contig"]);
     $outrec->{reads_used} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "reads_used"]);
     $outrec->{total_length} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "total_length"]);
+    $outrec->{num_contigs} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "num_contigs"]);
+    $outrec->{min_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "min_contig_len"]);
+    $outrec->{median_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "median_contig_len"]);
     my @types = ();
     for my $st (qw(PE PER MP MP3 MP8)) {
         if (Assembly::Utils::get_check_record($inrec, [$st])) {

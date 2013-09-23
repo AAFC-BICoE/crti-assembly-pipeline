@@ -41,7 +41,7 @@ sub create_kmer_range
     my $species = shift;
     my $strain = shift;
     my $trimraw = shift;
-    #my $use_velvetk = 1;
+    my $use_velvetk = 1;
     my $vk_radius = 6;
     my $min_kmer = 75;
     my $max_kmer = 75;
