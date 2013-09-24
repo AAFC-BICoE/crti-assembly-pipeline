@@ -6,6 +6,7 @@ use 5.010;
 use YAML::XS qw(LoadFile DumpFile);
 use File::Path;
 use File::Basename;
+use Assembly::Utils;
 
 my $fastqc_bin = "/opt/bio/FastQC/fastqc";
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
@@ -117,9 +118,11 @@ sub get_fastqc_subdir
     my $tr = shift;
     my $tr_filename = shift;
     
-    my $fastqc_subdir = $rec->{sample_dir} . "/fastqc_out/" . $tr_filename . "_fastqc";
+    my $sample_dir = Assembly::Utils::get_check_record($rec, ["sample_dir"]);
+    my $fastqc_subdir = $sample_dir . "/fastqc_out/" . $tr_filename . "_fastqc";
     my $key = $tr . "_subdir";
-    $rec->{fastqc}->{$rval}->{$key} = $fastqc_subdir;
+    #$rec->{fastqc}->{$rval}->{$key} = $fastqc_subdir;
+    Assembly::Utils::set_check_record($rec, ["fastqc", $rval], $key, $fastqc_subdir);
     return $fastqc_subdir;
 }
 
@@ -131,10 +134,9 @@ sub get_fastqc_cmd
     my $trdata = shift;
     my $fastqc_out = shift;
     my $fastqc_cmd = $fastqc_bin . " -o " . $fastqc_out . " " . $rec->{$rval}->{$trdata};
-    #my $fastqc_cmd_key = $trdata . "_fastqc_cmd";
-    #$rec->{$rval}->{$fastqc_cmd_key} = $fastqc_cmd;
     my $key = $tr . "_cmd";
-    $rec->{fastqc}->{$rval}->{$key} = $fastqc_cmd;
+    #$rec->{fastqc}->{$rval}->{$key} = $fastqc_cmd;
+    Assembly::Utils::set_check_record($rec, ["fastqc", $rval], $key, $fastqc_cmd);
     return $fastqc_cmd;
 }
 
@@ -146,7 +148,8 @@ sub get_qsub_cmd
     my $fastqc_cmd = shift;
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " " . $options->{qsub_script} . " '" . $fastqc_cmd . "'";
     my $key = $tr . "_qsub";
-    $rec->{fastqc}->{$rval}->{$key} = $qsub_cmd;
+    #$rec->{fastqc}->{$rval}->{$key} = $qsub_cmd;
+    Assembly::Utils::set_check_record($rec, ["fastqc", $rval], $key, $qsub_cmd);
     return $qsub_cmd;
 }
 
@@ -156,7 +159,6 @@ sub submit_qsub
     my $filename = shift;
     my $fastqc_subdir = shift;
     my $qsub_cmd = shift;
-    #print join("\n", ("submit qsub:", $filename, $fastqc_subdir, $qsub_cmd)) . "\n";
     if (-e $fastqc_subdir) {
         if ($options->{verbose}) {
             print "Won't run fastqc on file $filename - output folder already exists:\n";
@@ -165,7 +167,8 @@ sub submit_qsub
     } else {
         if ($options->{verbose}) {
             print "Submitting qsub command:\n${qsub_cmd}\n";
-            my $fqcout = ($rec->{fastqc}->{fastqc_out} ? $rec->{fastqc}->{fastqc_out} : '');
+            #my $fqcout = ($rec->{fastqc}->{fastqc_out} ? $rec->{fastqc}->{fastqc_out} : '');
+            my $fqcout = Assembly::Utils::get_check_record($rec, ["fastqc", "fastqc_out"]);
             print "didn't find the out dir for this one - contents of fastqc_out:\n";
             print `/bin/ls $fqcout` if $fqcout;
         }
@@ -183,7 +186,8 @@ sub get_sample_record
 	my $temp = LoadFile($options->{yaml_in});
 	my $sample = $options->{sample};
 	if (defined $temp->{$sample}) {
-		$records->{$sample} = $temp->{$sample};
+		#$records->{$sample} = $temp->{$sample};
+		Assembly::Utils::set_check_record($records, [], $sample, $temp->{$sample});
 	} else {
 		die "Error: could not find a record for specified sample $sample in file " . $options->{yaml_in} . "\n";
 	}
@@ -199,8 +203,10 @@ sub get_reports
     my $text_path = $fastqc_subdir . "/fastqc_data.txt";
     my $html_key = $tr . "_report_html";
     my $text_key = $tr . "_data_txt";
-    $rec->{fastqc}->{$rval}->{$html_key} = $html_path;
-    $rec->{fastqc}->{$rval}->{$text_key} = $text_path;
+    #$rec->{fastqc}->{$rval}->{$html_key} = $html_path;
+    #$rec->{fastqc}->{$rval}->{$text_key} = $text_path;
+    Assembly::Utils::set_check_record($rec, ["fastqc", $rval], $html_key, $html_path);
+    Assembly::Utils::set_check_record($rec, ["fastqc", $rval], $text_key, $text_path);
 }
 
 gather_opts;
@@ -220,13 +226,15 @@ foreach my $sample (keys %{$records})
         	if ($tr =~ /raw/) {
         		$trdata = $trdata . "_symlink";
         	}
-            $rec->{fastqc} = {};
+            #$rec->{fastqc} = {}; #this actually causes a bug: the loss of all previous raw fastqc commands when running with --trim.
             for my $rval (qw(R1 R2)) {
                 if (check_record_fields($rec, $rval, $tr, $trdata)) {
-                    my $fastqc_out = $rec->{sample_dir} . "/fastqc_out";
-                    $rec->{fastqc}->{fastqc_out} = $fastqc_out;
+                    my $sample_dir = Assembly::Utils::get_check_record($rec, ["sample_dir"]);
+                    my $fastqc_out = $sample_dir . "/fastqc_out";
+                    #$rec->{fastqc}->{fastqc_out} = $fastqc_out;
+                    Assembly::Utils::set_check_record($rec, ["fastqc"], "fastqc_out", $fastqc_out);
                     mkpath $fastqc_out;
-                    $rec->{fastqc}->{$rval} = {};
+                    #$rec->{fastqc}->{$rval} = {}; # same bug as above.
                     my $tr_filename = basename($rec->{$rval}->{$trdata});
                     my $fastqc_subdir = get_fastqc_subdir($rec, $rval, $tr, $tr_filename);
                     get_reports($rec, $rval, $tr, $fastqc_subdir);

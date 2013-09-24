@@ -19,10 +19,10 @@ my $options = {};
 my $velvet_bin_dir = "/opt/bio/velvet";
 #my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
 #my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt contigs.fa)];
-# Modify the above - we plan on deleting all but Log, Roadmaps, stats.txt, contigs.fa
+# Modify the above - we plan on deleting all but Log, CnyUnifiedSeq, Graph2, PreGraph, contigs.fa
 # in order to save space. Don't want the script to re-run where we've deleted files.
-my $vh_outfiles = [qw(Log Roadmaps)];
-my $vg_outfiles = [qw(stats.txt contigs.fa)];
+my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
+my $vg_outfiles = [qw(Graph2 PreGraph contigs.fa)];
 
 
 # @ kbins is only used by get_kmer_bin function below.
