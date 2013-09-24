@@ -12,6 +12,7 @@ my $options = {};
 my @release_headers = qw (Species Strain Sequencing_Types Trim_Raw Release_Version Est_Genome_Size Best_Kmer Best_N50);
 my @wiki_genome = ();
 my @wiki_release = ();
+my @wiki_combined = ();
 
 sub set_default_opts
 {
@@ -24,6 +25,7 @@ sub set_default_opts
         testing 1
         wiki_release_table output_files/wiki_release_table.txt
         wiki_genome_table output_files/wiki_genome_table.txt
+        wiki_combined_table output_files/wiki_combined_table.txt
     );
     for my $kdef (keys %defaults) {
         $options->{$kdef} = $defaults{$kdef} unless $options->{$kdef};
@@ -40,6 +42,7 @@ sub check_opts
                 --testing (place output yaml files in /tmp)
                 --wiki_release_table (print out table of releases for pasting to wiki)
                 --wiki_genome_table (print table of genome stats for pasting to wiki)
+                --wiki_combined_table (print combined release/genome stats for pasting to wiki)
             ";
     }
 }
@@ -56,6 +59,7 @@ sub gather_opts
         'testing',
         'wiki_release_table',
         'wiki_genome_table',
+        'wiki_combined_table',
         );
     set_default_opts;
     check_opts;
@@ -66,6 +70,14 @@ sub print_verbose
     if ($options->{verbose}) {
         print (@_);
     }
+}
+
+# Function to add commas to a number, from: 
+# http://perldoc.perl.org/perlfaq5.html#How-can-I-output-my-numbers-with-commas-added%3F
+sub commify {
+    local $_ = shift;
+    1 while s/^([-+]?\d+)(\d{3})/$1,$2/;
+    return $_;
 }
 
 sub get_software_versions
@@ -454,6 +466,48 @@ sub get_wiki_genome_line
     push (@wiki_genome, $line);
 }
 
+sub get_wiki_combined_line
+{
+    my $release = shift;
+    my $release_dir = shift;
+    my @fields = ();
+    push (@fields, $release->{genome_assembly}->{kingdom});
+    push (@fields, $release->{release}->{species});
+    push (@fields, $release->{release}->{strain});
+    push (@fields, $release->{release}->{version});
+    push (@fields, "Genome"); #Type
+
+    my $link_target = "http://biocluster/project_data/CRTI-09S-462RD/specimen/";
+    if ($release_dir =~ /specimen\/(.*)/) {
+        $link_target = $link_target . $1;
+    } elsif ($release_dir =~ /\.\.\/\.\.\/processing_test2\/(.*)/) {
+        $link_target = $link_target . $1;
+    } else {
+        $link_target = $link_target . $release_dir;
+    }
+    my $link_text = "Release"; # could also be the release prefix here.
+    my $link = "[[" . $link_target . "][" . $link_text . "]]";
+    push (@fields, $link);
+    
+    for my $key (qw(total_length estimated_genome_length num_contigs min_contig_len median_contig_len
+                max_contig N50)) {
+        my $var = ($release->{genome_assembly}->{$key} ? $release->{genome_assembly}->{$key} : '');
+        push (@fields, commify($var));
+    }
+    
+    # Add commas to both numerator and denominator of reads used.
+    my $reads_used = ($release->{genome_assembly}->{reads_used} ? $release->{genome_assembly}->{reads_used} : '');
+    if ($reads_used =~ /^(\d+)\/(\d+)/) {
+        my $numer = commify($1);
+        my $denom = commify($2);
+        my $expr = $numer . "/" . $denom;
+        push (@fields, $expr);
+    }
+    
+    my $line = "|" . join("|", @fields) . "|";
+    push (@wiki_combined, $line);
+}  
+
 sub create_release
 {
     my $species = shift;
@@ -490,6 +544,9 @@ sub create_release
         }
         if ($options->{wiki_genome_table}) {
             get_wiki_genome_line($release, $release_dir);
+        }
+        if ($options->{wiki_combined_table}) {
+            get_wiki_combined_line($release, $release_dir);
         }
         # add yml info to release yml record
         # write the release yml record
@@ -542,6 +599,17 @@ sub print_wiki_tables
         print FGEN "|" . join("|", @genome_headers) . "|\n";
         print FGEN join("\n", @wiki_genome) . "\n";
         close (FGEN);
+    }
+    if ($options->{wiki_combined_table}) {
+        my @combined_headers = ("Kingdom", "Species", "Strain", "Release", "Type", "Link", 
+            "Total Length", "Estimated Genome Length", "Number of Contigs", "Min Contig", 
+            "Median Contig", "Max Contig", "N50", "Reads Used");
+        @wiki_combined = sort @wiki_combined;
+        my $fname = $options->{wiki_combined_table};
+        open (FCMB, '>', $fname) or die "Error: could not open output table file $fname\n";
+        print FCMB "|" . join("|", @combined_headers) . "|\n";
+        print FCMB join("\n", @wiki_combined) . "\n";
+        close (FCMB);
     }
 }
 
