@@ -1,14 +1,14 @@
 Species	Strain	PE	PER	MP	MP3	MP8	Trim/Raw	VK_Best_Kmer
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	trim	87
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	raw	93
-Synchytrium_endobioticum	unknown					S00180A	trim	
-Synchytrium_endobioticum	unknown					S00180A	raw	
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					trim	49
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S00171C					raw	49
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809		trim	
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809		raw	
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	trim	81
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	raw	89
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					trim	65
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					raw	73
+Globodera_pallida	A1_INRA_St-Malo_France	S00137F					trim	77
+Globodera_pallida	A1_INRA_St-Malo_France	S00137F					raw	83
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					trim	79
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	S00137E					raw	85
 Penicillium_nordicum	DAOM_185683	S0016FF					trim	57
@@ -65,6 +65,8 @@ Penicillium_verrucosum	DAOM_213195	S001701					trim	53
 Penicillium_verrucosum	DAOM_213195	S001701					raw	59
 Pectobacterium_wasabiae	Ecw1002	S000CFE					trim	83
 Pectobacterium_wasabiae	Ecw1002	S000CFE					raw	87
+Arcobacter_lanthierii	AF_1581	S0016FC					trim	93
+Arcobacter_lanthierii	AF_1581	S0016FC					raw	99
 Arcobacter_lanthierii	AF_1430	S00107D					trim	93
 Arcobacter_lanthierii	AF_1430	S00107D					raw	99
 Puccinia_triticina	race_MFDS_RSA2117	S001380					trim	71
@@ -75,6 +77,8 @@ Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	trim	73
 Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	raw	91
 Puccinia_graminis	race_TMRTK_RSA2053	S001376					trim	71
 Puccinia_graminis	race_TMRTK_RSA2053	S001376					raw	75
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	S001379					trim	47
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	S001379					raw	55
 Puccinia_graminis	race_QTHJT_RSA2051	S001378					trim	45
 Puccinia_graminis	race_QTHJT_RSA2051	S001378					raw	51
 Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	S001377					trim	55
@@ -107,8 +111,10 @@ Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	trim	79
 Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	raw	85
 Basidioascus_undulatus	unknown_strain						trim	53
 Basidioascus_undulatus	unknown_strain						raw	61
-Basidioascus_undulatus	unknown	S00106D					trim	
-Basidioascus_undulatus	unknown	S00106D					raw	
+Basidioascus_undulatus	unknown						trim	
+Basidioascus_undulatus	unknown						raw	
+Basidioascus_undulatus	DAOM_241956	S00106D					trim	53
+Basidioascus_undulatus	DAOM_241956	S00106D					raw	61
 Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	trim	93
 Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	raw	97
 Penicillium_thymicola	DAOM_180753	S00106B					trim	69

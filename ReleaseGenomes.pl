@@ -22,7 +22,7 @@ sub set_default_opts
         release_table input_data/Release.tab
         run 0
         verbose 1
-        testing 1
+        testing 0
         wiki_release_table output_files/wiki_release_table.txt
         wiki_genome_table output_files/wiki_genome_table.txt
         wiki_combined_table output_files/wiki_combined_table.txt
@@ -182,7 +182,8 @@ sub get_genome_stanza
     $outrec->{min_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "min_contig_len"]);
     $outrec->{median_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "median_contig_len"]);
     my @types = ();
-    for my $st (qw(PE PER MP MP3 MP8)) {
+    #for my $st (qw(PE PER MP MP3 MP8)) {
+    for my $st (qw(PE)) {
         if (Assembly::Utils::get_check_record($inrec, [$st])) {
             push (@types, $st);
         }
@@ -402,18 +403,21 @@ sub create_release_yaml
     my $strain = shift;
     my $cand_rec = shift;
     my $strain_rec = shift;
-    my $release_yaml_rec = {};
+    #my $release_yaml_rec = {};
+    my $release_yaml_rec = [];
     my $trimraw = $cand_rec->{Trim_Raw};
     my $release_kmer = $cand_rec->{Best_Kmer};
     
-    $release_yaml_rec->{release} = get_release_stanza($species, $strain, $strain_rec);
-    $release_yaml_rec->{genome_assembly} = get_genome_stanza($species, $strain, $trimraw, $strain_rec, $release_kmer);
+    $release_yaml_rec->[0]->{release} = get_release_stanza($species, $strain, $strain_rec);
+    $release_yaml_rec->[1]->{genome_assembly} = get_genome_stanza($species, $strain, $trimraw, $strain_rec, $release_kmer);
     my $pipeline = [];
+    $release_yaml_rec->[2]->{samples} = [];
     for my $sample_type (qw(PE PER MP MP3 MP8)) {
         my $sample_rec = Assembly::Utils::get_check_record($strain_rec, [$sample_type]);
         if ($sample_rec) {
             my ($sample_stanza, $qc_cmds) = get_sample_stanza($strain_rec, $sample_type, $trimraw);
-            $release_yaml_rec->{$sample_type} = $sample_stanza;
+            #$release_yaml_rec->{$sample_type} = $sample_stanza;
+            push (@{$release_yaml_rec->[2]->{samples}}, $sample_stanza);
             for my $rec (@$qc_cmds) {
                 push (@$pipeline, $rec);
             }
@@ -426,7 +430,7 @@ sub create_release_yaml
     for my $rec (@$pipeline_remainder) {
         push (@$pipeline, $rec);
     }
-    $release_yaml_rec->{pipeline} = $pipeline;
+    $release_yaml_rec->[3]->{pipeline} = $pipeline;
     return $release_yaml_rec;
 }
 
@@ -434,9 +438,9 @@ sub get_wiki_release_line
 {
     my $release = shift;
     my $release_dir = shift;
-    my $species = $release->{release}->{species};
-    my $strain = $release->{release}->{strain};
-    my $version = $release->{release}->{version};
+    my $species = $release->[0]->{release}->{species};
+    my $strain = $release->[0]->{release}->{strain};
+    my $version = $release->[0]->{release}->{version};
     my $type = "Genome";
     my $link_target = "http://biocluster/project_data/CRTI-09S-462RD/specimen/";
     if ($release_dir =~ /specimen\/(.*)/) {
@@ -453,13 +457,13 @@ sub get_wiki_release_line
 sub get_wiki_genome_line
 {
     my $release = shift;
-    my $species = $release->{release}->{species};
-    my $strain = $release->{release}->{strain};
-    my $N50 = $release->{genome_assembly}->{N50};
-    my $max_contig = $release->{genome_assembly}->{max_contig};
-    my $reads_used = $release->{genome_assembly}->{reads_used};
-    my $total_length = $release->{genome_assembly}->{total_length};
-    my $est_genome_length = $release->{genome_assembly}->{estimated_genome_length};
+    my $species = $release->[0]->{release}->{species};
+    my $strain = $release->[0]->{release}->{strain};
+    my $N50 = $release->[1]->{genome_assembly}->{N50};
+    my $max_contig = $release->[1]->{genome_assembly}->{max_contig};
+    my $reads_used = $release->[1]->{genome_assembly}->{reads_used};
+    my $total_length = $release->[1]->{genome_assembly}->{total_length};
+    my $est_genome_length = $release->[1]->{genome_assembly}->{estimated_genome_length};
     my @fields = ($species, $strain, $est_genome_length, $N50, $max_contig, $reads_used,
             $total_length);
     my $line = "|" . join("|", @fields) . "|";
@@ -471,11 +475,16 @@ sub get_wiki_combined_line
     my $release = shift;
     my $release_dir = shift;
     my @fields = ();
-    push (@fields, $release->{genome_assembly}->{kingdom});
-    push (@fields, $release->{release}->{species});
-    push (@fields, $release->{release}->{strain});
-    push (@fields, $release->{release}->{version});
+    push (@fields, $release->[1]->{genome_assembly}->{kingdom});
+    push (@fields, $release->[0]->{release}->{species});
+    push (@fields, $release->[0]->{release}->{strain});
+    push (@fields, $release->[0]->{release}->{version});
     push (@fields, "Genome"); #Type
+
+    push (@fields, "yes"); # paired-end = true
+    push (@fields, "no"); # MP 3kb = false
+    push (@fields, "no"); # MP 8kb = false
+    push (@fields, $release->[1]->{genome_assembly}->{release_kmer}); # Kmer used for release
 
     my $link_target = "http://biocluster/project_data/CRTI-09S-462RD/specimen/";
     if ($release_dir =~ /specimen\/(.*)/) {
@@ -491,12 +500,12 @@ sub get_wiki_combined_line
     
     for my $key (qw(total_length estimated_genome_length num_contigs min_contig_len median_contig_len
                 max_contig N50)) {
-        my $var = ($release->{genome_assembly}->{$key} ? $release->{genome_assembly}->{$key} : '');
+        my $var = ($release->[1]->{genome_assembly}->{$key} ? $release->[1]->{genome_assembly}->{$key} : '');
         push (@fields, commify($var));
     }
     
     # Add commas to both numerator and denominator of reads used.
-    my $reads_used = ($release->{genome_assembly}->{reads_used} ? $release->{genome_assembly}->{reads_used} : '');
+    my $reads_used = ($release->[1]->{genome_assembly}->{reads_used} ? $release->[1]->{genome_assembly}->{reads_used} : '');
     if ($reads_used =~ /^(\d+)\/(\d+)/) {
         my $numer = commify($1);
         my $denom = commify($2);
@@ -507,6 +516,7 @@ sub get_wiki_combined_line
     my $line = "|" . join("|", @fields) . "|";
     push (@wiki_combined, $line);
 }  
+
 
 sub create_release
 {
@@ -524,7 +534,7 @@ sub create_release
     Assembly::Utils::set_check_record($yaml_rec, ["release"], "prefix", $release_prefix);
     Assembly::Utils::set_check_record($yaml_rec, ["release"], "release_dir", $release_dir);
     Assembly::Utils::set_check_record($yaml_rec, ["release"], "version", $cand_rec->{Release_Version});
-    unless (release_exists($release_dir, $release_prefix)) {
+    unless (release_exists($release_dir, $release_prefix) or $release_dir =~ /^\/release/) {
         mkpath $release_dir;
         my $release_yaml_fname = '';
         if ($options->{testing}) {
@@ -601,7 +611,7 @@ sub print_wiki_tables
         close (FGEN);
     }
     if ($options->{wiki_combined_table}) {
-        my @combined_headers = ("Kingdom", "Species", "Strain", "Release", "Type", "Link", 
+        my @combined_headers = ("Kingdom", "Species", "Strain", "Release", "Type", "PE", "MP-3kb", "MP-8kb", "K-mer", "Link", 
             "Total Length", "Estimated Genome Length", "Number of Contigs", "Min Contig", 
             "Median Contig", "Max Contig", "N50", "Reads Used");
         @wiki_combined = sort @wiki_combined;

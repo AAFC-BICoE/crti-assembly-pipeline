@@ -259,7 +259,7 @@ sub submit_cmds
 
     if ($vh_files_exist and !$vg_files_exist) {
         my $sub_cmds = $vqs->submit_vg($vh_cmd, $trimraw);
-        my ($vg_qsub_cmd, $vg_jobid) = $sub_cmds;
+        my ($vg_qsub_cmd, $vg_jobid) = @$sub_cmds;
         Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_cmd", $vg_qsub_cmd);
         Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_jobid", $vg_jobid);
     } elsif (!$vh_files_exist) {

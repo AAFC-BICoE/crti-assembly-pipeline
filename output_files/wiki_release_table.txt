@@ -3,7 +3,6 @@
 |Arcobacter lanthierii|strain AF 1430|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_lanthierii/release/Al_AF_1430_R01][Release]]|
 |Arcobacter septicus|strain AF 1028|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_septicus/release/As_AF_1028_R01][Release]]|
 |Arcobacter septicus|strain AF 1078|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_septicus/release/As_AF_1078_R01][Release]]|
-|Basidioascus undulatus||R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/B_undulatus/release/Bu_unknown_R01][Release]]|
 |Globodera pallida|strain A2 Cyprus, pathotype Pa2/3|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_pallida/release/Gp_A2_Cyprus_pathotype_Pa23_R01][Release]]|
 |Globodera pallida|strain B1 INRA LeRheu France, pathotype Pa2/3|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_pallida/release/Gp_B1_INRA_LeRheu_France_pathotype_Pa23_R01][Release]]|
 |Globodera rostochiensis|Nfld isolate|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_Nfld_isolate_R01][Release]]|

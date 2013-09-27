@@ -49,6 +49,32 @@ Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	43	43	176	
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	45	45	176	561	24479/208586080
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	47	47	103	330	11828/208586080
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	49	49	49	121	1766/208586080
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	69				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	71				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	73				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	75				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	77				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	79				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	81				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	83				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	85				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	87				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	89				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	91				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	93				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	77				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	79				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	81				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	83				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	85				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	87				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	89				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	91				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	93				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	95				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	97				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	99				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	101				
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	trim	43	1671	248934	194517671	44725056/86103428
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	trim	45	1883	285241	184340235	43219951/86103428
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	trim	47	2109	221039	174038294	42160558/86103428
@@ -75,6 +101,32 @@ Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	raw	67	2585	104625	99563572
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	raw	69	2264	67406	101624545	33439133/86103428
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	raw	71	2047	72623	91340500	31948573/86103428
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	100000000	raw	73	1784	60514	80755226	29785557/86103428
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	65				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	67				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	69				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	71				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	73				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	75				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	77				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	79				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	81				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	83				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	85				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	87				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	trim	89				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	71				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	73				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	75				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	77				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	79				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	81				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	83				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	85				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	87				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	89				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	91				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	93				
+Globodera_pallida	A1_INRA_St-Malo_France	100000000	raw	95				
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	100000000	trim	49				
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	100000000	trim	51				
 Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	100000000	trim	53				
@@ -692,6 +744,25 @@ Pectobacterium_wasabiae	Ecw1002	5000000	raw	95	178122	408000	5025796	7693531/868
 Pectobacterium_wasabiae	Ecw1002	5000000	raw	97	6798	28732	4769051	6533764/8682640
 Pectobacterium_wasabiae	Ecw1002	5000000	raw	99	1208	5952	17916	86170/8682640
 Pectobacterium_wasabiae	Ecw1002	5000000	raw	101				
+Arcobacter_lanthierii	AF_1581	1700000	trim	81				
+Arcobacter_lanthierii	AF_1581	1700000	trim	83				
+Arcobacter_lanthierii	AF_1581	1700000	trim	85				
+Arcobacter_lanthierii	AF_1581	1700000	trim	87				
+Arcobacter_lanthierii	AF_1581	1700000	trim	89				
+Arcobacter_lanthierii	AF_1581	1700000	trim	91				
+Arcobacter_lanthierii	AF_1581	1700000	trim	93				
+Arcobacter_lanthierii	AF_1581	1700000	trim	95				
+Arcobacter_lanthierii	AF_1581	1700000	trim	97				
+Arcobacter_lanthierii	AF_1581	1700000	trim	99				
+Arcobacter_lanthierii	AF_1581	1700000	trim	101				
+Arcobacter_lanthierii	AF_1581	1700000	raw	87				
+Arcobacter_lanthierii	AF_1581	1700000	raw	89				
+Arcobacter_lanthierii	AF_1581	1700000	raw	91				
+Arcobacter_lanthierii	AF_1581	1700000	raw	93				
+Arcobacter_lanthierii	AF_1581	1700000	raw	95				
+Arcobacter_lanthierii	AF_1581	1700000	raw	97				
+Arcobacter_lanthierii	AF_1581	1700000	raw	99				
+Arcobacter_lanthierii	AF_1581	1700000	raw	101				
 Arcobacter_lanthierii	AF_1430	1700000	trim	81	337703	412153	2233013	12734745/13318554
 Arcobacter_lanthierii	AF_1430	1700000	trim	83	337862	412155	2233066	12710613/13318554
 Arcobacter_lanthierii	AF_1430	1700000	trim	85	338183	412157	2233060	12686046/13318554
@@ -816,6 +887,32 @@ Puccinia_graminis	race_TMRTK_RSA2053	80000000	raw	59	8976	96560	115608179	639402
 Puccinia_graminis	race_TMRTK_RSA2053	80000000	raw	61	9321	98591	118215058	63995730/73645790
 Puccinia_graminis	race_TMRTK_RSA2053	80000000	raw	63	8957	103375	118488603	63852132/73645790
 Puccinia_graminis	race_TMRTK_RSA2053	80000000	raw	65	8549	77010	118256989	63526005/73645790
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	35				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	37				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	39				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	41				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	43				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	45				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	47				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	49				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	51				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	53				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	55				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	57				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	trim	59				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	43				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	45				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	47				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	49				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	51				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	53				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	55				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	57				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	59				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	61				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	63				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	65				
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	80000000	raw	67				
 Puccinia_graminis	race_QTHJT_RSA2051	80000000	trim	21				
 Puccinia_graminis	race_QTHJT_RSA2051	80000000	trim	23	6338	74441	65478132	35195400/39855618
 Puccinia_graminis	race_QTHJT_RSA2051	80000000	trim	25	6689	75020	65887747	34774449/39855618
@@ -1163,32 +1260,32 @@ Ditylenchus_dipsaci	Ontario_01	100000000	raw	91
 Ditylenchus_dipsaci	Ontario_01	100000000	raw	93				
 Ditylenchus_dipsaci	Ontario_01	100000000	raw	95				
 Ditylenchus_dipsaci	Ontario_01	100000000	raw	97				
-Basidioascus_undulatus	unknown	20000000	trim	31	6845	38853	32824634	10849914/12168580
-Basidioascus_undulatus	unknown	20000000	trim	33				
-Basidioascus_undulatus	unknown	20000000	trim	35				
-Basidioascus_undulatus	unknown	20000000	trim	37				
-Basidioascus_undulatus	unknown	20000000	trim	39				
-Basidioascus_undulatus	unknown	20000000	trim	41	7029	43534	32239233	10404825/12168580
-Basidioascus_undulatus	unknown	20000000	trim	43	7594	48921	32789120	10333629/12168580
-Basidioascus_undulatus	unknown	20000000	trim	45	7055	35472	32716707	10236742/12168580
-Basidioascus_undulatus	unknown	20000000	trim	47	6629	38466	32658287	10215297/12168580
-Basidioascus_undulatus	unknown	20000000	trim	49	5954	33730	32533570	10046782/12168580
-Basidioascus_undulatus	unknown	20000000	trim	51	5186	29132	33017479	9880951/12168580
-Basidioascus_undulatus	unknown	20000000	trim	53	3581	23412	32637920	9677358/12168580
-Basidioascus_undulatus	unknown	20000000	trim	55	2641	15085	32026191	9515936/12168580
-Basidioascus_undulatus	unknown	20000000	raw	39				
-Basidioascus_undulatus	unknown	20000000	raw	41				
-Basidioascus_undulatus	unknown	20000000	raw	43				
-Basidioascus_undulatus	unknown	20000000	raw	45				
-Basidioascus_undulatus	unknown	20000000	raw	47				
-Basidioascus_undulatus	unknown	20000000	raw	49	8443	54512	32532778	10292348/12168580
-Basidioascus_undulatus	unknown	20000000	raw	51	8712	56791	33095175	10230213/12168580
-Basidioascus_undulatus	unknown	20000000	raw	53	7918	56617	33058385	10124522/12168580
-Basidioascus_undulatus	unknown	20000000	raw	55	7169	46081	32957991	9896616/12168580
-Basidioascus_undulatus	unknown	20000000	raw	57	6351	46261	32766092	9716532/12168580
-Basidioascus_undulatus	unknown	20000000	raw	59	3986	26873	32777710	9604300/12168580
-Basidioascus_undulatus	unknown	20000000	raw	61	3310	22966	32450970	9437344/12168580
-Basidioascus_undulatus	unknown	20000000	raw	63	2748	22964	32083581	0/12168580
+Basidioascus_undulatus	DAOM_241956	20000000	trim	41				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	43				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	45				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	47				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	49				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	51				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	53				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	55				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	57				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	59				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	61				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	63				
+Basidioascus_undulatus	DAOM_241956	20000000	trim	65				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	49				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	51				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	53				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	55				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	57				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	59				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	61				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	63				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	65				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	67				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	69				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	71				
+Basidioascus_undulatus	DAOM_241956	20000000	raw	73				
 Tilletia_indica	DAOM_236416	20000000	trim	81				
 Tilletia_indica	DAOM_236416	20000000	trim	83				
 Tilletia_indica	DAOM_236416	20000000	trim	85				
