@@ -19,7 +19,7 @@ sub set_default_opts
     my %defaults = qw(
         yaml_in yaml_files/13_contig_stats.yml
         yaml_out yaml_files/14_velvet_release.yml
-        release_table input_data/Release.tab
+        release_table input_data/Release_test2.tab
         run 0
         verbose 1
         testing 0

@@ -1,40 +1,15 @@
 |Species|Strain|Release Version|Type|Link|
-|Arcobacter cibarius|strain LMG 21996|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_cibarius/release/Ac_LMG_21996_R01][Release]]|
-|Arcobacter lanthierii|strain AF 1430|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_lanthierii/release/Al_AF_1430_R01][Release]]|
-|Arcobacter septicus|strain AF 1028|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_septicus/release/As_AF_1028_R01][Release]]|
-|Arcobacter septicus|strain AF 1078|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_septicus/release/As_AF_1078_R01][Release]]|
-|Globodera pallida|strain A2 Cyprus, pathotype Pa2/3|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_pallida/release/Gp_A2_Cyprus_pathotype_Pa23_R01][Release]]|
-|Globodera pallida|strain B1 INRA LeRheu France, pathotype Pa2/3|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_pallida/release/Gp_B1_INRA_LeRheu_France_pathotype_Pa23_R01][Release]]|
-|Globodera rostochiensis|Nfld isolate|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_Nfld_isolate_R01][Release]]|
-|Globodera rostochiensis|QC strain, pathotype Ro1|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_QC_pathotype_Ro1_R01][Release]]|
-|Globodera rostochiensis|SCRIR03, pathotype Ro3|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_SCRIR03_pathotype_Ro3_R01][Release]]|
-|Globodera rostochiensis|SCRIR04, pathotype Ro4|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_SCRIR04_pathotype_Ro4_R01][Release]]|
-|Globodera rostochiensis|SCRIR05, pathotype Ro5|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_SCRIR05_pathotype_Ro5_R01][Release]]|
-|Globodera rostochiensis|strain Ro19, pathotype Ro1|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_Ro19_pathotype_Ro1_R01][Release]]|
-|Pantoea (Erwinia) ananatis|strain LMG 2665|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_ananatis/release/Pa_LMG_2665_R01][Release]]|
-|Pantoea stewartii|strain DOAB 021|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_stewartii/release/Ps_DOAB_021_R01][Release]]|
-|Pantoea stewartii|strain DOAB 230|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_stewartii/release/Ps_DOAB_230_R01][Release]]|
-|Pantoea stewartii|subsp. Nov. S301|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_stewartii/release/Ps_subsp_Nov_S301_R01][Release]]|
-|Pectobacterium carotovorum|subsp. brasiliensis, isolate 1001|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_carotovorum/release/Pcb_subsp_brasiliensis_isolate_1001_R01][Release]]|
-|Pectobacterium carotovorum|subsp. brasiliensis, isolate 1009|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_carotovorum/release/Pcb_subsp_brasiliensis_isolate_1009_R01][Release]]|
-|Pectobacterium carotovorum|subsp. brasiliensis, isolate 1033|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_carotovorum/release/Pcb_subsp_brasiliensis_isolate_1033_R01][Release]]|
-|Pectobacterium wasabiae|Ecw1002|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_wasabiae/release/Pw_Ecw1002_R01][Release]]|
-|Penicillium nordicum|strain DAOM 185683|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_nordicum/release/Pn_DAOM_185683_R01][Release]]|
-|Penicillium thymicola|strain DAOM 180753|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_thymicola/release/Pth_DAOM_180753_R01][Release]]|
-|Penicillium verrucosum|strain DAOM 211566|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_verrucosum/release/Pv_DAOM_211566_R01][Release]]|
-|Penicillium verrucosum|strain DAOM 213195|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_verrucosum/release/Pv_DAOM_213195_R01][Release]]|
-|Penicillium verrucosum|strain DAOM 214801|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_verrucosum/release/Pv_DAOM_214801_R01][Release]]|
-|Penicillium verrucosum|strain KAS 4251|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_verrucosum/release/Pv_KAS_4251_R01][Release]]|
-|Penicillium verrucosum|strain KAS 4370|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_verrucosum/release/Pv_KAS_4370_R01][Release]]|
-|Puccinia graminis|CF12WGA1_100pg DNA_0%PEG|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_graminis/release/Pg_CF12WGA1_100pg_DNA_0PEG_R01][Release]]|
-|Puccinia graminis|CF12WGA2_10ng DNA_0%PEG|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_graminis/release/Pg_CF12WGA2_10ng_DNA_0PEG_R01][Release]]|
-|Puccinia graminis|CF12WGA3_100pg DNA_1%PEG|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_graminis/release/Pg_CF12WGA3_100pg_DNA_1PEG_R01][Release]]|
-|Puccinia graminis|race QTHJT (RSA2051)|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_graminis/release/Pg_race_QTHJT_RSA2051_R01][Release]]|
-|Puccinia graminis|race RHTSK (RSA2052)|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_graminis/release/Pg_race_RHTSK_RSA2052_R01][Release]]|
-|Puccinia graminis|race TMRTK (RSA2053)|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_graminis/release/Pg_race_TMRTK_RSA2053_R01][Release]]|
-|Puccinia triticina|race MBDS (RSA2119)|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_triticina/release/Pt_race_MBDS_RSA2119_R01][Release]]|
-|Puccinia triticina|race MFDS (RSA2117)|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_triticina/release/Pt_race_MFDS_RSA2117_R01][Release]]|
-|Ralstonia solanacearum|NCPPB 909 race 3 biovar 2|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/R_solanacearum/release/Rs_NCPPB_909_race_3_biovar_2_R01][Release]]|
-|Ralstonia solanacearum|race 3 biovar 2 906 IIB-1 with low cold-Cl|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/R_solanacearum/release/Rs_race_3_biovar_2_906_IIB-1_with_low_cold-Cl_R01][Release]]|
-|Streptomyces scabies|CG-1|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/S_scabies/release/Ss_CG-1_R01][Release]]|
+|Arcobacter lanthierii|strain AF 1581|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/A_lanthierii/release/Al_AF_1581_R01][Release]]|
+|Ditylenchus destructor|Jiangsu 01|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/D_destructor/release/Dd_Jiangsu_01_R01][Release]]|
+|Ditylenchus dipsaci|Ontario 01|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/D_dipsaci/release/Ddi_Ontario_01_R01][Release]]|
+|Globodera rostochiensis|Isolate Mar149,  pathotype Ro1|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/G_rostochiensis/release/Gr_Isolate_Mar149_pathotype_Ro1_R01][Release]]|
+|Penicillium verrucosum|strain KAS 4260|R02|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/P_verrucosum/release/Pv_KAS_4260_R02][Release]]|
+|Ralstonia solanacearum|NCPPB 909 race 3 biovar 2|R02|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/R_solanacearum/release/Rs_NCPPB_909_race_3_biovar_2_R02][Release]]|
+|Streptomyces scabies|CG-1|R02|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/S_scabies/release/Ss_CG-1_R02][Release]]|
+|Synchytrium endobioticum|2000 outbreak, pathotype 6|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/S_endobioticum/release/Se_2000_outbreak_pathotype_6_R01][Release]]|
+|Synchytrium endobioticum|2012 PEI outbreak, unknown pathotype|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/S_endobioticum/release/Se_2012_PEI_outbreak_unknown_pathotype_R01][Release]]|
+|Synchytrium endobioticum|mixed strains from Newfoundland|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/S_endobioticum/release/Se_mixed_strains_from_Newfoundland_R01][Release]]|
 |Tilletia caries|DAOM 238032|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/T_caries/release/Tca_DAOM_238032_R01][Release]]|
+|Tilletia controversa|DAOM 236426|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/T_controversa/release/Tc_DAOM_236426_R01][Release]]|
+|Tilletia indica|DAOM 236416|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/T_indica/release/Ti_DAOM_236416_R01][Release]]|
+|Tilletia walkeri|DAOM 236422|R01|Genome|[[http://biocluster/project_data/CRTI-09S-462RD/specimen/../../processing_test2/T_walkeri/release/Tw_DAOM_236422_R01][Release]]|
