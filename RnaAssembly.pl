@@ -254,7 +254,7 @@ sub run_bowtie
 sub run_tophat
 {
     my $asm_rec = shift;
-    my $bowtie_jobid
+    my $bowtie_jobid = shift;
     my $sample = shift;
     my $assembly_dir = Assembly::Utils::get_check_record($asm_rec, ["rna_assembly_dir"]);
     my $tophat_dir = $assembly_dir . "/" . $sample . "_tophat";
@@ -274,6 +274,14 @@ sub run_tophat
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_qsub_jobid", $tophat_qsub_jobid);
     return $tophat_qsub_jobid;
 }
+
+sub run_cufflinks
+{
+    my $asm_rec = shift;
+    my $tophat_jobid = shift;
+    my $sample = shift;
+    my $asse
+    my $cufflinks_cmd =
         my $cufflinks_cmd = "qsub -N cufflinks -hold_jid \t\t qsub_np10.sh 'cufflinks -p 10 -o $dir/${sample}_cufflinks_out $dir/${sample}_tophat_out/accepted_hits.bam'\n";
         print $tophat_cmd;
         print $cufflinks_cmd;   
