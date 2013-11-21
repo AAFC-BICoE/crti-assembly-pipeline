@@ -99,7 +99,11 @@ sub alter_super_records
             #die "Error: Trying to assign sample $sample as species: $species, bio_type: $bio_type, " .
                 #"strain: $strain_key, sample type: $sample_type\nbut another sample already exists there: $prev_sample\n";
         } else {
-            Assembly::Utils::set_check_record ($super_records, [$species_key, $bio_type, $strain_key], $sample_type, $rec);
+            if ($bio_type =~ /DNA/) {
+                Assembly::Utils::set_check_record ($super_records, [$species_key, $bio_type, $strain_key], $sample_type, $rec);
+            } elsif ($bio_type =~ /RNA/) {
+                Assembly::Utils::set_check_record ($super_records, [$species_key, $bio_type, $strain_key], $sample, $rec);
+            }
             my $strain_dir = Assembly::Utils::get_check_record($rec, ["species_dir"]);
             $strain_dir .= "/DNA/assemblies/" . $strain_key;
             unless (-e $strain_dir) {
