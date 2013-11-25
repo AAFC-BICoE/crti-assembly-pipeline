@@ -14,14 +14,19 @@ use Assembly::Utils;
 # and generate a release file for the transcript assembly.
 
 my $options = {};
-my @colheaders = ("Species", "Strain", "Sample_ID", "Metafile");
+my @colheaders = ("Species", "Strain", "Sample_ID", "Reference_Strain", "Reference_Metafile");
 my $bowtie_path = "/opt/bio/bowtie2/bowtie2-build";
 my $tophat_path = "/opt/bio/tophat/bin/tophat";
 my $cufflinks_path = "/opt/bio/cufflinks/bin/cufflinks";
 my $qsub_path = "/opt/gridengine/bin/lx26-amd64/qsub";
 my $qsub_script = "./qsub_script.sh";
 my $qsub_nprocs = 10;
-my $qsub_multiproc_script = "./qsub_np10.sh";
+
+my $output_filenames = {
+    "bowtie" => [qw(.1.bt2 .2.bt2 .3.bt2 .4.bt2 .fa)],
+    "tophat" => [qw(accepted_hits.bam deletions.bed insertions.bed junctions.bed unmapped.bam)],
+    "cufflinks" => [qw(genes.fpkm_tracking isoforms.fpkm_tracking skipped.gtf transcripts.gtf)],
+    };
 
 sub set_default_opts
 {
@@ -91,6 +96,8 @@ sub parse_assembly_table
                 $line_record->{Species} = $species_key; # Reset value to standard access format.
                 my $strain_key = Assembly::Utils::format_strain_key($line_record->{Strain});
                 $line_record->{Strain} = $strain_key; # Reset value to standard access format.
+                my $reference_strain_key = Assembly::Utils::format_strain_key($line_record->{Reference_Strain});
+                $line_record->{Reference_Strain} = $reference_strain_key;
                 my $sample = $line_record->{"Sample_ID"};
                 $table_recs->{$sample} = $line_record;
             } else {
@@ -111,6 +118,52 @@ sub get_jobid
         $hold_jobid = $1;
     }
     return $hold_jobid;
+}
+
+sub submit_job
+{
+    my $qsub_cmd = shift;
+    my $qsub_jobid = '';
+    if ($options->{testing}) {
+        print_verbose ("Testing - no submission. Test qsub command is:\n$qsub_cmd\n");
+        $qsub_jobid = 1; # Use 1 because it won't stop anyhting holding on 1 from running
+    } else {
+        my $submit_str = `$qsub_cmd`;
+        $qsub_jobid = get_jobid ($submit_str);
+        print_verbose ("Submitted job with jobid $qsub_jobid:\n$qsub_cmd\n");
+    }
+    return $qsub_jobid;
+}
+
+# Note that trailing slash is required on input filename.
+# This is because we are using a file prefix in one case.
+sub output_files_exist
+{
+    my $cmd_name = shift;
+    my $base_dir = shift;
+    my $exist = 1;
+    my $file_list = ($output_filenames->{$cmd_name} ? $output_filenames->{$cmd_name} : []);
+    foreach my $fname (@$file_list) {
+        unless (-e $base_dir . $fname) {
+            $exist = 0;
+        }
+    }
+    return $exist;
+}
+
+# Check if output files exist; if not, submit job and return jobid.
+sub check_submit_cmd
+{
+    my $cmd_name = shift;
+    my $base_dir = shift;
+    my $qsub_cmd = shift;
+    my $qsub_jobid = 1;
+    if (output_files_exist ($cmd_name, $base_dir)) {
+        print_verbose ("Output $cmd_name files already exist - not issuing the following command:\n$qsub_cmd\n");
+    } else {
+        my $qsub_jobid = submit_job ($qsub_cmd);
+    }
+    return $qsub_jobid;
 }
 
 # Two funcs below could be a mini-package to handle linking of files/creating of dirs?
@@ -137,6 +190,7 @@ sub create_dir
     my $dirname = shift;
     unless ($options->{testing}) {
         unless (-e $dirname) {
+            print_verbose ("Creating directory $dirname\n");
             mkpath $dirname;
         }
     }
@@ -172,8 +226,10 @@ sub add_assembly_dir
     my ($yrec, $asm_rec, $strain, $sample, $trimraw) = @_;
     # my $species_abbr = Assembly::Utils::get_check_record($yrec, ["species_abbr"]);
     my $species_dir = Assembly::Utils::get_check_record($yrec, ["species_dir"]);
+    print "strain $strain Got species dir $species_dir\n";
     my $dirname = $species_dir . "/RNA/assemblies/" . $strain . "/" . $sample . "/" . $trimraw . "/";
     Assembly::Utils::set_check_record($asm_rec, [], "rna_assembly_dir", $dirname);
+    #create_dir ($dirname);
     mkpath $dirname;
 }
 
@@ -215,10 +271,11 @@ sub add_genome_file
     my $genome_prefix = shift;
     $genome_infile = `readlink -e $genome_infile`; 
     chomp $genome_infile;
-    Assembly::Utils::set_check_record($asm_rec, [], "genome_infile", $genome_infile);
-    Assembly::Utils::set_check_record($asm_rec, [], "genome_prefix", $genome_prefix);
     my $dirname = Assembly::Utils::get_check_record($asm_rec, ["rna_assembly_dir"]);
-    my $genome_outfile = $dirname . "/" . $genome_prefix . ".fa" # "_" . basename($genome_infile);
+    $genome_prefix = $dirname . "/" . $genome_prefix;
+    my $genome_outfile = $genome_prefix . ".fa"; # "_" . basename($genome_infile)
+    Assembly::Utils::set_check_record($asm_rec, [], "genome_infile", $genome_infile);
+    Assembly::Utils::set_check_record($asm_rec, [], "genome_prefix", $genome_prefix);;
     create_symlink ($genome_infile, $genome_outfile);
 }    
 
@@ -226,8 +283,9 @@ sub add_genome_file
 # to yaml record for future access. Create rna assembly dirs and link in required files.
 sub add_file_info
 {
-    my ($yaml_recs, $species, $strain, $sample, $trimraw, $genome_file, $genome_prefix) = @_;
+    my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix) = @_;
     my $yrec = Assembly::Utils::get_check_record($yaml_recs, [$species, "RNA", $strain, $sample]);
+    unless ($yrec) { print "ERROR: species '$species', strain '$strain', sample '$sample'\n"; }
     Assembly::Utils::set_check_record($yaml_recs, [$species, "RNA", $strain, $sample, "RNA_assembly"], $trimraw, {});
     my $asm_rec = Assembly::Utils::get_check_record($yaml_recs, [$species, "RNA", $strain, $sample, "RNA_assembly", $trimraw]);
     add_assembly_dir ($yrec, $asm_rec, $strain, $sample, $trimraw);
@@ -241,10 +299,10 @@ sub run_bowtie
     my $asm_rec = shift;
     my $genome_file = Assembly::Utils::get_check_record ($asm_rec, ["genome_infile"]);
     my $genome_prefix = Assembly::Utils::get_check_record ($asm_rec, ["genome_prefix"]);
+    my $assembly_dir = Assembly::Utils::get_check_record ($asm_rec, ["rna_assembly_dir"]);
     my $bowtie_cmd = "$bowtie_path $genome_file $genome_prefix";
-    my $bowtie_qsub_cmd = "qsub -N bowtie2-build $qsub_script '$bowtie_cmd'\n";
-    my $submit_str = `$bowtie_qsub_cmd`;
-    my $bowtie_qsub_jobid = get_jobid ($submit_str);
+    my $bowtie_qsub_cmd = $qsub_path . " -N bowtie2-build " . $qsub_script . " '" . $bowtie_cmd . "'";
+    my $bowtie_qsub_jobid = check_submit_cmd ("bowtie", $genome_prefix, $bowtie_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_cmd", $bowtie_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_qsub_cmd", $bowtie_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_qsub_jobid", $bowtie_qsub_jobid);
@@ -262,12 +320,11 @@ sub run_tophat
     my $genome_prefix = Assembly::Utils::get_check_record($asm_rec, ["genome_prefix"]);
     my $r1data = Assembly::Utils::get_check_record($asm_rec, ["r1data"]);
     my $r2data = Assembly::Utils::get_check_record($asm_rec, ["r2data"]);
-    my $tophat_cmd = $tophat_path . "-p " . $qsub_nprocs . " -o " . $tophat_dir . " " . 
+    my $tophat_cmd = $tophat_path . " -p " . $qsub_nprocs . " -o " . $tophat_dir . " " . 
         $genome_prefix . " " . $r1data . " " . $r2data;
-    my $tophat_qsub_cmd = $qsub_path . " -N tophat -hold_jid " . $bowtie_jobid . " " . 
-        $qsub_multiproc_script . "'" . $tophat_cmd . "'";
-    my $submit_str = `$tophat_qsub_cmd`;
-    my $tophat_qsub_jobid = get_jobid ($submit_str);
+    my $tophat_qsub_cmd = $qsub_path . " -N tophat -hold_jid " . $bowtie_jobid . 
+        " -pe smp " . $qsub_nprocs . " " . $qsub_script . " '" . $tophat_cmd . "'";
+    my $tophat_qsub_jobid = check_submit_cmd("tophat", $tophat_dir . "/", $tophat_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_dir", $tophat_dir);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_cmd", $tophat_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_qsub_cmd", $tophat_qsub_cmd);
@@ -280,19 +337,31 @@ sub run_cufflinks
     my $asm_rec = shift;
     my $tophat_jobid = shift;
     my $sample = shift;
-    my $asse
-    my $cufflinks_cmd =
-        my $cufflinks_cmd = "qsub -N cufflinks -hold_jid \t\t qsub_np10.sh 'cufflinks -p 10 -o $dir/${sample}_cufflinks_out $dir/${sample}_tophat_out/accepted_hits.bam'\n";
-        print $tophat_cmd;
-        print $cufflinks_cmd;   
+    my $assembly_dir = Assembly::Utils::get_check_record($asm_rec, ["rna_assembly_dir"]);
+    my $cufflinks_dir = $assembly_dir . "/" . $sample . "_cufflinks";
+    create_dir ($cufflinks_dir);
+    my $tophat_dir = Assembly::Utils::get_check_record($asm_rec, ["tophat_dir"]);
+    my $accepted_hits_file = $tophat_dir . "/accepted_hits.bam";
+    my $cufflinks_cmd = $cufflinks_path . " -N cufflinks " . $qsub_nprocs . " -o " . 
+        $cufflinks_dir . " " . $accepted_hits_file;
+    my $cufflinks_qsub_cmd = $qsub_path . " -N cufflinks -hold_jid " . $tophat_jobid . 
+        " -pe smp " . $qsub_nprocs . " " . $qsub_script . " '" . $cufflinks_cmd . "'";
+    my $cufflinks_qsub_jobid = check_submit_cmd ("cufflinks", $cufflinks_dir . "/", $cufflinks_qsub_cmd);
+    Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_dir", $cufflinks_dir);
+    Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_cmd", $cufflinks_cmd);
+    Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_qsub_cmd", $cufflinks_qsub_cmd);
+    Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_qsub_jobid", $cufflinks_qsub_jobid);
+    return $cufflinks_qsub_jobid;
+} 
 
 sub create_assembly
 {
-    my ($yaml_recs, $species, $strain, $sample, $trimraw, $genome_file, $genome_prefix) = @_;
-    my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $trimraw, $genome_file, $genome_prefix);
+    my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix) = @_;
+    my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix);
     
     my $bowtie_jobid = run_bowtie ($asm_rec);
     my $tophat_jobid = run_tophat ($asm_rec, $bowtie_jobid, $sample);
+    my $cufflinks_jobid = run_cufflinks ($asm_rec, $tophat_jobid, $sample);
 }
 
 sub run_rna_assembly
@@ -300,13 +369,15 @@ sub run_rna_assembly
     my $yaml_recs = shift;
     my $table_recs = shift;
     for my $sample (keys %$table_recs) {
+    #for my $sample ("S001464") {
         # Get the parameters of interest.
         my $species = $table_recs->{$sample}->{"Species"};
         my $strain = $table_recs->{$sample}->{"Strain"};
-        my ($genome_file, $genome_prefix) = get_genome_assembly ($table_recs->{$sample}->{"Metafile"});
+        my $reference_strain = $table_recs->{$sample}->{"Reference_Strain"};
+        my ($genome_file, $genome_prefix) = get_genome_assembly ($table_recs->{$sample}->{"Reference_Metafile"});
         next unless (-s $genome_file);
-        for my $trimraw (qw(trim raw)) {
-            create_assembly ($yaml_recs, $species, $strain, $sample, $trimraw, $genome_file, $genome_prefix);
+        for my $trimraw (qw(trim)) {
+            create_assembly ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix);
         }
     }
 }
