@@ -13,6 +13,10 @@ use Assembly::Utils;
 # Create the transcriptome assembly within the given base folder
 # and generate a release file for the transcript assembly.
 
+# One-liner to start from scratch with all assemblies
+# cd /isilon/biodiversity/projects/CRTI/specimen/processing_test2
+# find . -maxdepth 6 -path "*RNA/assemblies" -exec find {} -name "trim" \; | xargs -I {} rm -rf {}/
+
 my $options = {};
 my @colheaders = ("Species", "Strain", "Sample_ID", "Reference_Strain", "Reference_Metafile");
 my $bowtie_path = "/opt/bio/bowtie2/bowtie2-build";
@@ -113,7 +117,7 @@ sub parse_assembly_table
 sub get_jobid
 {
     my $qsub_str = shift;
-    my $hold_jobid = '';
+    my $hold_jobid = 1;
     if ($qsub_str =~ /Your job[^\s]*\s(\d+)[\.\s]/) {
         $hold_jobid = $1;
     }
@@ -126,7 +130,7 @@ sub submit_job
     my $qsub_jobid = '';
     if ($options->{testing}) {
         print_verbose ("Testing - no submission. Test qsub command is:\n$qsub_cmd\n");
-        $qsub_jobid = 1; # Use 1 because it won't stop anyhting holding on 1 from running
+        $qsub_jobid = int(rand(10)) + 1; # Use > 1 because it won't stop anyhting holding on 1 from running
     } else {
         my $submit_str = `$qsub_cmd`;
         $qsub_jobid = get_jobid ($submit_str);
@@ -161,7 +165,7 @@ sub check_submit_cmd
     if (output_files_exist ($cmd_name, $base_dir)) {
         print_verbose ("Output $cmd_name files already exist - not issuing the following command:\n$qsub_cmd\n");
     } else {
-        my $qsub_jobid = submit_job ($qsub_cmd);
+        $qsub_jobid = submit_job ($qsub_cmd);
     }
     return $qsub_jobid;
 }
@@ -306,6 +310,9 @@ sub run_bowtie
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_cmd", $bowtie_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_qsub_cmd", $bowtie_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_qsub_jobid", $bowtie_qsub_jobid);
+    # Line below should be changed.
+    my $bowtie_version = `ssh biocomp-0-0 '$bowtie_path --version'`;
+    Assembly::Utils::set_check_record($asm_rec, [], "bowtie_version", $bowtie_version);
     return $bowtie_qsub_jobid;
 }
 
@@ -329,6 +336,8 @@ sub run_tophat
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_cmd", $tophat_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_qsub_cmd", $tophat_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_qsub_jobid", $tophat_qsub_jobid);
+    my $tophat_version = `ssh biocomp-0-0 '$tophat_path --version'`;
+    Assembly::Utils::set_check_record($asm_rec, [], "tophat_version", $tophat_version);
     return $tophat_qsub_jobid;
 }
 
@@ -342,7 +351,7 @@ sub run_cufflinks
     create_dir ($cufflinks_dir);
     my $tophat_dir = Assembly::Utils::get_check_record($asm_rec, ["tophat_dir"]);
     my $accepted_hits_file = $tophat_dir . "/accepted_hits.bam";
-    my $cufflinks_cmd = $cufflinks_path . " -N cufflinks " . $qsub_nprocs . " -o " . 
+    my $cufflinks_cmd = $cufflinks_path . " -p " . $qsub_nprocs . " -o " . 
         $cufflinks_dir . " " . $accepted_hits_file;
     my $cufflinks_qsub_cmd = $qsub_path . " -N cufflinks -hold_jid " . $tophat_jobid . 
         " -pe smp " . $qsub_nprocs . " " . $qsub_script . " '" . $cufflinks_cmd . "'";
@@ -351,6 +360,8 @@ sub run_cufflinks
     Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_cmd", $cufflinks_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_qsub_cmd", $cufflinks_qsub_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_qsub_jobid", $cufflinks_qsub_jobid);
+    my $cufflinks_version = `ssh biocomp-0-0 '$cufflinks_path 2>&1 | egrep "^cufflinks"'`;
+    Assembly::Utils::set_check_record($asm_rec, [], "cufflinks_version", $cufflinks_version);
     return $cufflinks_qsub_jobid;
 } 
 
@@ -369,7 +380,7 @@ sub run_rna_assembly
     my $yaml_recs = shift;
     my $table_recs = shift;
     for my $sample (keys %$table_recs) {
-    #for my $sample ("S001464") {
+    #for my $sample ("S001278") {
         # Get the parameters of interest.
         my $species = $table_recs->{$sample}->{"Species"};
         my $strain = $table_recs->{$sample}->{"Strain"};
