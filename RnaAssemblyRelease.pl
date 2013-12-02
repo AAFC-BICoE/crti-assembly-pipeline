@@ -316,6 +316,11 @@ sub update_release
     my $bowtie_stanza = create_pipeline_stanza ($yrec, "bowtie", "bowtie2-build indexer");
     my $tophat_stanza = create_pipeline_stanza ($yrec, "tophat", "tophat alignment");
     my $cufflinks_stanza = create_pipeline_stanza ($yrec, "cufflinks", "cufflinks assembly");
+    # Add the input/output file info for the released transcripts.gtf file
+    # Copy the transcripts file to the release dir.
+    my $cufflinks_dir = Assembly::Utils::get_check_record ($yrec, ["cufflinks_dir"]);
+    my $transcripts_in = $cufflinks_dir . "/transcripts.gtf";
+    my $transcripts_out = $output_release_dir . "/" . $output_release_prefix . "_" . $sample . "_transcripts.gtf";
     
     push (@$pipeline_ref, $bowtie_stanza);
     push (@$pipeline_ref, $tophat_stanza);
