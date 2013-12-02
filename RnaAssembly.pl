@@ -18,7 +18,8 @@ use Assembly::Utils;
 # find . -maxdepth 6 -path "*RNA/assemblies" -exec find {} -name "trim" \; | xargs -I {} rm -rf {}/
 
 my $options = {};
-my @colheaders = ("Species", "Strain", "Sample_ID", "Reference_Strain", "Reference_Metafile");
+my @colheaders = ("Species", "Strain", "Sample_ID", "Trim_Raw", "Reference_Strain", "Reference_Metafile", 
+        "Output_Release_Dir", "Output_Release_Prefix");
 my $bowtie_path = "/opt/bio/bowtie2/bowtie2-build";
 my $tophat_path = "/opt/bio/tophat/bin/tophat";
 my $cufflinks_path = "/opt/bio/cufflinks/bin/cufflinks";
@@ -311,7 +312,11 @@ sub run_bowtie
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_qsub_cmd", $bowtie_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_qsub_jobid", $bowtie_qsub_jobid);
     # Line below should be changed.
-    my $bowtie_version = `ssh biocomp-0-0 '$bowtie_path --version'`;
+    # my $bowtie_version = `ssh biocomp-0-0 '$bowtie_path --version'`;
+    my $bowtie_version = "/opt/bio/bowtie2/bowtie2-build version 2.0.0-beta7\n64-bit\nBuilt
+              on igm1\nThu Jul 12 13:29:09 EDT 2012\nCompiler: gcc version 4.1.2 20080704
+              (Red Hat 4.1.2-50)\nOptions: -O3 -m64 -msse2 -funroll-loops -g3 \nSizeof
+              {int, long, long long, void*, size_t, off_t}: {4, 8, 8, 8, 8, 8}\n";
     Assembly::Utils::set_check_record($asm_rec, [], "bowtie_version", $bowtie_version);
     return $bowtie_qsub_jobid;
 }
@@ -336,7 +341,8 @@ sub run_tophat
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_cmd", $tophat_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_qsub_cmd", $tophat_qsub_cmd);
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_qsub_jobid", $tophat_qsub_jobid);
-    my $tophat_version = `ssh biocomp-0-0 '$tophat_path --version'`;
+    #my $tophat_version = `ssh biocomp-0-0 '$tophat_path --version'`;
+    my $tophat_version = "TopHat v2.0.5";
     Assembly::Utils::set_check_record($asm_rec, [], "tophat_version", $tophat_version);
     return $tophat_qsub_jobid;
 }
@@ -360,7 +366,8 @@ sub run_cufflinks
     Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_cmd", $cufflinks_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_qsub_cmd", $cufflinks_qsub_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "cufflinks_qsub_jobid", $cufflinks_qsub_jobid);
-    my $cufflinks_version = `ssh biocomp-0-0 '$cufflinks_path 2>&1 | egrep "^cufflinks"'`;
+    #my $cufflinks_version = `ssh biocomp-0-0 '$cufflinks_path 2>&1 | egrep "^cufflinks"'`;
+    my $cufflinks_version = "cufflinks v2.0.2";
     Assembly::Utils::set_check_record($asm_rec, [], "cufflinks_version", $cufflinks_version);
     return $cufflinks_qsub_jobid;
 } 
@@ -390,6 +397,7 @@ sub run_rna_assembly
         for my $trimraw (qw(trim)) {
             create_assembly ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix);
         }
+        print "Finished sample $sample\n";
     }
 }
 
