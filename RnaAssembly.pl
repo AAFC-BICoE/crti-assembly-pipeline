@@ -221,7 +221,11 @@ sub get_genome_assembly
 
     my $last_cmd_idx = scalar @$pip - 1;
     my $cmd_rec = $pip->[$last_cmd_idx];
-    my $genome_file = $cmd_rec->{"release"}->[0]->{"input_file"};
+    #my $genome_file = $cmd_rec->{"release"}->[0]->{"input_file"};
+    # Above line is an ERROR! The fasta node names have not been changed
+    # to match the release for the input file! Use the release genome file
+    # instead.
+    my $genome_file = $cmd_rec->{"release"}->[0]->{"output_file"};
     return ($genome_file, $genome_prefix);
 }
 
