@@ -6,6 +6,7 @@ use YAML::XS qw(LoadFile DumpFile);
 use File::Path;
 use File::Basename;
 use Assembly::Utils;
+use Cwd;
 
 # Given an input spreadsheet with entries for at least the
 # following fields:
@@ -23,6 +24,11 @@ my @colheaders = ("Species", "Strain", "Sample_ID", "Trim_Raw", "Reference_Strai
 my $bowtie_path = "/opt/bio/bowtie2/bowtie2-build";
 my $tophat_path = "/opt/bio/tophat/bin/tophat";
 my $cufflinks_path = "/opt/bio/cufflinks/bin/cufflinks";
+#my $transcripts_rename_path = getcwd . "/gff_mod_labels.pl";
+#my $gtf2gff_cfg_path = getcwd . "/gtf2gff3.cfg";
+#my $gtf2gff_path = getcwd . "/gtf2gff.pl";
+my $gtf2gff_rename_path = getcwd . "/gtf2gff_rename.sh";
+
 my $qsub_path = "/opt/gridengine/bin/lx26-amd64/qsub";
 my $qsub_script = "./qsub_script.sh";
 my $qsub_nprocs = 10;
@@ -31,6 +37,7 @@ my $output_filenames = {
     "bowtie" => [qw(.1.bt2 .2.bt2 .3.bt2 .4.bt2 .fa)],
     "tophat" => [qw(accepted_hits.bam deletions.bed insertions.bed junctions.bed unmapped.bam)],
     "cufflinks" => [qw(genes.fpkm_tracking isoforms.fpkm_tracking skipped.gtf transcripts.gtf)],
+    "gtf2gff_rename" => [qw(transcripts_rename.gtf transcripts.gff)],
     };
 
 sub set_default_opts
@@ -90,6 +97,7 @@ sub parse_assembly_table
     if ($fname and -s $fname) {
         open (FRNA, '<', $fname) or die "Error: couldn't open file $fname\n";
         while (my $line = <FRNA>) {
+            chomp $line;
             my @fields = split (/\t/, $line);
             if (scalar (@fields) == scalar (@colheaders)) {
                 my $line_record = {};
@@ -226,6 +234,7 @@ sub get_genome_assembly
     # to match the release for the input file! Use the release genome file
     # instead.
     my $genome_file = $cmd_rec->{"release"}->[0]->{"output_file"};
+    $genome_file =~ s/processing_test2\///; # FIX!
     return ($genome_file, $genome_prefix);
 }
 
@@ -292,11 +301,12 @@ sub add_genome_file
 # to yaml record for future access. Create rna assembly dirs and link in required files.
 sub add_file_info
 {
-    my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix) = @_;
+    my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix) = @_;
     my $yrec = Assembly::Utils::get_check_record($yaml_recs, [$species, "RNA", $strain, $sample]);
     unless ($yrec) { print "ERROR: species '$species', strain '$strain', sample '$sample'\n"; }
     Assembly::Utils::set_check_record($yaml_recs, [$species, "RNA", $strain, $sample, "RNA_assembly"], $trimraw, {});
     my $asm_rec = Assembly::Utils::get_check_record($yaml_recs, [$species, "RNA", $strain, $sample, "RNA_assembly", $trimraw]);
+    Assembly::Utils::set_check_record($asm_rec, [], "release_prefix", $output_release_prefix);
     add_assembly_dir ($yrec, $asm_rec, $strain, $sample, $trimraw);
     add_genome_file($asm_rec, $genome_file, $genome_prefix);
     add_read_files ($yrec, $asm_rec, $trimraw);
@@ -376,14 +386,54 @@ sub run_cufflinks
     return $cufflinks_qsub_jobid;
 } 
 
+sub run_gtf2gff_rename
+{
+    my $asm_rec = shift;
+    my $cufflinks_jobid = shift;
+    my $sample = shift;
+    my $strain = shift;
+    my $reference_strain = shift;
+    my $cufflinks_dir = Assembly::Utils::get_check_record ($asm_rec, ["cufflinks_dir"]);
+    my $output_release_prefix = Assembly::Utils::get_check_record ($asm_rec, ["release_prefix"]);
+    my $transcript_gene_name = $output_release_prefix;
+    if ($strain ne $reference_strain) {
+        $transcript_gene_name =~ s/$reference_strain/$strain/;
+    }
+    my $transcripts_gtf = $cufflinks_dir . "/transcripts.gtf";
+    my $transcripts_rename_gtf = $cufflinks_dir . "/transcripts_rename.gtf";
+    my $transcripts_gff = $cufflinks_dir . "/transcripts.gff";
+    # transcripts.gtf -> transcripts_rename.gtf -> transcripts.gff
+    #my $transcripts_rename_cmd = $transcripts_rename_path . " -i " . $transcripts_gtf . " -o " . 
+    #    $transcripts_rename_gtf . " -g " . $output_release_prefix . "_gene -c Cufflinks";
+    #my $gtf2gff_cmd = $gtf2gff_path . "  --cfg " . $gtf2gff_cfg_path . " " . $transcripts_rename_gtf .
+    #    " >" . $transcripts_gff;
+    #my $combined_cmd = $transcripts_rename_cmd . " && " . $gtf2gff_cmd;
+    my $combined_cmd = join (" ", ($gtf2gff_rename_path, $transcripts_gtf, $transcripts_rename_gtf,
+            $transcripts_gff, $transcript_gene_name, "Cufflinks"));
+    my $combined_qsub_cmd = $qsub_path . " -N gtf2gff_rename -hold_jid " . $cufflinks_jobid .
+        " " . $qsub_script . " '" . $combined_cmd . "'";
+    my $combined_qsub_jobid = check_submit_cmd ("gtf2gff_rename", $cufflinks_dir . "/", $combined_qsub_cmd);
+    Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_cmd", $combined_cmd);
+    Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_qsub_cmd", $combined_qsub_cmd);
+    Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_qsub_jobid", $combined_qsub_jobid);
+    my $combined_version = "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff_rename.sh " .
+        "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gff_mod_labels.pl " .
+        "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff.pl " .
+        "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff3.cfg ";
+    Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_version", $combined_version);
+    return $combined_qsub_jobid;
+}
+        
+
 sub create_assembly
 {
-    my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix) = @_;
-    my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix);
+    my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix) = @_;
+    my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
     
     my $bowtie_jobid = run_bowtie ($asm_rec);
     my $tophat_jobid = run_tophat ($asm_rec, $bowtie_jobid, $sample);
     my $cufflinks_jobid = run_cufflinks ($asm_rec, $tophat_jobid, $sample);
+    my $gtf2gff_rename_jobid = run_gtf2gff_rename ($asm_rec, $cufflinks_jobid, $sample, $strain, $reference_strain);
 }
 
 sub run_rna_assembly
@@ -391,15 +441,18 @@ sub run_rna_assembly
     my $yaml_recs = shift;
     my $table_recs = shift;
     for my $sample (keys %$table_recs) {
-    #for my $sample ("S001278") {
+    #for my $sample ("S001374") { # A cibarius
+    #for my $sample ("S001278") { # T indica
+    #for my $sample ("S00142C") { # R sol NCPBB_325...
         # Get the parameters of interest.
         my $species = $table_recs->{$sample}->{"Species"};
         my $strain = $table_recs->{$sample}->{"Strain"};
         my $reference_strain = $table_recs->{$sample}->{"Reference_Strain"};
         my ($genome_file, $genome_prefix) = get_genome_assembly ($table_recs->{$sample}->{"Reference_Metafile"});
+        my $output_release_prefix = $table_recs->{$sample}->{"Output_Release_Prefix"};
         next unless (-s $genome_file);
         for my $trimraw (qw(trim)) {
-            create_assembly ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix);
+            create_assembly ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
         }
         print "Finished sample $sample\n";
     }

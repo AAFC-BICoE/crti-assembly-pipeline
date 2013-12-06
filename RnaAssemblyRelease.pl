@@ -6,6 +6,7 @@ use Assembly::Utils;
 use YAML::XS qw(LoadFile DumpFile);
 use Cwd;
 use File::Path;
+use File::Basename;
 
 # Open and parse the table as in prev script...????
 
@@ -110,6 +111,8 @@ sub parse_assembly_table
 
 sub get_sample_stanza
 {
+    my $rna_strain = shift;
+    my $dna_strain = shift;
     my $strain_rec = shift;
     my $sample_type = shift;
     my $trimraw = shift;
@@ -137,13 +140,21 @@ sub get_sample_stanza
     my $sample_id = Assembly::Utils::get_check_record($sample_rec, ["sample"]);
     #my $release_prefix = Assembly::Utils::get_check_record($strain_rec, ["release", "prefix"]);
     #my $release_dir = Assembly::Utils::get_check_record($strain_rec, ["release", "release_dir"]);
-    my $fpath_base = $release_dir . "/" . $release_prefix . "_" . $bio_type . 
+    
+    my $rna_release_prefix = $release_prefix;
+    if ($rna_strain ne $dna_strain) {
+        $rna_release_prefix =~ s/$dna_strain/$rna_strain/;
+    }    
+    my $fpath_base = $release_dir . "/" . $rna_release_prefix . "_" . $bio_type . 
             "_" . $sample_id . "_";
 
     my $r1_in = Assembly::Utils::get_check_record($sample_rec, ["R1", "rawdata"]);
-    my $r1_out = $fpath_base . "R1.fq";
+    my $r1_out = $fpath_base . "R1.fq.gz";
     my $r2_in = Assembly::Utils::get_check_record($sample_rec, ["R2", "rawdata"]);
-    my $r2_out = $fpath_base . "R2.fq";
+    my $r2_out = $fpath_base . "R2.fq.gz";
+    
+    $r1_in =~ s/fq$/fq.gz/;
+    $r2_in =~ s/fq$/fq.gz/;
 
     $outrec->{release} = [];
     $outrec->{release}->[0] = {};
@@ -156,13 +167,13 @@ sub get_sample_stanza
     # copy the files here??
     unless (-e $r1_out and (-s $r1_in) == (-s $r1_out)) {
         print_verbose "cp $r1_in $r1_out\n";
-        if ($options->{run}) {
+        unless ($options->{testing}) {
             system("cp $r1_in $r1_out");
         }
     }
     unless (-e $r2_out and (-s $r2_in) == (-s $r2_out)) {
         print_verbose "cp $r2_in $r2_out\n";
-        if ($options->{run}) {
+        unless ($options->{testing}) {
             system("cp $r2_in $r2_out");
         }
     }
@@ -181,24 +192,35 @@ sub get_sample_stanza
         my $tr1_out = $fpath_base . "trim_R1.fq";
         my $tr2_in = Assembly::Utils::get_check_record($sample_rec, ["R2", "trimdata"]);
         my $tr2_out = $fpath_base . "trim_R2.fq";
-        
+    
         $outrec->{release}->[2] = {};
         $outrec->{release}->[2]->{input_file} = $tr1_in;
-        $outrec->{release}->[2]->{output_file} = $tr1_out;
+        $outrec->{release}->[2]->{output_file} = $tr1_out . ".gz";
         $outrec->{release}->[3] = {};
         $outrec->{release}->[3]->{input_file} = $tr2_in;
-        $outrec->{release}->[3]->{output_file} = $tr2_out;
+        $outrec->{release}->[3]->{output_file} = $tr2_out . ".gz";
         
-        unless (-e $tr1_out and (-s $tr1_in) == (-s $tr1_out)) {
-            print_verbose "cp $tr1_in $tr1_out\n";
-            if ($options->{run}) {
+        #unless (-e $tr1_out and (-s $tr1_in) == (-s $tr1_out)) {
+        #unless (-e $tr1_out . ".gz") {
+        
+        unless ($options->{testing}) {
+            unless (-e $tr1_out or -e $tr1_out . ".gz") {
+                print_verbose "cp $tr1_in $tr1_out\n";
                 system("cp $tr1_in $tr1_out");
             }
+            unless (-e $tr1_out . ".gz") {
+                system("gzip $tr1_out");
+            }
         }
-        unless (-e $tr2_out and (-s $tr2_in) == (-s $tr2_out)) {
-            print_verbose "cp $tr2_in $tr2_out\n";
-            if ($options->{run}) {
+        #unless (-e $tr2_out and (-s $tr2_in) == (-s $tr2_out)) {
+        
+        print_verbose "cp $tr2_in $tr2_out\n";
+        unless ($options->{testing}) {
+            unless (-e $tr2_out or -e $tr2_out . ".gz") {
                 system("cp $tr2_in $tr2_out");
+            }
+            unless (-e $tr2_out . ".gz") {
+                system("gzip $tr2_out");
             }
         }
     }
@@ -297,6 +319,70 @@ sub create_pipeline_stanza
     return $release_stanza;
 }
 
+#sub create_symlink
+#{
+#    my $infile = shift;
+#    my $outfile = shift;
+#    if ($options->{create_links}) {
+#        unless ($options->{testing}) {
+#            if (-e $infile and -s $infile) {
+#                my $dirname = dirname ($outfile);
+#                if (-d $dirname) {
+#                    unless (-e $outfile) {
+#                        symlink ($infile, $outfile);
+#                    }
+#                }
+#            }
+#        }
+#    }
+#}
+
+# Symlink over all the sample .fq files that existed in the previous release.
+sub link_previous_fastq
+{
+    my $release_rec = shift;
+    my $output_dir = shift;
+    
+    my @release_files = ();
+    my @sample_list = @{$release_rec->[2]->{samples}};
+    for my $sample (@sample_list) {
+        my @sample_rel_files = @{$sample->{release}};
+        for my $relsec (@sample_rel_files) {
+            push (@release_files, $relsec->{output_file});
+        }
+    }
+    
+    for my $filepath (@release_files) {
+        print $filepath . "\n";
+        $filepath =~ s/processing_test2\///;
+        $filepath = `readlink -e $filepath`;
+        $filepath =~ s/\s+$//;
+        print $filepath . "\n";
+        my $filename = basename ($filepath);
+        print $filename . "\n";
+        my $outfile = $output_dir . "/" . $filename;
+        symlink ($filepath, $outfile);
+    }
+}
+
+# Symlink over the previous release's genome assembly
+sub link_previous_fa
+{
+    my $release_rec = shift;
+    my $output_dir = shift;
+    my @pipeline = @{$release_rec->[3]->{pipeline}};
+    my $last = $pipeline[$#pipeline];
+    my $genome_fa = $last->{release}->[0]->{output_file};
+    print "GOT GENOME $genome_fa\n";
+    $genome_fa =~ s/processing_test2\///;
+    $genome_fa = `readlink -e $genome_fa`;
+    $genome_fa =~ s/\s+$//;
+    print "GOT GENOME $genome_fa\n";
+    my $genome_filename = basename ($genome_fa);
+    my $genome_outfile = $output_dir . "/" . $genome_filename;
+    symlink ($genome_fa, $genome_outfile);
+}
+
 sub update_release
 {
     my ($release_rec, $yaml_records, $table_records, $sample, $strain, $trimraw) = @_;
@@ -305,10 +391,17 @@ sub update_release
     my $strain_rec = Assembly::Utils::get_check_record ($yaml_records, [$species, "RNA", $strain]); 
     my $output_release_prefix = $table_records->{$sample}->{"Output_Release_Prefix"};
     my $output_release_dir = $table_records->{$sample}->{"Output_Release_Dir"};
-    my ($sample_stanza, $qc_cmds) = get_sample_stanza ($strain_rec, $sample, $trimraw, $output_release_prefix, $output_release_dir);   
+    my $input_release_dir = dirname ($table_records->{$sample}->{"Reference_Metafile"});
+    my $dna_strain = $table_records->{$sample}->{"Reference_Strain"};
+    
+    # Symlink over all the sample .fq files that existed in the previous release.
+    link_previous_fastq ($release_rec, $output_release_dir);
+    link_previous_fa ($release_rec, $output_release_dir);
+    
+    my ($sample_stanza, $qc_cmds) = get_sample_stanza ($strain, $dna_strain, $strain_rec, $sample, $trimraw, $output_release_prefix, $output_release_dir);   
     push (@{$release_rec->[2]->{samples}}, $sample_stanza);
     my $pipeline_ref = $release_rec->[3]->{pipeline};
-        for my $rec (@$qc_cmds) {
+    for my $rec (@$qc_cmds) {
         push (@$pipeline_ref, $rec);
     }
     
@@ -316,15 +409,31 @@ sub update_release
     my $bowtie_stanza = create_pipeline_stanza ($yrec, "bowtie", "bowtie2-build indexer");
     my $tophat_stanza = create_pipeline_stanza ($yrec, "tophat", "tophat alignment");
     my $cufflinks_stanza = create_pipeline_stanza ($yrec, "cufflinks", "cufflinks assembly");
-    # Add the input/output file info for the released transcripts.gtf file
+    my $gtf2gff_stanza = create_pipeline_stanza ($yrec, "gtf2gff_rename", "GTF to GFF3 file conversion and gene name relabeling");
+    # Add the input/output file info for the released transcripts.gff file
     # Copy the transcripts file to the release dir.
     my $cufflinks_dir = Assembly::Utils::get_check_record ($yrec, ["cufflinks_dir"]);
-    my $transcripts_in = $cufflinks_dir . "/transcripts.gtf";
-    my $transcripts_out = $output_release_dir . "/" . $output_release_prefix . "_" . $sample . "_transcripts.gtf";
+    my $transcripts_in = $cufflinks_dir . "/transcripts.gff";
+    my $transcripts_release_prefix = $output_release_prefix;
+    if ($strain ne $dna_strain) {
+        $transcripts_release_prefix =~ s/$strain/$dna_strain/;
+    }
+    my $transcripts_out = $output_release_dir . "/" . $transcripts_release_prefix . "_" . $sample . "_transcripts.gff";
+    $gtf2gff_stanza->{"release"} = [];
+    $gtf2gff_stanza->{"release"}->[0] = {"input_file" => $transcripts_in, 
+            "output_file" => $transcripts_out};
+    
+    # Copy the transcripts.gff file to the release folder.
+    unless ($options->{testing}) {
+        unless (-e $transcripts_out) {
+            system ("cp $transcripts_in $transcripts_out");
+        }
+    }
     
     push (@$pipeline_ref, $bowtie_stanza);
     push (@$pipeline_ref, $tophat_stanza);
     push (@$pipeline_ref, $cufflinks_stanza);
+    push (@$pipeline_ref, $gtf2gff_stanza);
 }
     
 sub samples_by_strain
@@ -357,11 +466,12 @@ sub create_release
     my $table_strains = samples_by_strain ($table_records);
     
     for my $strain (keys %$table_strains) {
+    #for my $strain ("LMG_21996") { # A cibarius
         my @sample_list = @{$table_strains->{$strain}};
         my $release_rec = '';
         my $last_sample = '';
         for my $sample (@sample_list) {
-            print "Working on sample $sample\n";
+            print_verbose "Working on sample $sample\n";
             my $input_release_filename = $table_records->{$sample}->{"Reference_Metafile"};
             unless ($release_rec) {
                 $release_rec = LoadFile ($input_release_filename);
@@ -370,9 +480,9 @@ sub create_release
             update_release ($release_rec, $yaml_records, $table_records, $sample, $strain, $trimraw);
             $last_sample = $sample;
         }
-        print "sample $last_sample\n";
+        print_verbose "sample $last_sample\n";
         my $output_release_filename = get_output_filename ($table_records, $last_sample);
-        print "Writing file $output_release_filename\n";
+        print_verbose "Writing file $output_release_filename\n";
         DumpFile ($output_release_filename, $release_rec);
     }
 }
@@ -381,7 +491,7 @@ gather_options;
 my $yaml_records = LoadFile ($options->{yaml_in});
 my $table_records = parse_assembly_table;
 create_release ($yaml_records, $table_records);
-#DumpFile ($options->{yaml_out}, $yaml_records);
+DumpFile ($options->{yaml_out}, $yaml_records);
 
 
 
