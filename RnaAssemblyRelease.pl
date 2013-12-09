@@ -105,6 +105,7 @@ sub parse_assembly_table
                 print_verbose ("Error on line $. of rna assembly table file - incorrect number of cols.\n");
             }
         }
+        close (FRNA);
     }
     return $table_recs;
 }
