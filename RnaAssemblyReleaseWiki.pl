@@ -2,7 +2,9 @@
 use strict;
 use warnings;
 use Getopt::Long;
-use YAML::XS;
+use YAML::XS qw (LoadFile DumpFile);
+use File::Basename;
+use Assembly::Utils;
 
 my $options = {};
 my @colheaders = ("Species", "Strain", "Sample_ID", "Trim_Raw", "Reference_Strain", "Reference_Metafile", 
@@ -128,16 +130,17 @@ sub get_release_recs
 {
     my $table_records = shift;   
     # Get each unique combo of reference species, reference strain, release.
-    my %release_recs = {};
+    my $release_recs = {};
     
-    for my $sample (@$table_records) {
+    for my $sample (keys %$table_records) {
         my $species = $table_records->{$sample}->{"Species"};
         
         my $strain = $table_records->{$sample}->{"Reference_Strain"};
         my $release = $table_records->{$sample}->{"Output_Release_Prefix"};
-        my $release_dir = dirname ($table_records->{$sample}->{"Output_Release_Dir"};
+        my $release_dir = $table_records->{$sample}->{"Output_Release_Dir"};
+        print "Got release dir $release_dir\n";
         my $key = get_key ($species, $strain, $release);
-        unless ($release_recs{$key}) {
+        unless ($release_recs->{$key}) {
             $release_recs->{$key} = [$species, $strain, $release, $release_dir];
         }
     }
@@ -147,8 +150,8 @@ sub get_release_recs
 sub get_release_link
 {
     my $release_dir = shift;
-    http://biocluster/project_data/CRTI-09S-462RD/specimen/G_rostochiensis/release
     my $link_prefix = "http://biocluster/project_data/CRTI-09S-462RD/specimen";
+    $release_dir =~ s/processing_test2\///;
     $release_dir =~ s/.*\/specimen\///;
     my $link_dir = $link_prefix . "/" . $release_dir;
     my $link = "[[" . $link_dir . "][Release]]";
@@ -164,21 +167,29 @@ sub create_wiki_table
     my $release_recs = get_release_recs ($table_records);
     my $fname = ($options->{wiki_table_file} ? $options->{wiki_table_file} : '');
     if ($fname) {
-        open (FWIKI, '>', $fname) or die "Error: couldn't open file for output: $fname\n";
+        my @wiki_line_list = ();
         foreach my $rkey (keys %$release_recs) {
             my $rec = $release_recs->{$rkey};
             my ($species, $strain, $release, $release_dir) = @$rec;
             my $kingdom = $spec_to_king->{$species};
             my $link = get_release_link ($release_dir);
+            $release =~ s/^.*\_//;
             $species =~ s/\_/ /g;
             $strain =~ s/\_/ /g;
-            my $wiki_line = "|" . join ("|", ($kingdom, $species, $strain, $release, $link)) . "|\n";
-            print FWIKI $wiki_line;
+            my $type = "Transcript Assembly";
+            my $wiki_line = "|" . join ("|", ($kingdom, $species, $strain, $release, $type, $link)) . "|";
+            #print FWIKI $wiki_line . "\n";
+            push (@wiki_line_list, $wiki_line);
         }
+        open (FWIKI, '>', $fname) or die "Error: couldn't open file for output: $fname\n";
+        print FWIKI "|" . join ("|", (qw(Kingdom Species Strain Release Type Link))) . "|\n";
+        @wiki_line_list = sort (@wiki_line_list);
+        print FWIKI join ("\n", @wiki_line_list) . "\n";
         close (FWIKI);
     }
 }
 
+gather_options;
 my $yaml_records = LoadFile ($options->{yaml_in});
 my $table_records = parse_assembly_table;
 my $spec_to_king = parse_genome_lengths_table;

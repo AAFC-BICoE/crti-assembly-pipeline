@@ -37,7 +37,7 @@ my $output_filenames = {
     "bowtie" => [qw(.1.bt2 .2.bt2 .3.bt2 .4.bt2 .fa)],
     "tophat" => [qw(accepted_hits.bam deletions.bed insertions.bed junctions.bed unmapped.bam)],
     "cufflinks" => [qw(genes.fpkm_tracking isoforms.fpkm_tracking skipped.gtf transcripts.gtf)],
-    "gtf2gff_rename" => [qw(transcripts_rename.gtf transcripts.gff)],
+    "gtf2gff_rename" => [qw(transcripts_raw.gff transcripts.gff)],
     };
 
 sub set_default_opts
@@ -390,6 +390,7 @@ sub run_gtf2gff_rename
 {
     my $asm_rec = shift;
     my $cufflinks_jobid = shift;
+    my $species = shift;
     my $sample = shift;
     my $strain = shift;
     my $reference_strain = shift;
@@ -400,7 +401,7 @@ sub run_gtf2gff_rename
         $transcript_gene_name =~ s/$reference_strain/$strain/;
     }
     my $transcripts_gtf = $cufflinks_dir . "/transcripts.gtf";
-    my $transcripts_rename_gtf = $cufflinks_dir . "/transcripts_rename.gtf";
+    my $transcripts_rename_gff = $cufflinks_dir . "/transcripts_raw.gff";
     my $transcripts_gff = $cufflinks_dir . "/transcripts.gff";
     # transcripts.gtf -> transcripts_rename.gtf -> transcripts.gff
     #my $transcripts_rename_cmd = $transcripts_rename_path . " -i " . $transcripts_gtf . " -o " . 
@@ -408,18 +409,19 @@ sub run_gtf2gff_rename
     #my $gtf2gff_cmd = $gtf2gff_path . "  --cfg " . $gtf2gff_cfg_path . " " . $transcripts_rename_gtf .
     #    " >" . $transcripts_gff;
     #my $combined_cmd = $transcripts_rename_cmd . " && " . $gtf2gff_cmd;
-    my $combined_cmd = join (" ", ($gtf2gff_rename_path, $transcripts_gtf, $transcripts_rename_gtf,
-            $transcripts_gff, $transcript_gene_name, "Cufflinks"));
+    my $col2val = $species . "_" . $sample;
+    my $combined_cmd = join (" ", ($gtf2gff_rename_path, $transcripts_gtf, $transcripts_rename_gff,
+            $transcripts_gff, $transcript_gene_name, $col2val, $sample));
     my $combined_qsub_cmd = $qsub_path . " -N gtf2gff_rename -hold_jid " . $cufflinks_jobid .
         " " . $qsub_script . " '" . $combined_cmd . "'";
     my $combined_qsub_jobid = check_submit_cmd ("gtf2gff_rename", $cufflinks_dir . "/", $combined_qsub_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_cmd", $combined_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_qsub_cmd", $combined_qsub_cmd);
     Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_qsub_jobid", $combined_qsub_jobid);
-    my $combined_version = "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff_rename.sh " .
-        "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gff_mod_labels.pl " .
-        "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff.pl " .
-        "svn export -r 4381 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff3.cfg ";
+    my $combined_version = "svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff_rename.sh " .
+        "svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gff_mod_labels.pl " .
+        "svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff.pl " .
+        "svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff3.cfg ";
     Assembly::Utils::set_check_record ($asm_rec, [], "gtf2gff_rename_version", $combined_version);
     return $combined_qsub_jobid;
 }
@@ -433,15 +435,15 @@ sub create_assembly
     my $bowtie_jobid = run_bowtie ($asm_rec);
     my $tophat_jobid = run_tophat ($asm_rec, $bowtie_jobid, $sample);
     my $cufflinks_jobid = run_cufflinks ($asm_rec, $tophat_jobid, $sample);
-    my $gtf2gff_rename_jobid = run_gtf2gff_rename ($asm_rec, $cufflinks_jobid, $sample, $strain, $reference_strain);
+    my $gtf2gff_rename_jobid = run_gtf2gff_rename ($asm_rec, $cufflinks_jobid, $species, $sample, $strain, $reference_strain);
 }
 
 sub run_rna_assembly
 {
     my $yaml_recs = shift;
     my $table_recs = shift;
-    for my $sample (keys %$table_recs) {
-    #for my $sample ("S001374") { # A cibarius
+    #for my $sample (keys %$table_recs) {
+    for my $sample ("S001374") { # A cibarius
     #for my $sample ("S001278") { # T indica
     #for my $sample ("S00142C") { # R sol NCPBB_325...
         # Get the parameters of interest.
