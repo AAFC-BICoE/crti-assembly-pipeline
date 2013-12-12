@@ -32,19 +32,18 @@ For custom download, specify -u <url> -x <output xlsx download path> -t <output 
 Assume we're in specimen/processing/AssemblyPipeline/ dir and running a test run in dir specimen/processing_test/
 
 Example:
-./DirSetup.pl -s input_data/Illumina_sample_summary.tab -a input_data/SpeciesAbbreviations.tab --specimen_dir ../../processing_test/ --yaml_out yaml_files/01_dirsetup.yml --all_samples
+./DirSetup.pl
 
 Mandatory:
     -s -a -yaml_out
 
-Optional:
-    --species <species> 
-    --sample <sample> 
-    --sample_file <sample file>
-    --all_samples
+All:
+    --seq_sample_file <file> default: input_data/Illumina_sample_summary.tab
+    --species_abbr_file <file> default: input_data/SpeciesAbbreviations.tab
+    --specimen_dir <dirname> default: ../../processing_test/
+    --all_samples default: set
     --testing
     --verbose
-    --record_file <output records table name>
     --specimen_dir <path to specimen/ dir>
 
 Error check: 
@@ -54,14 +53,16 @@ cat yaml_files/01_dirsetup.yml | grep 'rawdata:' | wc -l
 
 You should get back twice the number of samples you expect to have in your rawdata folder (sum of # of R1 and R2 files).
 
+NOTE: You can run the pipeline on a subset of your samples by pulling the relevant records out of the illumina summary table, e.g.:
+
+cat input_data/illumina_summary.tab | grep lanthierii | grep 1440 > input_data/illumina_summary_lanthierii.tab
+./DirSetup.pl -s input_data/illumina_summary_lanthierii.tab
 
 3. 
 
 Run fastqc on the raw data.
 
-./FastQC.pl -i yaml_files/01_dirsetup.yml -o yaml_files/02_rawqc.yml --raw --qsub_script qsub_script.sh --qsub_batch_file qsub_files/01_raw_fastqc.sh
-
-cat qsub_files/01_raw_fastqc.sh | bash
+./FastQC.pl --raw 
 
 Optional args:
     --raw
@@ -74,6 +75,20 @@ Optional args:
     --qsub_batch_file
 
 4. 
+
+./FastxTrim.pl
+firefox output_files/untrimmed_reports.html
+record trim params in input_data/ManualTrimParams.tab
+-Q 33
+./FastxTrim.pl
+
+$ ./FastxTrim.pl --verbose
+Warning: too few fields in file input_data/ManualTrimParams.tab line 296
+Your job 103501 ("fastx_trim") has been submitted
+Your job 103502 ("fastx_trim") has been submitted
+
+
+
 
 Parse trim parameters and generate trim commands/qsub scripts.
 

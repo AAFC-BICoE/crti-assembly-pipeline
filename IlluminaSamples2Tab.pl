@@ -11,8 +11,62 @@ use Spreadsheet::XLSX;
 use Spreadsheet::ParseExcel; # for .xls
 use Getopt::Long;
 use utf8;
+use Pod::Usage;
+use Data::Dumper;
 
 binmode(STDOUT, ":utf8"); # For e.g. degree symbols in input to render.
+
+=head1 NAME
+
+IlluminaSamples2Tab.pl - Download and convert samples .xlsx file to .tab format.
+
+=head1 SYNOPSIS
+
+IlluminaSamples2Tab.pl -u <http://path/to/Illumina_sample_summary.xlsx> 
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--url>
+
+The URL of the Illumina sample sheet in Excel .xlsx format. Default location is http://biodiversity.agr.gc.ca/svn/sequencing/Illumina_sample_summary.xlsx.
+
+=item B<--excel_filename>
+
+Save URL file to this location (default is URL basename).
+
+=item B<--tab_filename>
+
+Save tab-delimited text file output to this location (default is URL basename .tab).
+
+=item B<--defaults>
+
+Prints out the default arguments for this script and exit.
+
+=item B<--help>
+
+Prints a brief help message and exits.
+
+=item B<--man>
+
+Prints the full documentation and exits.
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> will download the .xlsx file, save it with the appropriate name, and then 
+convert it to tab-delimited text using the perl Spreadsheet::XLSX module.
+
+=cut
+
+sub printDefaults
+{
+    my $options = shift;
+    print "Defaults:\n";
+    print Dumper($options);
+}
 
 sub setupOptions {
     my  $url = 'http://biodiversity.agr.gc.ca/svn/sequencing/Illumina_sample_summary.xlsx';
@@ -21,7 +75,16 @@ sub setupOptions {
         'url|u=s',
         'excel_filename|x=s',
         'tab_filename|t=s',
-        );
+        'help|h',
+        'man|m',
+        'defaults|d',
+        ) or pod2usage(2);
+    if ($options->{help}) {
+        pod2usage(1);
+    }
+    if ($options->{man}) {
+        pod2usage(-exitval => 0, -verbose => 2);
+    }
     $options->{url} ||= $url;
     if (!defined $options->{excel_filename} and $options->{url} =~ /\/([^\/]+)$/) {
         my $ename = $1;
@@ -33,6 +96,10 @@ sub setupOptions {
     if (!defined $options->{tab_filename} and $options->{excel_filename} =~ /^(.*)\.xlsx?$/) {
         my $tname = $1 . ".tab";
         $options->{tab_filename} = $tname;
+    }
+    if ($options->{defaults}) {
+        printDefaults ($options);;
+        exit;
     }
     return $options;
 }

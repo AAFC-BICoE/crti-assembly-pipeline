@@ -3,10 +3,13 @@ use strict;
 use warnings;
 use Getopt::Long;
 use YAML::XS qw(DumpFile LoadFile);
+use Cwd;
 
 my $options = {};
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
 my $fastx_trimmer_bin = "/opt/bio/fastx/bin/fastx_trimmer";
+my $gunzip_bin = "/bin/gunzip";
+my $fastx_gunzip_script = getcwd . "/FastxTrim.sh";
 my @qsub_cmd_list = ();
 my @html_lines = ();
 my $records = {};
@@ -40,7 +43,6 @@ sub check_opts
                 --qsub_opts <qsub options>
                 --qsub_script <qsub script name>
                 --qsub_batch_file
-                --submit
                 ";
     }
 }
@@ -58,7 +60,6 @@ sub gather_opts
             'qsub_opts=s',
             'qsub_script=s',
             'qsub_batch_file=s',
-            'submit',
             );
     set_default_opts;
     check_opts;
@@ -118,7 +119,12 @@ sub get_trim_cmd
     my $outfile = $rec->{$direction}->{trimdata};
     my $Qval = $rec->{fastx_trimmer}->{$direction}->{Qval};
     my $fval = $rec->{fastx_trimmer}->{$direction}->{fval};
-    my $cmd = $fastx_trimmer_bin . " -Q $Qval -f $fval -i $rawfile -o $outfile";
+    my $cmd = '';
+    if ($rawfile =~ /q\.gz\s*$/) {
+        $cmd = join (" ", ($fastx_gunzip_script, $rawfile, $Qval, $fval, $outfile));
+    } else {
+        $cmd = $fastx_trimmer_bin . " -Q $Qval -f $fval -i $rawfile -z -o $outfile";
+    }
     $rec->{fastx_trimmer}->{$direction}->{trim_cmd} = $cmd;
     return $cmd;
 }
@@ -157,7 +163,7 @@ sub apply_trim_params
                     my $trimfile = '';
                     if ($rawfile =~ /(.*)_(R[12].fq)/) {
                         my $trimval = $fval - 1; # The number of bases actually trimmed is f-1.
-                        $trimfile = $1 . "_trim_" . $trimval . "-0-0_" . $2;
+                        $trimfile = $1 . "_trim_" . $trimval . "-0-0_" . $2 . ".gz";
                         $rec->{$direction}->{trimdata} = $trimfile;
                     } else {
                         die "Error: raw file $rawfile cannot be used to get a trim file. Aborting";
@@ -170,7 +176,7 @@ sub apply_trim_params
                         }
                     } else {
                         push (@qsub_cmd_list, $qsub_cmd);
-                        if ($options->{submit}) {
+                        unless ($options->{testing}) {
                             system($qsub_cmd);
                         }
                     }

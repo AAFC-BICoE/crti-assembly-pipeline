@@ -7,6 +7,8 @@ use File::Basename;
 use 5.010;
 use YAML::XS qw(DumpFile);
 use Assembly::Utils  qw(set_check_record get_check_record);
+use Data::Dumper;
+use Pod::Usage;
 
 my $options = {};
 my $records = {};
@@ -18,6 +20,70 @@ my @col_headers = qw (Shipping_Date Results_Received_NRC_PBI_LIMS_Request Projec
         Growth_Condition_Notes Biomaterial Biomaterial_Type Sample_Name MID_Tag Barcode
         Total_Numreads_in_Lane NumReads Percent_of_Reads_in_Lane Download); 
 
+=head1 NAME
+
+DirSetup.pl
+
+=head1 SYNOPSIS
+
+DirSetup.pl --seq_sample_file input_data/Illumina_sample_summary.tab
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--seq_sample_file>
+
+Illumina summary table filename (or selected lines thereof) in tab-delimited text format.
+
+=item B<--species_abbr_file>
+
+File specifying two- or three-letter abbreviations for species names. Each abbreviation should be unique.
+
+=item B<--specimen_dir>
+
+The base folder for processing. All specimen folders and raw files will be created and linked at this location, and all further processing using the output metadata will occur within subfolders of this folder.
+
+=item B<--yaml_out>
+
+The output YAML file, containing metadata about file locations and steps performed. To be used as input in subsequent stages of pipeline processing.
+
+=item B<--g_rosto_file>
+
+Deprecated. Used to allow for nonstandard G rostochiensis file processing by pipeline. Deprecated as we now have our own (standard PBI) raw reads for G rostochiensis.
+
+=item B<--all_samples>
+
+Deprecated. Process all samples. Previous versions supported running specific samples only. Such can be performed now by selecting specific lines from the input sample sheet.
+
+=item B<--verbose>
+
+Print more detailed information on steps being performed.
+
+=item B<--testing>
+
+Step through the script but do not actually create any files or directories.
+
+=item B<--defaults>
+
+Print out all default settings for input option values.
+
+=item B<--help>
+
+Print out the help message.
+
+=item B<--man>
+
+Full documentation.
+
+=back
+
+=head1 DESCRIPTION
+
+Initialize the folder structure in preparation for running the genome assembly pipeline.
+
+=cut
+
 sub set_default_opts
 {
     my %defaults = qw(
@@ -25,24 +91,28 @@ sub set_default_opts
         species_abbr_file input_data/SpeciesAbbreviations.tab
         specimen_dir ../../processing_test2
         yaml_out yaml_files/01_dirsetup.yml
-        g_rosto_file input_data/G_rosto_sample_summary.tab
         );
+        # g_rosto_file input_data/G_rosto_sample_summary.tab
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
+    }
+    if ($options->{defaults}) {
+        print "Defaults:\n";
+        print Dumper($options);
+        exit;
     }
 }
 
 sub check_options
 {
+	if ($options->{help}) {
+	    pod2usage(1);
+	}
+	if ($options->{man}) {
+	    pod2usage(-exitval => 0, -verbose => 2);
+	}
 	unless ($options->{seq_sample_file} and $options->{species_abbr_file} ) {
-		die "Usage: $0 -s <sequence sample file> -a <species name abbreviation file> 
-			Optional:
-				--testing
-				--verbose
-				--specimen_dir <path to specimen/ dir>
-				--yaml_out <yaml output file>
-				--g_rosto_file <filename>
-				";
+		pod2usage(1);
 	}
 }
 
@@ -57,6 +127,9 @@ sub gather_options
 		'specimen_dir|p=s',
 		'yaml_out|y=s',
 		'g_rosto_file=s',
+		'defaults|d',
+		'help|h',
+		'man|m',
 		);
 	set_default_opts;
 	check_options;

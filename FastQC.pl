@@ -119,6 +119,7 @@ sub get_fastqc_subdir
     my $tr_filename = shift;
     
     my $sample_dir = Assembly::Utils::get_check_record($rec, ["sample_dir"]);
+    $tr_filename =~ s/\.gz\s*$//; # get rid of .gz extension for folder name.
     my $fastqc_subdir = $sample_dir . "/fastqc_out/" . $tr_filename . "_fastqc";
     my $key = $tr . "_subdir";
     #$rec->{fastqc}->{$rval}->{$key} = $fastqc_subdir;
