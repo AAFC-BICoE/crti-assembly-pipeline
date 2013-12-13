@@ -579,3 +579,7 @@ S00137F	trimdata	R1	../../processing_test2/G_pallida/DNA/data/Gp_S00137F/S00137F
 S00137F	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_D2BRTACXX/S00137F_ATCACG_L008_R1.fq	101	66749021
 S00137F	trimdata	R2	../../processing_test2/G_pallida/DNA/data/Gp_S00137F/S00137F_ATCACG_L008_trim_7-0-0_R2.fq	94	66751591
 S00137F	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_D2BRTACXX/S00137F_ATCACG_L008_R2.fq	101	66749021
+S0017B0	trimdata	R1	../../processing_lanthierii/A_lanthierii/DNA/data/Al_S0017B0/S0017B0_TGACCA_L008_trim_5-0-0_R1.fq.gz	101	4880377
+S0017B0	rawdata	R1	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B0_TGACCA_L008_R1.fq.gz	101	4880377
+S0017B0	trimdata	R2	../../processing_lanthierii/A_lanthierii/DNA/data/Al_S0017B0/S0017B0_TGACCA_L008_trim_5-0-0_R2.fq.gz	101	4879447
+S0017B0	rawdata	R2	/isilon/biodiversity/data/raw/illumina/PBI/Project_C2CK5ACXX/S0017B0_TGACCA_L008_R2.fq.gz	101	4880377

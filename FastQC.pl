@@ -7,6 +7,7 @@ use YAML::XS qw(LoadFile DumpFile);
 use File::Path;
 use File::Basename;
 use Assembly::Utils;
+use Pod::Usage;
 
 my $fastqc_bin = "/opt/bio/FastQC/fastqc";
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
@@ -15,6 +16,65 @@ my $options = {};
 my $records = {};
 my @qsub_cmd_list;
 
+=head1 NAME
+
+FastQC.pl
+
+=head1 SYNOPSIS
+
+FastQC.pl [--trim|--raw]
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--yaml_in>
+
+Input YAML file containing samples to process and associated metadata.
+
+=item B<--yaml_out>
+
+Output YAML file with updates from FastQC processing for input into the next stage of processing.
+
+=item B<--raw>
+
+Generate a fastqc report for the raw reads files for each input sample.
+
+=item B<--trim>
+
+Generate a fastqc report for the trimmed reads for each input sample. Requires that trimmed files have previously been generated.
+
+=item B<--sample>
+
+Specify the ID of a single sample to generate the fastqc report for.
+
+=item B<--verbose>
+
+Increase output message detail.
+
+=item B<--testing>
+
+Run through the script but do not create files or directories or submit qsub commands.
+
+=item B<--man>
+
+Report full documentation and exit.
+
+=item B<--help>
+
+Prints out help message and exits.
+
+=item B<--defaults>
+
+Print out the defaul option values and exit.
+
+=back
+
+=head1 DESCRIPTION
+
+Run fastqc to generate reports for all raw reads files for all samples in the input YAML file.
+
+=cut 
 
 sub set_default_opts
 {
@@ -47,23 +107,13 @@ sub set_default_opts
     } else {
         $options->{qsub_opts} = $qopts;
     }
+    Assembly::Utils::print_defaults ($0, $options);
 }    
 
 sub check_opts
 {
     unless ($options->{yaml_in} and $options->{yaml_out} and ($options->{trim} or $options->{raw})) {
-        die "Usage: $0 -i <yaml input file> -o <yaml output file> [--trim and/or --raw]
-            Optional args:
-            	--raw
-            	--trim
-            	--sample <sample id>
-                --verbose
-                --testing
-                --qsub_opts <qsub options>
-                --qsub_script <qsub script name>
-                --qsub_batch_file
-                --submit
-                ";
+        pod2usage(1);
     }
 }
 
@@ -80,8 +130,12 @@ sub gather_opts
 			'qsub_opts=s',
 			'qsub_script=s',
 			'qsub_batch_file=s',
-			'submit',
-			);
+			'man|m',
+			'help|h',
+			'defaults|d',
+			) or pod2usage(1);
+	pod2usage(1) if $options->{help};
+	pod2usage(-exitval => 0, -verbose => 2) if $options->{man};
 	set_default_opts;
 	check_opts;
 }
@@ -176,7 +230,7 @@ sub submit_qsub
         if ($options->{qsub_batch_file}) {
             push (@qsub_cmd_list, $qsub_cmd);
         }
-        if ($options->{submit}) {
+        unless ($options->{testing}) {
             system($qsub_cmd);
         }
     }

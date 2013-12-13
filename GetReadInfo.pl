@@ -91,17 +91,23 @@ sub read_table_stats
         close (FINTAB);
     }
 }
-        
+
 # Given a raw or trimmed .fq file, return
 # the number of reads and the read length.
 sub get_read_info
 {
     my $fq_infile = shift;
     if (-e $fq_infile) {
-        open (FQIN, '<', $fq_infile);
+        my $fqin;
+        print "Working on file $fq_infile\n";
+        if ($fq_infile =~ /\.gz/) {
+            open ($fqin, "gunzip -c $fq_infile |");
+        } else {
+            open ($fqin, '<', $fq_infile);
+        }
         my ($num_reads, $read_length) = (0, 0);
         if ($options->{verbose}) { print "Determining read length/num reads from file $fq_infile\n"; }
-        while (my $line = <FQIN>) {
+        while (my $line = <$fqin>) {
             if ($. == 2) {
                 chomp $line;
                 $read_length = length($line);
@@ -110,7 +116,7 @@ sub get_read_info
                 $num_reads++;
             }
         }
-        close (FQIN);
+        close ($fqin);
         print join("\t", ($fq_infile, $read_length, $num_reads)) . "\n";
         return ($read_length, $num_reads);
     } else {

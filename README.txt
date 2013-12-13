@@ -116,6 +116,8 @@ cat qsub_files/02_fastx_trim.sh | bash to submit all the jobs.
 
 5.
 
+./FastQC.pl --trim
+
 Run post-trimming fastqc
 
 Simply use the FastQC.pl script again, this time using the --trim option instead of --raw.
@@ -123,6 +125,10 @@ Simply use the FastQC.pl script again, this time using the --trim option instead
 ./FastQC.pl -i yaml_files/03_trim.yml -o yaml_files/04_trimqc.yml --trim --qsub_script qsub_script.sh --qsub_batch_file qsub_files/03_trim_fastqc.sh
 
 6.
+
+screen
+source ~/perl5/perlbrew/etc/bashrc
+./GetReadLengths.pl --verbose
 
 Go through raw/trimmed files to determine number of reads, read lengths.
 
@@ -143,6 +149,15 @@ Take an input 'estimated genome lengths' table and add this information to the r
 7.
 
 (Step 1 Genome Assembly part)
+
+
+./AssemblySetup.pl --verbose
+
+./GenomeLengths.pl --verbose
+
+./VelvetKRun.pl --verbose
+
+
 
 
 

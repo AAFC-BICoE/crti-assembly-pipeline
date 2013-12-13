@@ -7,7 +7,6 @@ use File::Basename;
 use 5.010;
 use YAML::XS qw(DumpFile);
 use Assembly::Utils  qw(set_check_record get_check_record);
-use Data::Dumper;
 use Pod::Usage;
 
 my $options = {};
@@ -96,11 +95,12 @@ sub set_default_opts
     for my $key (keys %defaults) {
         $options->{$key} = $defaults{$key} unless $options->{$key};
     }
-    if ($options->{defaults}) {
-        print "Defaults:\n";
-        print Dumper($options);
-        exit;
-    }
+    Assembly::Utils::print_defaults ($0, $options);
+    #if ($options->{defaults}) {
+    #    print "Defaults:\n";
+    #    print Dumper($options);
+    #    exit;
+    #}
 }
 
 sub check_options
@@ -130,7 +130,7 @@ sub gather_options
 		'defaults|d',
 		'help|h',
 		'man|m',
-		);
+		) or pod2usage(1);
 	set_default_opts;
 	check_options;
 }		
@@ -395,7 +395,9 @@ sub create_directory_setup
 sub setup_all_dirs
 {
 	foreach my $sample (keys %$records) {
+	    print "Got sample $sample\n";
 	    if ($sample =~ /\S/) {
+	        print "Working on sample $sample\n";
 		    my $rec = $records->{$sample};
 		    create_directory_setup($rec);
 	    }

@@ -21,9 +21,10 @@ my $velvet_bin_dir = "/opt/bio/velvet";
 #my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt contigs.fa)];
 # Modify the above - we plan on deleting all but Log, CnyUnifiedSeq, Graph2, PreGraph, contigs.fa
 # in order to save space. Don't want the script to re-run where we've deleted files.
+#my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
+#my $vg_outfiles = [qw(Graph2 PreGraph contigs.fa)];
 my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
-my $vg_outfiles = [qw(Graph2 PreGraph contigs.fa)];
-
+my $vg_outfiles = [qw(contigs.fa)]; # reduced files listed here - using '-very_clean yes' option now.
 
 # @ kbins is only used by get_kmer_bin function below.
 # Assumes we have binaries of form
@@ -35,7 +36,6 @@ sub set_default_opts
             yaml_in yaml_files/10_velvetk.yml
             yaml_out yaml_files/11_velvet_cmds.yml
             qsub_script qsub_script.sh
-            submit 0
             submit_max 0
             min_kmer 75 
             max_kmer 75
@@ -58,7 +58,7 @@ sub check_opts
                 --trim
                 --raw
                 --qsub_script <filename>
-                --submit
+                --testing
                 --submit_max <#>
                 --verbose
                 --min_kmer <value (default 21)>
@@ -79,7 +79,6 @@ sub gather_opts
             'qsub_script=s',
             'trim',
             'raw',
-            'submit',
             'submit_max=s',
             'verbose',
             'min_kmer',
@@ -87,6 +86,7 @@ sub gather_opts
             'use_velvetk',
             'velvetk_radius=s',
             'specimen_dir=s',
+            'testing',
             );
     set_default_opts;
     check_opts;
@@ -183,7 +183,7 @@ sub base_velvetg_cmd
     my $scaffolding_opt = " -scaffolding yes ";    
     my $velvetg_bin = $velvet_bin_dir . "/velvetg_" . $kmer_bin;
     my $velvetg_cmd = $velvetg_bin . " " . $outdir . " -exp_cov " . $exp_cov .
-        " " . $min_contig_opt . $scaffolding_opt . " -amos_file no -cov_cutoff auto ";
+        " " . $min_contig_opt . $scaffolding_opt . " -amos_file no -cov_cutoff auto -very_clean yes ";
     return $velvetg_cmd;
 }
 
@@ -278,7 +278,7 @@ sub submit_cmds
 sub build_assembly_cmds
 {
     my $records = shift;
-    my $vqs = new Assembly::Qsub($options->{qsub_script}, $options->{submit}, $options->{submit_max}, $options->{verbose});
+    my $vqs = new Assembly::Qsub($options->{qsub_script}, $options->{testing}, $options->{submit_max}, $options->{verbose});
     for my $species (keys %$records) {
         my $spec_ref = $records->{$species}->{DNA};
         for my $strain (keys %$spec_ref) {

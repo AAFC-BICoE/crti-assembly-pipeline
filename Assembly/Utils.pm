@@ -7,6 +7,7 @@ package Assembly::Utils;
 
 use strict;
 use warnings;
+use Data::Dumper;
 
 sub get_check_record
 {
@@ -90,6 +91,18 @@ sub get_jobid
         $hold_jobid = $1;
     }
     return $hold_jobid;
+}
+
+# Print out the options that are currently set via Getopt.
+sub print_defaults
+{
+    my $scriptname = shift;
+    my $options = shift;
+    if ($options->{defaults}) {
+        print "Default option values for $scriptname:\n";
+        print Dumper ($options);
+        exit;
+    }
 }
 
 return 1;

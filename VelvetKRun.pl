@@ -19,7 +19,6 @@ sub set_default_opts
         trim 1
         raw 1
         verbose 0
-        run 0
         velvetk_infile input_data/VelvetKBest.tab
         velvetk_outfile output_files/VelvetKBestOut.tab
         velvet_stats_file output_files/VelvetStats.tab
@@ -39,7 +38,7 @@ sub check_opts
                 --sample_list <ID1,ID2,...,IDX (no spaces)>
                 --trim
                 --raw
-                --run
+                --testing
                 --velvetk_infile <filename>
                 --velvetk_outfile <filename>
                 --velvet_stats_file <filename>
@@ -61,7 +60,7 @@ sub gather_opts
         'velvetk_infile=s',
         'velvetk_outfile=s',
         'velvet_stats_file=s',
-        'run',
+        'testing',
         'qsub_script=s',
         );
     set_default_opts;
@@ -174,7 +173,7 @@ sub submit_velvetk_cmd
         Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_cmd", $vk_cmd);
         Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw], "velvetk_qsub_cmd", $vk_qsub_cmd);
         
-        if ($options->{run} and $vk_cmd) {
+        if ($vk_cmd and not $options->{testing}) {
             print "Running command $vk_cmd\n";
             my $best = `$vk_cmd`;
             chomp $best;

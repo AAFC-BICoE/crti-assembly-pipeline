@@ -35,12 +35,12 @@ sub new
 {
     my $class = shift;
     my $qsub_script = shift;
-    my $submit = shift;
+    my $testing = shift;
     my $submit_max = shift;
     my $verbose = shift;
     my $self = {
         qsub_script => $qsub_script,
-        submit => $submit,
+        testing => $testing,
         submit_max => $submit_max,
         verbose => $verbose,
         counter => 0,
@@ -96,7 +96,7 @@ sub submit_velvet
             " " . $hold_param_str . $self->{qsub_script} . " '" . $velvet_cmd . "'";
     my ($jobid, $qsub_str) = ('',''); 
     #print $qsub_cmd . "\n";
-    if ($self->{submit}) {
+    unless ($self->{testing}) {
         my $exceed_max = 0;
         if ($self->{submit_max} and $self->{total_submitted} > $self->{submit_max}) {
             $exceed_max = 1;
@@ -108,7 +108,7 @@ sub submit_velvet
             print_verbose $self, "Got jobid " . $jobid . "\n";
             inc_total($self);
         }
-    } elsif (!$self->{submit}) {
+    } elsif ($self->{testing}) {
         # testing jobid
         $jobid = random_uniform_integer(1, 100000, 190000);
     }
