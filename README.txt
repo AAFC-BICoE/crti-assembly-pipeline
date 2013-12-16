@@ -155,6 +155,8 @@ Take an input 'estimated genome lengths' table and add this information to the r
 
 ./GenomeLengths.pl --verbose
 
+./ReverseComplement.pl --verbose
+
 ./VelvetKRun.pl --verbose
 
 
@@ -167,4 +169,8 @@ Take an input 'estimated genome lengths' table and add this information to the r
 
 
 
+
+./VelvetCommands.pl --verbose
+
+./VelvetStatsFull.pl --verbose
 
