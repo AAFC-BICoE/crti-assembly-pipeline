@@ -67,10 +67,10 @@ Penicillium_verrucosum	KAS_4382						trim	1
 Penicillium_verrucosum	KAS_4382						raw	1
 Arcobacter_lanthierii	AF_1581						trim	93
 Arcobacter_lanthierii	AF_1581						raw	99
+Arcobacter_lanthierii	AF_1440	S0017B0					trim	93
+Arcobacter_lanthierii	AF_1440	S0017B0					raw	97
 Arcobacter_lanthierii	AF_1430						trim	93
 Arcobacter_lanthierii	AF_1430						raw	99
-Arcobacter_lanthierii	AF1440	S0017B0					trim	97
-Arcobacter_lanthierii	AF1440	S0017B0					raw	97
 Puccinia_triticina	race_MFDS_RSA2117						trim	71
 Puccinia_triticina	race_MFDS_RSA2117						raw	77
 Puccinia_triticina	race_MBDS_RSA2119						trim	71

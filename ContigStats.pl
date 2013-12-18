@@ -189,6 +189,7 @@ sub all_contig_stats
     my $kmer = 43;
     for my $species (keys %$records) {
         for my $strain (keys %{$records->{$species}->{DNA}}) {
+            print "Workin gon specie $species strain $strain\n";
             my $strain_rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain]);
             for my $trimraw (qw(trim raw)) {
                 my $kmer_range = get_kmer_range($strain_rec, $trimraw);
@@ -259,8 +260,8 @@ sub write_contig_stats
 gather_opts;
 my $records = LoadFile($options->{yaml_in});
 parse_input_stats($records);
-#my $output_stats = all_contig_stats($records);
-my $output_stats = release_contig_stats($records);
+my $output_stats = all_contig_stats($records);
+#my $output_stats = release_contig_stats($records);
 write_contig_stats($output_stats);
 DumpFile($options->{yaml_out}, $records);
 

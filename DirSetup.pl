@@ -164,6 +164,7 @@ sub clean_field
 sub parse_record
 {
 	my $line = shift;
+	print $line;
 	chomp $line;
 	my @fields = split (/\t/, $line);
 	my $rec = {};

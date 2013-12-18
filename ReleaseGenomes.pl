@@ -19,8 +19,7 @@ sub set_default_opts
     my %defaults = qw(
         yaml_in yaml_files/13_contig_stats.yml
         yaml_out yaml_files/14_velvet_release.yml
-        release_table input_data/Release_test2.tab
-        run 0
+        release_table input_data/Release.tab
         verbose 1
         testing 0
         wiki_release_table output_files/wiki_release_table.txt
@@ -38,7 +37,6 @@ sub check_opts
         die "Usage: $0 -i <input yaml file> -o <output yaml file> -r <release table>
             Optional:
                 --verbose
-                --run (create directories and yaml files and copy release data)
                 --testing (place output yaml files in /tmp)
                 --wiki_release_table (print out table of releases for pasting to wiki)
                 --wiki_genome_table (print table of genome stats for pasting to wiki)
@@ -55,7 +53,6 @@ sub gather_opts
         'yaml_out|o=s',
         'release_table|r=s',
         'verbose',
-        'run',
         'testing',
         'wiki_release_table',
         'wiki_genome_table',
@@ -180,7 +177,7 @@ sub get_genome_stanza
     $outrec->{total_length} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "total_length"]);
     $outrec->{num_contigs} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "num_contigs"]);
     $outrec->{min_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "min_contig_len"]);
-    $outrec->{median_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "median_contig_len"]);
+    $outrec->{median_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "median_contig"]);
     my @types = ();
     #for my $st (qw(PE PER MP MP3 MP8)) {
     for my $st (qw(PE)) {
@@ -224,8 +221,10 @@ sub get_sample_stanza
 
     my $r1_in = Assembly::Utils::get_check_record($sample_rec, ["R1", "rawdata"]);
     my $r1_out = $fpath_base . "R1.fq";
+    if ($r1_in =~/\.gz\s*$/){ $r1_out .= ".gz"; }
     my $r2_in = Assembly::Utils::get_check_record($sample_rec, ["R2", "rawdata"]);
     my $r2_out = $fpath_base . "R2.fq";
+    if ($r2_in =~/\.gz\s*$/){ $r2_out .= ".gz"; }
 
     $outrec->{release} = [];
     $outrec->{release}->[0] = {};
@@ -238,13 +237,13 @@ sub get_sample_stanza
     # copy the files here??
     unless (-e $r1_out and (-s $r1_in) == (-s $r1_out)) {
         print_verbose "cp $r1_in $r1_out\n";
-        if ($options->{run}) {
+        unless ($options->{testing}) {
             system("cp $r1_in $r1_out");
         }
     }
     unless (-e $r2_out and (-s $r2_in) == (-s $r2_out)) {
         print_verbose "cp $r2_in $r2_out\n";
-        if ($options->{run}) {
+        unless ($options->{testing}) {
             system("cp $r2_in $r2_out");
         }
     }
@@ -261,8 +260,10 @@ sub get_sample_stanza
 
         my $tr1_in = Assembly::Utils::get_check_record($sample_rec, ["R1", "trimdata"]);
         my $tr1_out = $fpath_base . "trim_R1.fq";
+        if ($tr1_in =~/\.gz\s*$/){ $tr1_out .= ".gz"; }
         my $tr2_in = Assembly::Utils::get_check_record($sample_rec, ["R2", "trimdata"]);
         my $tr2_out = $fpath_base . "trim_R2.fq";
+        if ($tr2_in =~/\.gz\s*$/){ $tr2_out .= ".gz"; }
         
         $outrec->{release}->[2] = {};
         $outrec->{release}->[2]->{input_file} = $tr1_in;
@@ -273,13 +274,13 @@ sub get_sample_stanza
         
         unless (-e $tr1_out and (-s $tr1_in) == (-s $tr1_out)) {
             print_verbose "cp $tr1_in $tr1_out\n";
-            if ($options->{run}) {
+            unless ($options->{testing}) {
                 system("cp $tr1_in $tr1_out");
             }
         }
         unless (-e $tr2_out and (-s $tr2_in) == (-s $tr2_out)) {
             print_verbose "cp $tr2_in $tr2_out\n";
-            if ($options->{run}) {
+            unless ($options->{testing}) {
                 system("cp $tr2_in $tr2_out");
             }
         }
@@ -387,7 +388,7 @@ sub get_pipeline_stanza
     
     unless (-e $contigs_outfile and -s $contigs_outfile) {
         print_verbose "cp $contigs_infile $contigs_outfile\n";
-        if ($options->{run}) {
+        unless ($options->{testing}) {
             system ("cp $contigs_infile $contigs_outfile");
         }
     }
@@ -570,16 +571,17 @@ sub create_all_releases
     my $records = shift;
     for my $species (keys %$records) {
         for my $strain (keys %{$records->{$species}->{DNA}}) {
+            print "Working on species $species strain $strain\n";
             #my $cand_rec = Assembly::Utils::get_check_record($release_candidates, [$species, $strain]);
             my $cand_rec = $release_candidates->{$species};
             if ($cand_rec) {
-                #print "Matched species $species\n";
-                #print "strain is '$strain'\n";
+                print "Matched species $species\n";
+                print "strain is '$strain'\n";
                 $cand_rec = $release_candidates->{$species}->{$strain};
                 #print "possible strain values: '" . join ("'\t'", (keys %{$release_candidates->{$species}})) . "'\n";
             }
             if ($cand_rec) {
-                #print "Got release candidate for species $species strain $strain\n";
+                print "Got release candidate for species $species strain $strain\n";
                 my $yaml_rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain]);
                 create_release ($species, $strain, $cand_rec, $yaml_rec);
             } else {

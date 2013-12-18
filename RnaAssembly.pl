@@ -44,8 +44,7 @@ sub set_default_opts
 {
     my %defaults = qw(
         rna_assembly_table input_data/RnaAssemblyTable.tab
-        specimen_dir ../../processing_test2
-        yaml_in yaml_files/06b_assembly_setup.yml
+        yaml_in yaml_files/14_velvet_release.yml
         yaml_out yaml_files/15_rna_setup.yml
         create_links 1
         );
@@ -62,7 +61,6 @@ sub check_options
                                 --testing
                                 --verbose
                                 --create_links
-                                --specimen_dir <path to specimen/ dir>
                                 ";
         }
 }
@@ -74,7 +72,6 @@ sub gather_options
                 'testing|t',
                 'verbose|v',
                 'create_links|l',
-                'specimen_dir|p=s',
                 'yaml_in|i=s',
                 'yaml_out|o=s',
                 );
@@ -234,7 +231,7 @@ sub get_genome_assembly
     # to match the release for the input file! Use the release genome file
     # instead.
     my $genome_file = $cmd_rec->{"release"}->[0]->{"output_file"};
-    $genome_file =~ s/processing_test2\///; # FIX!
+    $genome_file =~ s/processing_.*?\///; # FIX!
     return ($genome_file, $genome_prefix);
 }
 
@@ -430,25 +427,31 @@ sub run_gtf2gff_rename
 sub create_assembly
 {
     my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix) = @_;
-    my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
+    my $species_dir = Assembly::Utils::get_check_record ($yaml_recs, [$species, "RNA", $strain, $sample, "species_dir"]);
+    print "Sepcies dir is $species_dir\n";
+    if (-e $species_dir) {
+        print "It exists!\n";
+        my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
     
-    my $bowtie_jobid = run_bowtie ($asm_rec);
-    my $tophat_jobid = run_tophat ($asm_rec, $bowtie_jobid, $sample);
-    my $cufflinks_jobid = run_cufflinks ($asm_rec, $tophat_jobid, $sample);
-    my $gtf2gff_rename_jobid = run_gtf2gff_rename ($asm_rec, $cufflinks_jobid, $species, $sample, $strain, $reference_strain);
+        my $bowtie_jobid = run_bowtie ($asm_rec);
+        my $tophat_jobid = run_tophat ($asm_rec, $bowtie_jobid, $sample);
+        my $cufflinks_jobid = run_cufflinks ($asm_rec, $tophat_jobid, $sample);
+        my $gtf2gff_rename_jobid = run_gtf2gff_rename ($asm_rec, $cufflinks_jobid, $species, $sample, $strain, $reference_strain);
+    }
 }
 
 sub run_rna_assembly
 {
     my $yaml_recs = shift;
     my $table_recs = shift;
-    #for my $sample (keys %$table_recs) {
-    for my $sample ("S001374") { # A cibarius
+    for my $sample (keys %$table_recs) {
+    # for my $sample ("S001374") { # A cibarius
     #for my $sample ("S001278") { # T indica
     #for my $sample ("S00142C") { # R sol NCPBB_325...
         # Get the parameters of interest.
         my $species = $table_recs->{$sample}->{"Species"};
         my $strain = $table_recs->{$sample}->{"Strain"};
+        print "Working on sample $sample\n";
         my $reference_strain = $table_recs->{$sample}->{"Reference_Strain"};
         my ($genome_file, $genome_prefix) = get_genome_assembly ($table_recs->{$sample}->{"Reference_Metafile"});
         my $output_release_prefix = $table_recs->{$sample}->{"Output_Release_Prefix"};

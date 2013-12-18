@@ -31,7 +31,7 @@ sub check_opts
         die "Usage: $0 -i <yaml input file> -o <yaml output file> -s <illumina summary table file>
             Optional:
                 --sample <sample ID>
-                --no_raw_stats
+                --testing
                 --input_read_table <input table filename>
                 --output_read_table <output table filename>
                 --verbose
@@ -45,7 +45,7 @@ sub gather_opts
         'yaml_in|i=s',
         'yaml_out|o=s',
         'sample=s',
-        'no_raw_stats',
+        'testing',
         'input_read_table=s',
         'output_read_table=s',
         'verbose',
@@ -159,7 +159,7 @@ sub calc_stats
 
 sub calc_data_stats
 {
-    unless ($options->{no_raw_stats}) {
+    unless ($options->{testing}) {
         my $rec;
         if ($options->{sample} and defined $records->{$options->{sample}}) {
             my $rec = $records->{$options->{sample}};
