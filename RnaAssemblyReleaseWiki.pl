@@ -16,7 +16,6 @@ sub set_default_opts
         rna_assembly_table input_data/RnaAssemblyTable.tab
         genome_lengths_table input_data/GenomeLengths.tab
         wiki_table_file output_files/wiki_transcript_table.txt
-        specimen_dir ../../processing_test2
         yaml_in yaml_files/15_rna_setup.yml
         yaml_out yaml_files/16_rna_release.yml
         create_release 0
@@ -36,7 +35,6 @@ sub check_options
                                 --testing
                                 --verbose
                                 --create_release
-                                --specimen_dir <path to specimen/ dir>
                                 ";
         }
 }
@@ -50,7 +48,6 @@ sub gather_options
                 'testing|t',
                 'verbose|v',
                 'create_release|r',
-                'specimen_dir|p=s',
                 'yaml_in|i=s',
                 'yaml_out|o=s',
                 );

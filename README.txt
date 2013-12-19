@@ -239,3 +239,46 @@ Done!
 Now to assemble the transcriptome for the released genome...
 
 
+
+Add the relevant line for the new species to 
+input_data/Release.tab
+
+Get the scripts for gtf2gff conversion into the local directory:
+
+svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff_rename.sh
+svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gff_mod_labels.pl
+svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff.pl
+svn export -r 4390 http://biodiversity/svn/source/TranscriptAssembly/gtf2gff3.cfg
+
+Run the assembly script
+
+./RnaAssembly.pl
+
+Wait for the qsubbed jobs to complete. 
+
+Found that running the next step on the full rna release table was not ideal. Scrit tried to generate releases again for previously released organisms.
+Wound up copying the relevant lanthierii line on its own to 
+input_data/RnaAssemblyTable_lanthierii.tab
+
+Then ran:
+
+./RnaAssemblyRelease.pl --rna_assembly_table input_data/RnaAssemblyTable_lanthierii.tab
+
+Then
+
+./RnaAssemblyReleaseWiki.pl --rna_assembly_table input_data/RnaAssemblyTable_lanthierii
+
+Then copied lines from the file
+output_files/wiki_transcriptome_table.txt
+to the wiki
+
+then did 
+cd ../../
+mv processing_lanthierii/A_lanthierii/release/Al_AF_1440_R01V1/ A_lanthierii/release/
+
+This completed the transcriptome release.
+
+
+
+
+

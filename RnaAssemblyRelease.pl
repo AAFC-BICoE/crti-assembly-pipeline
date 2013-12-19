@@ -21,7 +21,6 @@ sub set_default_opts
 {
     my %defaults = qw(
         rna_assembly_table input_data/RnaAssemblyTable.tab
-        specimen_dir ../../processing_test2
         yaml_in yaml_files/15_rna_setup.yml
         yaml_out yaml_files/16_rna_release.yml
         create_release 0
@@ -39,7 +38,6 @@ sub check_options
                                 --testing
                                 --verbose
                                 --create_release
-                                --specimen_dir <path to specimen/ dir>
                                 ";
         }
 }
@@ -51,7 +49,6 @@ sub gather_options
                 'testing|t',
                 'verbose|v',
                 'create_release|r',
-                'specimen_dir|p=s',
                 'yaml_in|i=s',
                 'yaml_out|o=s',
                 );
@@ -355,7 +352,7 @@ sub link_previous_fastq
     
     for my $filepath (@release_files) {
         print $filepath . "\n";
-        $filepath =~ s/processing_test2\///;
+        $filepath =~ s/processing_.*?\///; # BUG! FIX!
         $filepath = `readlink -e $filepath`;
         $filepath =~ s/\s+$//;
         print $filepath . "\n";
@@ -375,7 +372,7 @@ sub link_previous_fa
     my $last = $pipeline[$#pipeline];
     my $genome_fa = $last->{release}->[0]->{output_file};
     print "GOT GENOME $genome_fa\n";
-    $genome_fa =~ s/processing_test2\///;
+    $genome_fa =~ s/processing_.*?\///; # BUG! FIX!
     $genome_fa = `readlink -e $genome_fa`;
     $genome_fa =~ s/\s+$//;
     print "GOT GENOME $genome_fa\n";
