@@ -3,8 +3,8 @@ Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype						trim	87
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype						raw	93
 Synchytrium_endobioticum	2000_outbreak_pathotype_6						trim	81
 Synchytrium_endobioticum	2000_outbreak_pathotype_6						raw	89
-Synchytrium_endobioticum	mixed_strains_from_Newfoundland						trim	49
-Synchytrium_endobioticum	mixed_strains_from_Newfoundland						raw	49
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S001381					trim	49
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S001381					raw	49
 Globodera_pallida	A1_INRA_St-Malo_France						trim	77
 Globodera_pallida	A1_INRA_St-Malo_France						raw	83
 Globodera_pallida	A2_Cyprus_pathotype_Pa23						trim	65
@@ -67,8 +67,6 @@ Penicillium_verrucosum	KAS_4382						trim	1
 Penicillium_verrucosum	KAS_4382						raw	1
 Arcobacter_lanthierii	AF_1581						trim	93
 Arcobacter_lanthierii	AF_1581						raw	99
-Arcobacter_lanthierii	AF_1440	S0017B0					trim	93
-Arcobacter_lanthierii	AF_1440	S0017B0					raw	97
 Arcobacter_lanthierii	AF_1430						trim	93
 Arcobacter_lanthierii	AF_1430						raw	99
 Puccinia_triticina	race_MFDS_RSA2117						trim	71

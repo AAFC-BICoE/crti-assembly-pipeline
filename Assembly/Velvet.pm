@@ -43,8 +43,8 @@ sub create_kmer_range
     my $trimraw = shift;
     my $use_velvetk = 1;
     my $vk_radius = 6;
-    my $min_kmer = 75;
-    my $max_kmer = 75;
+    my $min_kmer = 31;
+    my $max_kmer = 35;
     my $kmer_range = [];
     if ($use_velvetk and $vk_radius) {
         my $velvetk_best = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_best_kmer"]);

@@ -17,13 +17,13 @@ use Assembly::Qsub;
 
 my $options = {};
 my $velvet_bin_dir = "/opt/bio/velvet";
-#my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
+my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
 #my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt contigs.fa)];
 # Modify the above - we plan on deleting all but Log, CnyUnifiedSeq, Graph2, PreGraph, contigs.fa
 # in order to save space. Don't want the script to re-run where we've deleted files.
 #my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
 #my $vg_outfiles = [qw(Graph2 PreGraph contigs.fa)];
-my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
+#my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
 my $vg_outfiles = [qw(contigs.fa)]; # reduced files listed here - using '-very_clean yes' option now.
 
 # @ kbins is only used by get_kmer_bin function below.
@@ -42,7 +42,7 @@ sub set_default_opts
             trim 1
             raw 1
             use_velvetk 1
-            velvetk_radius 6
+            velvetk_radius 1
             specimen_dir ../../processing_test2
             );
     for my $key (keys %defaults) {
@@ -282,7 +282,8 @@ sub build_assembly_cmds
     for my $species (keys %$records) {
         my $spec_ref = $records->{$species}->{DNA};
         for my $strain (keys %$spec_ref) {
-			for my $trimraw (qw(trim raw)) {
+			#for my $trimraw (qw(trim raw)) {
+			for my $trimraw (qw(raw)) {
 				if ($options->{$trimraw}) {
                     my $assembly_dir = Assembly::Velvet::get_assembly_outdir($records, $species, $strain, $trimraw);
                     if ($assembly_dir) {

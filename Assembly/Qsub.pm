@@ -14,7 +14,8 @@ sub build_slot_info
     my $self = shift;
     my $slot_info = [];
     my $host_numbers = [];
-    for (my $i=0; $i<8; $i++) {
+    #for (my $i=0; $i<8; $i++) {
+    for my $i (3,5,6,7,8) {
         push (@$host_numbers, $i) for (1..2);
     }
     push (@$host_numbers, 9) for (1..8);

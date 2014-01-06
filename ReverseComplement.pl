@@ -5,10 +5,12 @@ use Getopt::Long;
 use YAML::XS qw(LoadFile DumpFile);
 use Assembly::Utils;
 use File::Basename;
+use Cwd;
 
 my $options = {};
 my $fx_rc_bin = "/opt/bio/fastx/bin/fastx_reverse_complement";
 my $qsub_bin = "/opt/gridengine/bin/lx26-amd64/qsub";
+my $reverse_complement_bin = getcwd . "/ReverseComplement.sh";
 
 sub set_default_opts
 {
@@ -30,7 +32,7 @@ sub check_opts
         die "Usage: $0 -i <input yaml file> -o <output yaml file>
             Optional:
                 --verbose
-                --run
+                --testing
                 --qsub_script
                 ";
     }
@@ -42,7 +44,7 @@ sub gather_opts
     GetOptions($options,
         'yaml_in|i=s',
         'yaml_out|o=s',
-        'run',
+        'testing',
         'verbose',
         'qsub_script=s',
         );
@@ -61,8 +63,54 @@ sub get_qsub_cmd
 {
     my $cmd = shift;
     my $qsub_cmd = $qsub_bin . " " . $options->{qsub_opts} . " -N revcomp " . 
-            " -l h=biocomp-0-5 " . $options->{qsub_script} . " '" . $cmd . "'";
+            #" -l h=biocomp-0-5 " . 
+            $options->{qsub_script} . " '" . $cmd . "'";
     return $qsub_cmd;
+}
+
+sub build_cmd_gz
+{
+    my $frec = shift;
+    my $rval = shift;
+    my $datafile = shift;
+    my $sample_dir = shift;
+    my $trimdata = shift;
+    
+    my $outfile = $sample_dir . "/rev_" . basename($datafile);
+    my $rc_cmd = $reverse_complement_bin . " " . $datafile . " " . $outfile;
+    my $rc_qsub_cmd = get_qsub_cmd ($rc_cmd);
+    my $revdata = "rev" . $trimdata;
+    Assembly::Utils::set_check_record($frec, [$rval], $revdata, $outfile);
+    Assembly::Utils::set_check_record($frec, [$rval], "cmd", $rc_cmd);
+    Assembly::Utils::set_check_record($frec, [$rval], "qsub_cmd", $rc_qsub_cmd);
+
+    print_verbose "Running command:\n" . $rc_qsub_cmd . "\n";
+    unless ($options->{testing} or -e $outfile) {
+        system($rc_qsub_cmd);
+    }
+
+}
+
+sub build_cmd_nogz
+{
+    my $frec = shift;
+    my $rval = shift;
+    my $datafile = shift;
+    my $sample_dir = shift;
+    my $trimdata = shift;
+    
+    my $outfile = $sample_dir . "/rev_" . basename($datafile) . ".gz";
+    my $rc_cmd = $fx_rc_bin . " -Q 33 -i " . $datafile . " -z -o " . $outfile;
+    my $rc_qsub_cmd = get_qsub_cmd ($rc_cmd);
+    my $revdata = "rev" . $trimdata;
+    Assembly::Utils::set_check_record($frec, [$rval], $revdata, $outfile);
+    Assembly::Utils::set_check_record($frec, [$rval], "cmd", $rc_cmd);
+    Assembly::Utils::set_check_record($frec, [$rval], "qsub_cmd", $rc_qsub_cmd);
+    
+    print_verbose "Running command:\n" . $rc_qsub_cmd . "\n";
+    unless ($options->{testing} or -e $outfile) {
+        system($rc_qsub_cmd);
+    }
 }
 
 sub do_revcomp
@@ -74,28 +122,16 @@ sub do_revcomp
         my $r2data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "R2", $trimdata]);
         if ($r1data and $r2data) {
             my $sample_dir = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "sample_dir"]);
-            my $r1out = $sample_dir . "/rev_" . basename($r1data);
-            my $r2out = $sample_dir . "/rev_" . basename($r2data);
-            my $r1rev = "rev" . $trimdata;
-            my $r2rev = "rev" . $trimdata;
-            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc", "R1"], $r1rev, $r1out);
-            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc", "R2"], $r2rev, $r2out);
-            my $r1_fx_rc_cmd = $fx_rc_bin . " -Q 33 -i " . $r1data . " -o " . $r1out;
-            my $r2_fx_rc_cmd = $fx_rc_bin . " -Q 33 -i " . $r2data . " -o " . $r2out;
-            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc", "R1"], "cmd", $r1_fx_rc_cmd);
-            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc", "R2"], "cmd", $r1_fx_rc_cmd);
-            my $r1_qsub_cmd = get_qsub_cmd($r1_fx_rc_cmd);
-            my $r2_qsub_cmd = get_qsub_cmd($r2_fx_rc_cmd);
-            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc", "R1"], "cmd", $r1_qsub_cmd);
-            Assembly::Utils::set_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc", "R2"], "cmd", $r2_qsub_cmd);
-            
-            print_verbose "Running command:\n" . $r1_qsub_cmd . "\n";
-            if ($options->{run} and not -e $r1out) {
-                system($r1_qsub_cmd);
+            my $frec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc"]);
+            if ($r1data =~ /\.gz\s*$/) {
+                build_cmd_gz ($frec, "R1", $r1data, $sample_dir, $trimdata);
+            } else {
+                build_cmd_nogz ($frec, "R1", $r1data, $sample_dir, $trimdata);
             }
-            print_verbose "Running command:\n" . $r2_qsub_cmd . "\n";
-            if ($options->{run} and not -e $r2out) {
-                system($r2_qsub_cmd);
+            if ($r2data =~ /\.gz\s*$/) {
+                build_cmd_gz ($frec, "R2", $r2data, $sample_dir, $trimdata);
+            } else {
+                build_cmd_nogz ($frec, "R2", $r2data, $sample_dir, $trimdata);
             }
         }
     }
