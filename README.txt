@@ -160,6 +160,12 @@ Take an input 'estimated genome lengths' table and add this information to the r
 
 ./VelvetKRun.pl --verbose
 
+
+Before running VelvetCOmmands.pl:
+    - run qhost to determine available hosts / ones that are under very high load/mem usage
+    - modify Assembly/Qsub.pl 's array of slots accordingly - only target usable hosts.
+    - this step could likely be automated in future.
+
 ./VelvetCommands.pl --verbose
 
 ./VelvetStatsFull.pl --verbose

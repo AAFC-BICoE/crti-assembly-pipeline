@@ -1,10 +1,10 @@
 Species	Strain	PE	PER	MP	MP3	MP8	Trim/Raw	VK_Best_Kmer
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype						trim	87
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype						raw	93
-Synchytrium_endobioticum	2000_outbreak_pathotype_6						trim	81
-Synchytrium_endobioticum	2000_outbreak_pathotype_6						raw	89
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	trim	87
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	raw	93
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S001381					trim	49
 Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S001381					raw	49
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	trim	81
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	raw	89
 Globodera_pallida	A1_INRA_St-Malo_France						trim	77
 Globodera_pallida	A1_INRA_St-Malo_France						raw	83
 Globodera_pallida	A2_Cyprus_pathotype_Pa23						trim	65
@@ -19,16 +19,16 @@ Globodera_rostochiensis	unknown_strain2						trim	73
 Globodera_rostochiensis	unknown_strain2						raw	81
 Globodera_rostochiensis	SCRIR03_pathotype_Ro3						trim	79
 Globodera_rostochiensis	SCRIR03_pathotype_Ro3						raw	85
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1						trim	67
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1						raw	73
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	S001389			S001808		trim	67
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	S001389			S001808		raw	73
 Globodera_rostochiensis	unknown_strain1						trim	55
 Globodera_rostochiensis	unknown_strain1						raw	63
 Globodera_rostochiensis	SCRIR05_pathotype_Ro5						trim	63
 Globodera_rostochiensis	SCRIR05_pathotype_Ro5						raw	71
 Globodera_rostochiensis	Ro19_pathotype_Ro1						trim	77
 Globodera_rostochiensis	Ro19_pathotype_Ro1						raw	87
-Globodera_rostochiensis	QC_pathotype_Ro1						trim	75
-Globodera_rostochiensis	QC_pathotype_Ro1						raw	81
+Globodera_rostochiensis	QC_pathotype_Ro1	S0016FE			S001703	S00141B	trim	75
+Globodera_rostochiensis	QC_pathotype_Ro1	S0016FE			S001703	S00141B	raw	81
 Globodera_rostochiensis	unknown						trim	
 Globodera_rostochiensis	unknown						raw	
 Globodera_rostochiensis	Nfld_isolate						trim	57
@@ -47,12 +47,10 @@ Pantoea_stewartii	DOAB_230						trim	81
 Pantoea_stewartii	DOAB_230						raw	85
 Pantoea_stewartii	DOAB_021						trim	87
 Pantoea_stewartii	DOAB_021						raw	91
-Tilletia_walkeri	DAOM_236422						trim	7
-Tilletia_walkeri	DAOM_236422						raw	83
-Pectobacterium_wasabiae	Ecw1002						trim	83
-Pectobacterium_wasabiae	Ecw1002						raw	87
-Penicillium_verrucosum	KAS_4260						trim	85
-Penicillium_verrucosum	KAS_4260						raw	89
+Tilletia_walkeri	DAOM_236422	S000D01			S001418	S001713	trim	7
+Tilletia_walkeri	DAOM_236422	S000D01			S001418	S001713	raw	83
+Penicillium_verrucosum	KAS_4260	S00106E			S001715	S001714	trim	85
+Penicillium_verrucosum	KAS_4260	S00106E			S001715	S001714	raw	89
 Penicillium_verrucosum	KAS_4251						trim	69
 Penicillium_verrucosum	KAS_4251						raw	77
 Penicillium_verrucosum	DAOM_214801						trim	73
@@ -65,6 +63,8 @@ Penicillium_verrucosum	KAS_4370						trim	37
 Penicillium_verrucosum	KAS_4370						raw	69
 Penicillium_verrucosum	KAS_4382						trim	1
 Penicillium_verrucosum	KAS_4382						raw	1
+Pectobacterium_wasabiae	Ecw1002						trim	83
+Pectobacterium_wasabiae	Ecw1002						raw	87
 Arcobacter_lanthierii	AF_1581						trim	93
 Arcobacter_lanthierii	AF_1581						raw	99
 Arcobacter_lanthierii	AF_1430						trim	93
@@ -73,8 +73,8 @@ Puccinia_triticina	race_MFDS_RSA2117						trim	71
 Puccinia_triticina	race_MFDS_RSA2117						raw	77
 Puccinia_triticina	race_MBDS_RSA2119						trim	71
 Puccinia_triticina	race_MBDS_RSA2119						raw	77
-Tilletia_controversa	DAOM_236426						trim	73
-Tilletia_controversa	DAOM_236426						raw	91
+Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	trim	73
+Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	raw	91
 Puccinia_graminis	race_TMRTK_RSA2053						trim	71
 Puccinia_graminis	race_TMRTK_RSA2053						raw	75
 Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG						trim	47
@@ -93,22 +93,22 @@ Pantoea_ananatis	LMG_2665						trim	87
 Pantoea_ananatis	LMG_2665						raw	95
 Ditylenchus_destructor	unknown						trim	
 Ditylenchus_destructor	unknown						raw	
-Ditylenchus_destructor	Jiangsu_01						trim	73
-Ditylenchus_destructor	Jiangsu_01						raw	79
+Ditylenchus_destructor	Jiangsu_01	S00106F			S00171D	S00141C	trim	73
+Ditylenchus_destructor	Jiangsu_01	S00106F			S00171D	S00141C	raw	79
 Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl						trim	59
 Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl						raw	91
 Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2						trim	93
 Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2						raw	101
 Streptomyces_scabies	CG-1						trim	79
 Streptomyces_scabies	CG-1						raw	89
-Tilletia_caries	DAOM_238032						trim	87
-Tilletia_caries	DAOM_238032						raw	93
+Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	trim	87
+Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	raw	93
 Arcobacter_septicus	AF_1028						trim	
 Arcobacter_septicus	AF_1028						raw	
 Arcobacter_septicus	AF_1078						trim	
 Arcobacter_septicus	AF_1078						raw	
-Ditylenchus_dipsaci	Ontario_01						trim	79
-Ditylenchus_dipsaci	Ontario_01						raw	85
+Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	trim	79
+Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	raw	85
 Basidioascus_undulatus	unknown_strain						trim	53
 Basidioascus_undulatus	unknown_strain						raw	61
 Basidioascus_undulatus	unknown						trim	
@@ -117,5 +117,5 @@ Basidioascus_undulatus	DAOM_241956						trim	53
 Basidioascus_undulatus	DAOM_241956						raw	61
 Penicillium_thymicola	DAOM_180753						trim	69
 Penicillium_thymicola	DAOM_180753						raw	73
-Tilletia_indica	DAOM_236416						trim	93
-Tilletia_indica	DAOM_236416						raw	97
+Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	trim	93
+Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	raw	97

@@ -1,21 +1,14 @@
 Species	Strain	Genome Size	Trim/raw	Kmer	N50	Max Contig	Total Length	Reads Used	Trim 100 N50	Trim 100 Total	Trim 500 N50	Trim 500 Total
-Arcobacter_lanthierii	AF_1440	1700000	trim	81	338100	412284	2231797	9470727/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	83	338109	412492	2232302	9458892/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	85	338116	412494	2232309	9450088/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	87	381982	446437	2232300	9438521/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	89	485078	919460	2232402	9426805/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	91	1329211	1329211	2232457	9416617/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	93	319114	585076	2251898	9397857/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	95	381	7780	337558	1608443/9760754
-Arcobacter_lanthierii	AF_1440	1700000	trim	97				
-Arcobacter_lanthierii	AF_1440	1700000	trim	99				
-Arcobacter_lanthierii	AF_1440	1700000	trim	101				
-Arcobacter_lanthierii	AF_1440	1700000	raw	85	338107	412282	2231758	9462993/9760754
-Arcobacter_lanthierii	AF_1440	1700000	raw	87	337866	412486	2232140	9452088/9760754
-Arcobacter_lanthierii	AF_1440	1700000	raw	89	337868	412488	2232218	9441458/9760754
-Arcobacter_lanthierii	AF_1440	1700000	raw	91				
-Arcobacter_lanthierii	AF_1440	1700000	raw	93				
-Arcobacter_lanthierii	AF_1440	1700000	raw	95	1142781	1142781	2231582	9408418/9760754
-Arcobacter_lanthierii	AF_1440	1700000	raw	97	485787	920174	2233170	9392135/9760754
-Arcobacter_lanthierii	AF_1440	1700000	raw	99	22156	163468	2377667	9154978/9760754
-Arcobacter_lanthierii	AF_1440	1700000	raw	101				
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	25	1393	703647	232356333	69775441/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	27	1449	1062556	231000013	69767731/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	29	1478	1385250	228622917	69591489/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	31	1545	1524081	226245844	69467526/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	33	1614	955915	223539681	69361363/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	35	1781	941868	216333834	69025737/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	37	1934	712806	212597791	68861835/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	39	2206	1556345	208469622	68642503/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	41	2700	998218	203686952	68326429/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	43	22726	903882	144258124	65902665/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	45	27690	1114763	140709692	65647901/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	47	52461	881701	117353959	64178259/74440654
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	49	58356	929530	116901759	63962393/74440654

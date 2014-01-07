@@ -282,8 +282,7 @@ sub build_assembly_cmds
     for my $species (keys %$records) {
         my $spec_ref = $records->{$species}->{DNA};
         for my $strain (keys %$spec_ref) {
-			#for my $trimraw (qw(trim raw)) {
-			for my $trimraw (qw(raw)) {
+			for my $trimraw (qw(trim raw)) {
 				if ($options->{$trimraw}) {
                     my $assembly_dir = Assembly::Velvet::get_assembly_outdir($records, $species, $strain, $trimraw);
                     if ($assembly_dir) {
@@ -293,7 +292,7 @@ sub build_assembly_cmds
                             my ($velveth_cmd, $velvetg_cmd) = get_velvet_cmds($records, $species, $strain, $trimraw, $kmer, $total_coverage, $avg_readlen, $assembly_dir);
                             my $rec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "kmer", $kmer]);
                             if ($rec) {
-                                if ($velveth_cmd !~ /shortPaired2/ and $velvetg_cmd !~ /ins_length2/) {
+                                if ($velveth_cmd =~ /shortPaired2/ and $velvetg_cmd =~ /ins_length2/) {
                                     submit_cmds($vqs, $rec, $trimraw);
                                 }
                             }
