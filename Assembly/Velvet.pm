@@ -44,7 +44,7 @@ sub create_kmer_range
     my $use_velvetk = 1;
     my $vk_radius = 6;
     my $min_kmer = 21;
-    my $max_kmer = 51;
+    my $max_kmer = 57;
     my $kmer_range = [];
     if (0 and $use_velvetk and $vk_radius) {
         my $velvetk_best = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "velvet", $trimraw, "velvetk_best_kmer"]);
@@ -121,6 +121,7 @@ sub get_coverage_vars
     my $trdata = $trimraw . "data";
     my $read_total = 0;
     my $rl_sum = 0;
+    my $nr_sum = 0;
     my $rl_count = 0;
     for my $sample_type (qw(PE PER MP MP3 MP8)) {
         if ($sample_type =~ /MP/) {
@@ -132,6 +133,7 @@ sub get_coverage_vars
             if ($numreads =~ /\d+/ and $readlen =~ /\d+/) {
                 $read_total += ($numreads * $readlen);
                 $rl_sum += $readlen;
+                $nr_sum += $numreads;
                 $rl_count++;
             }
         }
@@ -139,7 +141,8 @@ sub get_coverage_vars
     
     my $avg_readlen = 0;
     if ($rl_count) {
-        $avg_readlen = $rl_sum/$rl_count;
+        #$avg_readlen = $rl_sum/$rl_count; # BUG!
+        $avg_readlen = $read_total / $nr_sum;
     }
     my $genome_length = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, "related_genome_length", "RG_Est_Genome_Length"]);
     my $total_coverage = 0;

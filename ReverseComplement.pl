@@ -117,17 +117,13 @@ sub do_revcomp
     my ($records, $species, $strain, $sample_type, $trimraw) = @_;
     print "Revcomp for species $species strain $strain sample type $sample_type trimraw $trimraw\n";
     if (Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type])) {
-        print "test1 passed\n";
         my $trimdata = $trimraw . "data";
         my $r1data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "R1", $trimdata]);
         my $r2data = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "R2", $trimdata]);
-        print "test2 passed\n";
         if ($r1data and $r2data) {
-            print "test3 Both r1 r2 data fiels exist\n";
             my $sample_dir = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "sample_dir"]);
             Assembly::Utils::set_check_record ($records, [$species, "DNA", $strain, $sample_type], "fastx_rc", {});
             my $frec = Assembly::Utils::get_check_record($records, [$species, "DNA", $strain, $sample_type, "fastx_rc"]);
-            print "test4 got sample dir and frec\n";
             if ($r1data =~ /\.gz\s*$/) {
                 build_cmd_gz ($frec, "R1", $r1data, $sample_dir, $trimdata);
             } else {

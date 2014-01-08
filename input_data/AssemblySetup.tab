@@ -1,6 +1,6 @@
 Species	Strain	PE	PER	MP	MP3	MP8
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	S001707			S00180B	S001807	
-Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S001381					
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	S001381			S00171C					
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	S0017B7			S001809	S00180A	
 Globodera_pallida	A1_INRA_St-Malo_France	S00137F					
 Globodera_pallida	A2_Cyprus_pathotype_Pa23	S00137C					
@@ -34,7 +34,7 @@ Arcobacter_lanthierii	AF_1581	S0016FC
 Arcobacter_lanthierii	AF_1430	S00107D					
 Puccinia_triticina	race_MFDS_RSA2117	S001380					
 Puccinia_triticina	race_MBDS_RSA2119	S00137D					
-Tilletia_controversa	DAOM_236426	S000D05	S0017B1		S001419	S001712	
+Tilletia_controversa	DAOM_236426	S0017B1			S001419	S001712	
 Puccinia_graminis	race_TMRTK_RSA2053	S001376					
 Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	S001379					
 Puccinia_graminis	race_QTHJT_RSA2051	S001378					
@@ -46,11 +46,11 @@ Ditylenchus_destructor	Jiangsu_01	S00106F			S00171D	S00141C
 Pantoea_ananatis	LMG_2665	S0016FD					
 Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	S0017B2					
 Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	S000CFF	S00138B				
-Tilletia_caries	DAOM_238032	S000D03	S001387		S001417	S001711	
+Tilletia_caries	DAOM_238032	S001387			S001417	S001711	
 Streptomyces_scabies	CG-1	S000D02					
 Arcobacter_septicus	AF_1028	S0017B3					
 Arcobacter_septicus	AF_1078	S0017B4					
 Ditylenchus_dipsaci	Ontario_01	S001700			S001705	S001728	
 Basidioascus_undulatus	DAOM_241956	S00106D					
 Penicillium_thymicola	DAOM_180753	S00106B					
-Tilletia_indica	DAOM_236416	S000D04	S00138C		S001416	S001710	
+Tilletia_indica	DAOM_236416	S00138C			S001416	S001710	
