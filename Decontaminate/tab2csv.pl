@@ -12,7 +12,7 @@ unless ($tabfile and $csvfile) {
     die "Usage: $0 -t <tab file> -c <csvfile>\n";
 }
 
-my $csv = Text::CSV->new ({ binary => 1 });
+my $csv = Text::CSV->new ({ binary => 1, eol => "\n" });
 my $tsv = Text::CSV->new ({ binary => 1, sep_char => "\t", eol => "\n" });
 
 open (my $infh,  "<:encoding(utf8)", $tabfile) or die "Error: coulnd't open tab file $tabfile\n";
