@@ -15,8 +15,8 @@ unless ($tabfile and $csvfile) {
 my $csv = Text::CSV->new ({ binary => 1 });
 my $tsv = Text::CSV->new ({ binary => 1, sep_char => "\t", eol => "\n" });
 
-open (my $infh,  "<:encoding(utf8)", $csvfile) or die "Error: couldn't open CSV file $csvfile\n";
-open (my $outfh, ">:encoding(utf8)", $tabfile) or die "Error: coulnd't open tab file $tabfile\n";
+open (my $infh,  "<:encoding(utf8)", $tabfile) or die "Error: coulnd't open tab file $tabfile\n";
+open (my $outfh, ">:encoding(utf8)", $csvfile) or die "Error: couldn't open CSV file $csvfile\n";
 
 while (my $row = $tsv->getline ($infh)) {
     $csv->print ($outfh, $row);
