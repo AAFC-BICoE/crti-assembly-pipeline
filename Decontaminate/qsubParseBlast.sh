@@ -14,5 +14,5 @@ parsed_blast_file=$blast_out_file.parsed
 sorted_blast_file=$parsed_blast_file.sorted
 
 cat $blast_working_dir/tmp/*-result.txt > $blast_out_file
-cat $genome_file.blast_out.txt | ./parseBlastOutput.pl -s -f > $parsed_blast_file
+cat $genome_file.blast_out.txt | ./parseBlastOutput.pl -s -f -p > $parsed_blast_file
 cat $parsed_blast_file | cut -f 4,14 | sort -k 2 -t$'\t' -nr > $sorted_blast_file
