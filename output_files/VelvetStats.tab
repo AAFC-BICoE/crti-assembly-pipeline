@@ -1,113 +1,121 @@
 Species	Strain	Trim/raw	VelvetK	Best Kmer	Best N50	Max Contig	Total Length	Reads Used	Missing Kmers
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	trim	87						75,77,79,81,83,85,87,89,91,93,95,97,99
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	raw	93						81,83,85,87,89,91,93,95,97,99,101
-Synchytrium_endobioticum	mixed_strains_from_Newfoundland	trim	37	37	113	369	12127	209403/208586080	25,27,31
-Synchytrium_endobioticum	mixed_strains_from_Newfoundland	raw	37	37	113	369	12127	209403/208586080	25,27,29,31
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	trim	81						69,71,73,75,77,79,81,83,85,87,89,91,93
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	raw	89						77,79,81,83,85,87,89,91,93,95,97,99,101
-Globodera_pallida	A2_Cyprus_pathotype_Pa23	trim	55	55	2526	95618	137572963	38661751/86103428	65
-Globodera_pallida	A2_Cyprus_pathotype_Pa23	raw	61	61	3078	145385	124069616	37951543/86103428	
-Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	trim	67	61	7568	92107	127777642	105505539/145228316	
-Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	raw	75	69	7887	103155	133610692	104847561/145228316	
-Penicillium_nordicum	DAOM_185683	trim	47	47	88976	298940	31338152	21417439/21908982	
-Penicillium_nordicum	DAOM_185683	raw	53	51	97199	533250	31414519	21461651/21908982	
-Globodera_rostochiensis	SCRIR04_pathotype_Ro4	trim	47	47	5695	239828	133484167	35981077/66037510	43
-Globodera_rostochiensis	SCRIR04_pathotype_Ro4	raw	53	51	6610	387006	141330752	36859383/66037510	
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	trim	87						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	raw	93						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	trim	49						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Synchytrium_endobioticum	mixed_strains_from_Newfoundland	raw	49						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	trim	81						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	raw	89						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Globodera_pallida	A2_Cyprus_pathotype_Pa23	trim	65						
+Globodera_pallida	A2_Cyprus_pathotype_Pa23	raw	73						
+Globodera_pallida	A1_INRA_St-Malo_France	trim	77						
+Globodera_pallida	A1_INRA_St-Malo_France	raw	83						
+Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	trim	79						
+Globodera_pallida	B1_INRA_LeRheu_France_pathotype_Pa23	raw	85						
+Penicillium_nordicum	DAOM_185683	trim	57						
+Penicillium_nordicum	DAOM_185683	raw	65						
+Globodera_rostochiensis	SCRIR04_pathotype_Ro4	trim	55						
+Globodera_rostochiensis	SCRIR04_pathotype_Ro4	raw	65						
 Globodera_rostochiensis	unknown_strain2	trim	73						
 Globodera_rostochiensis	unknown_strain2	raw	81						
-Globodera_rostochiensis	SCRIR03_pathotype_Ro3	trim	69	69	10370	1541987	134707928	71246750/141886676	67,75
-Globodera_rostochiensis	SCRIR03_pathotype_Ro3	raw	73	67	10673	559746	127788553	71920170/141886676	61,63,69,83
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	trim	67						55,57,59,61,63,65,67,69,71,73,75,77,79
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	raw	73						61,63,65,67,69,71,73,75,77,79,81,83,85
+Globodera_rostochiensis	SCRIR03_pathotype_Ro3	trim	79						
+Globodera_rostochiensis	SCRIR03_pathotype_Ro3	raw	85						
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	trim	67						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	raw	73						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
 Globodera_rostochiensis	unknown_strain1	trim	55						
 Globodera_rostochiensis	unknown_strain1	raw	63						
-Globodera_rostochiensis	SCRIR05_pathotype_Ro5	trim	51	51	8137	870352	131294716	45816507/81408544	59
-Globodera_rostochiensis	SCRIR05_pathotype_Ro5	raw	59	57	8994	850542	135619377	45904728/81408544	
-Globodera_rostochiensis	Ro19_pathotype_Ro1	trim	73	73	9409	102901	78499324	100964042/157631698	
-Globodera_rostochiensis	Ro19_pathotype_Ro1	raw	81	81	9816	108954	77909047	99287656/157631698	
-Globodera_rostochiensis	QC_pathotype_Ro1	trim	75						63,65,67,69,71,73,75,77,79,81,83,85,87
-Globodera_rostochiensis	QC_pathotype_Ro1	raw	75	75	6899	117852	87234821	43221443/539226192	63,65,67,73,77
-Globodera_rostochiensis	unknown	trim	43	33	2421	24821	70119165	51734544/65078476	
-Globodera_rostochiensis	unknown	raw	51	39	2709	26887	70933450	51503897/65078476	43
-Globodera_rostochiensis	Nfld_isolate	trim	45	43	6785	61657	79058899	50619433/66682944	
-Globodera_rostochiensis	Nfld_isolate	raw	53	51	7369	76171	80090592	49883980/66682944	
-Arcobacter_cibarius	LMG_21996	trim	89	89	140289	481290	2131777	28214804/30303610	93,95,97,99,101
-Arcobacter_cibarius	LMG_21996	raw	99	99	147142	282995	2134463	28030130/30303610	101
-Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1001	trim	83	83	545303	1240519	4763734	19086130/20993100	93,95
-Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1001	raw	95	95	1163235	1523994	4764478	18896332/20993100	101
-Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1033	trim	93	93	136895	378077	4703084	36269494/40195334	97,99,101
-Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1033	raw	97	97	137123	405678	4701524	36264471/40195334	101
-Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1009	trim	85	85	369120	773691	4756221	12923776/14617664	93,95,97
-Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1009	raw	95	95	341004	760010	4762132	12843360/14617664	101
-Pantoea_stewartii	subsp_Nov_S301	trim	73	67	232818	529158	4438400	8892225/11384236	
-Pantoea_stewartii	subsp_Nov_S301	raw	79	71	349695	620669	4450413	8824468/11384236	77
-Pantoea_stewartii	DOAB_230	trim	77	77	135999	334447	4562830	6124614/7567952	
-Pantoea_stewartii	DOAB_230	raw	83	83	137103	336151	4502976	5965324/7567952	
-Pantoea_stewartii	DOAB_021	trim	89	89	47822	149435	5027412	10327770/11768700	97,99,101
-Pantoea_stewartii	DOAB_021	raw	93	93	46117	149160	5026362	10275973/11768700	101
-Tilletia_walkeri	DAOM_236422	trim	7						
-Tilletia_walkeri	DAOM_236422	raw	83						71,73,75,77,79,81,83,85,87,89,91,93,95
-Penicillium_verrucosum	KAS_4260	trim	85						73,75,77,79,81,83,85,87,89,91,93,95,97
-Penicillium_verrucosum	KAS_4260	raw	89						77,79,81,83,85,87,89,91,93,95,97,99,101
-Penicillium_verrucosum	KAS_4251	trim	57	51	68807	286331	33976515	29689235/32170356	
-Penicillium_verrucosum	KAS_4251	raw	65	57	75708	326224	34108018	29411491/32170356	
-Penicillium_verrucosum	DAOM_214801	trim	65	65	181039	550258	32170936	35517809/37344378	
-Penicillium_verrucosum	DAOM_214801	raw	71	71	190299	559372	32172945	35460229/37344378	
-Penicillium_verrucosum	DAOM_211566	trim	57	55	65651	287802	31992221	27212047/29842800	
-Penicillium_verrucosum	DAOM_211566	raw	63	59	72043	329226	32042682	27107244/29842800	51
+Globodera_rostochiensis	SCRIR05_pathotype_Ro5	trim	63						
+Globodera_rostochiensis	SCRIR05_pathotype_Ro5	raw	71						
+Globodera_rostochiensis	Ro19_pathotype_Ro1	trim	77						
+Globodera_rostochiensis	Ro19_pathotype_Ro1	raw	87						
+Globodera_rostochiensis	QC_pathotype_Ro1	trim	75						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Globodera_rostochiensis	QC_pathotype_Ro1	raw	81						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Globodera_rostochiensis	unknown	trim							
+Globodera_rostochiensis	unknown	raw							
+Globodera_rostochiensis	Nfld_isolate	trim	57						
+Globodera_rostochiensis	Nfld_isolate	raw	65						
+Arcobacter_cibarius	LMG_21996	trim	91						
+Arcobacter_cibarius	LMG_21996	raw	101						
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1001	trim	87						
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1001	raw	97						
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1033	trim	93						
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1033	raw	99						
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1009	trim	85						
+Pectobacterium_carotovorum	subsp_brasiliensis_isolate_1009	raw	93						
+Pantoea_stewartii	subsp_Nov_S301	trim	85						
+Pantoea_stewartii	subsp_Nov_S301	raw	91						
+Pantoea_stewartii	DOAB_230	trim	81						
+Pantoea_stewartii	DOAB_230	raw	85						
+Pantoea_stewartii	DOAB_021	trim	87						
+Pantoea_stewartii	DOAB_021	raw	91						
+Tilletia_walkeri	DAOM_236422	trim	7						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Tilletia_walkeri	DAOM_236422	raw	83						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Penicillium_verrucosum	KAS_4260	trim	85						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Penicillium_verrucosum	KAS_4260	raw	89						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Penicillium_verrucosum	KAS_4251	trim	69						
+Penicillium_verrucosum	KAS_4251	raw	77						
+Penicillium_verrucosum	DAOM_214801	trim	73						
+Penicillium_verrucosum	DAOM_214801	raw	81						
+Penicillium_verrucosum	DAOM_211566	trim	69						
+Penicillium_verrucosum	DAOM_211566	raw	75						
 Penicillium_verrucosum	KAS_4382	trim	1						
 Penicillium_verrucosum	KAS_4382	raw	1						
-Penicillium_verrucosum	KAS_4370	trim	49	61	25365	168731	30503611	0/25056028	
-Penicillium_verrucosum	KAS_4370	raw	57	51	89451	427820	30742336	24408855/25056028	
-Penicillium_verrucosum	DAOM_213195	trim	41	37	100244	523286	31806342	18413386/18913960	
-Penicillium_verrucosum	DAOM_213195	raw	47	43	115249	566737	31950810	18450561/18913960	
-Pectobacterium_wasabiae	Ecw1002	trim	77	77	732657	1011742	4954610	7967581/8682640	69
-Pectobacterium_wasabiae	Ecw1002	raw	91	91	1116388	1430342	4959116	7795755/8682640	101
-Arcobacter_lanthierii	AF_1430	trim	93	93	508545	637024	2272217	12586481/13318554	95,97,99,101
-Arcobacter_lanthierii	AF_1430	raw	95	95	483286	919334	2233509	12585969/13318554	101
-Puccinia_triticina	race_MFDS_RSA2117	trim	67	67	9038	83155	99840755	89575318/108292916	
-Puccinia_triticina	race_MFDS_RSA2117	raw	81	81	9915	109427	103742880	87829907/108292916	
-Puccinia_triticina	race_MBDS_RSA2119	trim	71	71	8489	79286	100934648	93950832/113874608	77
-Puccinia_triticina	race_MBDS_RSA2119	raw	77	77	9251	86884	101802672	93361877/113874608	
-Tilletia_controversa	DAOM_236426	trim	73						61,63,65,67,69,71,73,75,77,79,81,83,85
-Tilletia_controversa	DAOM_236426	raw	91						79,81,83,85,87,89,91,93,95,97,99,101
-Puccinia_graminis	race_TMRTK_RSA2053	trim	59	49	9281	108696	108089047	63743106/73645790	
-Puccinia_graminis	race_TMRTK_RSA2053	raw	63	53	9655	86171	111808720	64132388/73645790	51
-Puccinia_graminis	race_QTHJT_RSA2051	trim	35	29	7441	68286	68716951	34517517/39855618	39
-Puccinia_graminis	race_QTHJT_RSA2051	raw	39	33	8027	83680	71184333	34656233/39855618	35
-Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	trim	43	33	3716	80676	98214912	40476280/47829408	
-Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	raw	49	37	3887	69723	101772574	40388399/47829408	
-Puccinia_graminis	race_RHTSK_RSA2052	trim	43	35	7690	87989	96251398	37902257/43869176	33,39,41
-Puccinia_graminis	race_RHTSK_RSA2052	raw	45	45	5008	61123	104750661	37513217/43869176	33,35,37,39,41,43
-Puccinia_graminis	CF12WGA3_100pg_DNA_1PEG	trim	51	43	5863	50894	92131449	49216617/62422584	39,41,49
-Puccinia_graminis	CF12WGA3_100pg_DNA_1PEG	raw	57	45	6277	60061	95260088	49510628/62422584	
-Puccinia_graminis	CF12WGA2_10ng_DNA_0PEG	trim	35	27	3408	67943	87108252	36090965/41706674	
-Puccinia_graminis	CF12WGA2_10ng_DNA_0PEG	raw	43	37	3411	53108	90912820	35264530/41706674	35,39,41
+Penicillium_verrucosum	KAS_4370	trim	37						
+Penicillium_verrucosum	KAS_4370	raw	69						
+Penicillium_verrucosum	DAOM_213195	trim	53						
+Penicillium_verrucosum	DAOM_213195	raw	59						
+Pectobacterium_wasabiae	Ecw1002	trim	83						
+Pectobacterium_wasabiae	Ecw1002	raw	87						
+Arcobacter_lanthierii	AF_1581	trim	93						
+Arcobacter_lanthierii	AF_1581	raw	99						
+Arcobacter_lanthierii	AF_1430	trim	93						
+Arcobacter_lanthierii	AF_1430	raw	99						
+Puccinia_triticina	race_MFDS_RSA2117	trim	71						
+Puccinia_triticina	race_MFDS_RSA2117	raw	77						
+Puccinia_triticina	race_MBDS_RSA2119	trim	71						
+Puccinia_triticina	race_MBDS_RSA2119	raw	77						
+Tilletia_controversa	DAOM_236426	trim	73						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Tilletia_controversa	DAOM_236426	raw	91						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Puccinia_graminis	race_TMRTK_RSA2053	trim	71						
+Puccinia_graminis	race_TMRTK_RSA2053	raw	75						
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	trim	47						
+Puccinia_graminis	CF12WGA4_10ng_DNA_1PEG	raw	55						
+Puccinia_graminis	race_QTHJT_RSA2051	trim	45						
+Puccinia_graminis	race_QTHJT_RSA2051	raw	51						
+Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	trim	55						
+Puccinia_graminis	CF12WGA1_100pg_DNA_0PEG	raw	61						
+Puccinia_graminis	race_RHTSK_RSA2052	trim	55						
+Puccinia_graminis	race_RHTSK_RSA2052	raw	57						
+Puccinia_graminis	CF12WGA3_100pg_DNA_1PEG	trim	63						
+Puccinia_graminis	CF12WGA3_100pg_DNA_1PEG	raw	69						
+Puccinia_graminis	CF12WGA2_10ng_DNA_0PEG	trim	47						
+Puccinia_graminis	CF12WGA2_10ng_DNA_0PEG	raw	55						
 Ditylenchus_destructor	unknown	trim							
 Ditylenchus_destructor	unknown	raw							
-Ditylenchus_destructor	Jiangsu_01	trim	73						61,63,65,67,69,71,73,75,77,79,81,83,85
-Ditylenchus_destructor	Jiangsu_01	raw	79						67,69,71,73,75,77,79,81,83,85,87,89,91
-Pantoea_ananatis	LMG_2665	trim	85	85	471138	1158119	4951989	16364673/18809898	73,93,95,97
-Pantoea_ananatis	LMG_2665	raw	91	91	355346	832493	4948885	16267717/18809898	79,81,101
-Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	trim	49	49	7356	40917	4834282	12878289/13405138	37,39,41,45
-Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	raw	79	69	6980	50361	4925062	12607544/13405138	67,77
-Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	trim	93						81,83,85,87,89,91,93,95,97,99,101
-Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	raw	89	89	47635	155109	5228177	67192844/76801326	77,79,81,83,85,87,93,95,101
-Tilletia_caries	DAOM_238032	trim	87						75,77,79,81,83,85,87,89,91,93,95,97,99
-Tilletia_caries	DAOM_238032	raw	83	83	19058	107779	31795738	50041532/688480430	71,73,75,77,79
-Streptomyces_scabies	CG-1	trim	67	55	2434	21983	7040457	16483267/18409050	
-Streptomyces_scabies	CG-1	raw	77	65	2580	23988	7075051	16261126/18409050	
-Arcobacter_septicus	AF_1028	trim	93	93	235821	377414	2263439	13133139/13899982	97,99,101
-Arcobacter_septicus	AF_1028	raw	97	97	303724	655730	2262802	13120542/13899982	101
-Arcobacter_septicus	AF_1078	trim	91	91	297302	422786	2382035	13124490/13751454	95,97,99,101
-Arcobacter_septicus	AF_1078	raw	93	93	297308	336142	2381781	13133564/13751454	101
-Ditylenchus_dipsaci	Ontario_01	trim	79						67,69,71,73,75,77,79,81,83,85,87,89,91
-Ditylenchus_dipsaci	Ontario_01	raw	85						73,75,77,79,81,83,85,87,89,91,93,95,97
+Ditylenchus_destructor	Jiangsu_01	trim	73						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Ditylenchus_destructor	Jiangsu_01	raw	79						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Pantoea_ananatis	LMG_2665	trim	87						
+Pantoea_ananatis	LMG_2665	raw	95						
+Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	trim	59						
+Ralstonia_solanacearum	race_3_biovar_2_906_IIB-1_with_low_cold-Cl	raw	91						
+Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	trim	93						
+Ralstonia_solanacearum	NCPPB_909_race_3_biovar_2	raw	101						
+Tilletia_caries	DAOM_238032	trim	87						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Tilletia_caries	DAOM_238032	raw	93						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Streptomyces_scabies	CG-1	trim	79						
+Streptomyces_scabies	CG-1	raw	89						
+Arcobacter_septicus	AF_1028	trim							
+Arcobacter_septicus	AF_1028	raw							
+Arcobacter_septicus	AF_1078	trim							
+Arcobacter_septicus	AF_1078	raw							
+Ditylenchus_dipsaci	Ontario_01	trim	79						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Ditylenchus_dipsaci	Ontario_01	raw	85						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
 Basidioascus_undulatus	unknown_strain	trim	53						
 Basidioascus_undulatus	unknown_strain	raw	61						
-Basidioascus_undulatus	unknown	trim	43	43	7594	48921	32789120	10333629/12168580	33,35,37,39
-Basidioascus_undulatus	unknown	raw	51	51	8712	56791	33095175	10230213/12168580	39,41,43,45,47
-Tilletia_indica	DAOM_236416	trim	93						81,83,85,87,89,91,93,95,97,99,101
-Tilletia_indica	DAOM_236416	raw	97						85,87,89,91,93,95,97,99,101
-Penicillium_thymicola	DAOM_180753	trim	57	53	48600	260944	35411654	25994102/28221590	45,49,51
-Penicillium_thymicola	DAOM_180753	raw	61	57	52714	307876	35530149	25804255/28221590	51
+Basidioascus_undulatus	unknown	trim							
+Basidioascus_undulatus	unknown	raw							
+Basidioascus_undulatus	DAOM_241956	trim	53						
+Basidioascus_undulatus	DAOM_241956	raw	61						
+Tilletia_indica	DAOM_236416	trim	93						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Tilletia_indica	DAOM_236416	raw	97						21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57
+Penicillium_thymicola	DAOM_180753	trim	69						
+Penicillium_thymicola	DAOM_180753	raw	73						

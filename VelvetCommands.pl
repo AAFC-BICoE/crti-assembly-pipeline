@@ -17,13 +17,14 @@ use Assembly::Qsub;
 
 my $options = {};
 my $velvet_bin_dir = "/opt/bio/velvet";
-my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
+#my $vh_outfiles = [qw(CnyUnifiedSeq CnyUnifiedSeq.names Log Roadmaps)];
 #my $vg_outfiles = [qw(Graph2 LastGraph PreGraph stats.txt contigs.fa)];
 # Modify the above - we plan on deleting all but Log, CnyUnifiedSeq, Graph2, PreGraph, contigs.fa
 # in order to save space. Don't want the script to re-run where we've deleted files.
 #my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
 #my $vg_outfiles = [qw(Graph2 PreGraph contigs.fa)];
 #my $vh_outfiles = [qw(Log CnyUnifiedSeq)];
+my $vh_outfiles = ["Log"];
 my $vg_outfiles = [qw(contigs.fa)]; # reduced files listed here - using '-very_clean yes' option now.
 
 # @ kbins is only used by get_kmer_bin function below.
@@ -258,11 +259,13 @@ sub submit_cmds
     my $vg_files_exist = outfiles_exist($kdir, $vg_outfiles);
 
     if ($vh_files_exist and !$vg_files_exist) {
+        print_verbose ("Found velveth output but not velvetg output\n");
         my $sub_cmds = $vqs->submit_vg($vh_cmd, $trimraw);
         my ($vg_qsub_cmd, $vg_jobid) = @$sub_cmds;
         Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_cmd", $vg_qsub_cmd);
         Assembly::Utils::set_check_record($rec, [], "velvetg_qsub_jobid", $vg_jobid);
     } elsif (!$vh_files_exist) {
+        print "No files exist!\n";
         my $sub_cmds = $vqs->submit_vhg($vh_cmd, $vg_cmd, $trimraw);
         my ($vh_qsub_cmd, $vh_jobid, $vg_qsub_cmd, $vg_jobid) = @$sub_cmds;
         Assembly::Utils::set_check_record($rec, [], "velveth_qsub_cmd", $vh_qsub_cmd);
@@ -273,7 +276,6 @@ sub submit_cmds
         print_verbose "Not running for this kmer - found valid velvetg output files\n";
     }
 }
-        
 
 sub build_assembly_cmds
 {
