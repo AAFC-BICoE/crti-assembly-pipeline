@@ -4,6 +4,7 @@ use warnings;
 use Getopt::Long;
 use Text::CSV;
 use Bio::DB::Taxonomy;
+use File::Basename;
 
 # Take parsed blast output file, line by line
 # Get the species name
@@ -26,11 +27,43 @@ $tsv->column_names(@parsed_blast_headers);
 my $parsed_blast = '';
 my $taxa_tsv = '';
 my $taxa_csv = '';
-my $target_taxon = '';
+my $target_species = '';
+my $species_abbr_file = '';
+my $species_abbr_svn = "http://biodiversity/svn/source/AssemblyPipeline/input_data/SpeciesAbbreviations.tab";
 GetOptions ('parsed_blast|p=s' => \$parsed_blast,
             'taxa_csv|c=s' => \$taxa_csv,
-            'target_taxon|t=s' => \$target_taxon,);
+            'target_species|s=s' => \$target_species,
+            'species_abbr_file=s' => \$species_abbr_file);
 $parsed_blast and $taxa_csv or die "Usage: $0 -p <parsed blast file> -c <taxa csv file>\n";
+
+sub get_target_species
+{
+    if (!$target_species and !$species_abbr_file) {
+        $species_abbr_file = basename ($species_abbr_svn);
+        unless (-e $species_abbr_file) {
+            system("svn export $species_abbr_svn");
+        }
+    }
+    my $species = '';
+    if (-e $species_abbr_file) {
+        my $abbr = '';
+        if ($parsed_blast =~ /^([A-Z][a-z]{1,2})_/) {
+            $abbr = $1;
+        }
+        open (FIN, '<', $species_abbr_file) or die "Error: couldn't open species abbr file $species_abbr_file\n";
+        while (my $line = <FIN>) {
+            chomp $line;
+            my @fields = split (/\t/, $line);
+            if (scalar @fields == 2) {
+                my ($a, $s) = @fields;
+                if ($a eq $abbr) {
+                    $species = $s;
+                }
+            }
+        }
+    }
+    return $species;
+}
 
 sub create_taxonomy_object
 {
@@ -111,15 +144,24 @@ sub calc_target_distance
     return $dist;
 }
 
+sub get_target_ranks
+{
+    my $dbh = shift;
+    if (!$target_species) {
+        $target_species = get_target_species;
+    }
+    my $target_ranks = [];
+    if ($target_species) {
+        $target_ranks = get_taxon_rank ($dbh, $target_species);
+    }
+    return $target_ranks;
+}
 
 open (my $fpb, '<:encoding(utf8)', $parsed_blast) or die "Error: couldn't open file $parsed_blast\n";
 open (my $ftax, '>:encoding(utf8)', $taxa_csv) or die "Error: couldn't open file $taxa_csv\n";
 my $dbh = create_taxonomy_object;
 
-my $target_ranks = [];
-if ($target_taxon) {
-    $target_ranks = get_taxon_rank ($dbh, $target_taxon);
-}
+my $target_ranks = get_target_ranks ($dbh);;
 
 $csv->print($ftax, \@output_headers);
 #while (my $row = $tsv->getline_hr($fpb)) {
@@ -136,7 +178,7 @@ while (my $line = <$fpb>) {
             my $species_name = join(' ', @words[0..1]); # Get first two words as species name
             $ranks_found = get_taxon_rank ($dbh, $species_name);
             
-            if ($target_taxon) {
+            if (scalar @$target_ranks > 0) {
                 $target_distance = calc_target_distance ($target_ranks, $ranks_found);
             }
         }
