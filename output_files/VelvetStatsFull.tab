@@ -7,17 +7,17 @@ Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	29
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	31				
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	33				
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	35				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	37				
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	37	16126	359422	500586058	473495738/813107610
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	39				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	41				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	43				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	45				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	47				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	49				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	51				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	53				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	55				
-Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	57				
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	41	13150	391587	449780659	442783801/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	43	11146	415835	464658213	429559397/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	45	11146	314734	327962600	435299246/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	47	514	380939	52441108	65909948/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	49	662	402942	48490032	65603742/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	51	974	280431	44974072	65276902/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	53	5658	280793	30526473	64407677/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	55	11507	310280	27082062	64096602/813107610
+Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	trim	57	11891	504679	27006067	63854932/813107610
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	raw	21				
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	raw	23				
 Synchytrium_endobioticum	2012_PEI_outbreak_unknown_pathotype	25000000	raw	25				
@@ -78,22 +78,22 @@ Synchytrium_endobioticum	mixed_strains_from_Newfoundland	25000000	raw	57
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	21				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	23				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	25				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	27				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	27	256	254803	457802125	502069762/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	29				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	31				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	33				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	35				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	37				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	37	276	64854	258419016	456220925/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	39				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	41				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	43				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	41	242	44060	56758617	130631522/839197026
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	43	297	48809	170344181	207697467/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	45				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	47				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	47	322	77994	51483610	75099273/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	49				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	51				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	53				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	51	180	82892	59950683	7890745/839197026
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	53	185	88633	18108355	5281528/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	55				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	57				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	trim	57	289	98182	24763468	5404170/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	21				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	23				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	25				
@@ -101,7 +101,7 @@ Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	27
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	29				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	31				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	33				
-Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	35				
+Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	35	171	61961	121914718	158744451/839197026
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	37				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	39				
 Synchytrium_endobioticum	2000_outbreak_pathotype_6	25000000	raw	41				
@@ -123,15 +123,15 @@ Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	33
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	35				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	37				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	39				
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	41				
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	43				
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	41	102429	1085435	115965577	268321514/454894736
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	43	103644	783503	106061386	266074898/454894736
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	45				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	47				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	49				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	51				
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	53				
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	55				
-Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	57				
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	53	9554	84849	77854564	59326483/454894736
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	55	9867	76838	77345091	58272855/454894736
+Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	trim	57	9938	76558	76612310	57897173/454894736
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	raw	21				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	raw	23				
 Globodera_rostochiensis	Isolate_Mar149_pathotype_Ro1	100000000	raw	25				
@@ -159,17 +159,17 @@ Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	29
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	31				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	33				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	35				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	37				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	39				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	41				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	43				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	45				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	47				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	49				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	51				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	53				
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	37	12843	382789	269912506	127712680/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	39	3193	464550	564911357	143849600/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	41	3214	482477	483874936	137305904/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	43	3137	353707	380433587	115606146/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	45	3069	450795	281993077	102521554/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	47	656	835768	197856667	63086823/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	49	3954	1006204	137324375	49291528/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	51	8175	1247536	100804383	47093999/539226192
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	53	9012	538651	92716338	46939267/539226192
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	55				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	57				
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	trim	57	9212	653662	91801678	45865720/539226192
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	21				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	23				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	25				
@@ -177,7 +177,7 @@ Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	27
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	29				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	31				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	33				
-Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	35				
+Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	35	8103	804557	439033607	145756872/539226192
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	37				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	39				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	41				
@@ -189,25 +189,25 @@ Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	51
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	53				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	55				
 Globodera_rostochiensis	QC_pathotype_Ro1	100000000	raw	57				
-Tilletia_walkeri	DAOM_236422	20000000	trim	21				
-Tilletia_walkeri	DAOM_236422	20000000	trim	23				
-Tilletia_walkeri	DAOM_236422	20000000	trim	25				
-Tilletia_walkeri	DAOM_236422	20000000	trim	27				
-Tilletia_walkeri	DAOM_236422	20000000	trim	29				
-Tilletia_walkeri	DAOM_236422	20000000	trim	31				
-Tilletia_walkeri	DAOM_236422	20000000	trim	33				
-Tilletia_walkeri	DAOM_236422	20000000	trim	35				
-Tilletia_walkeri	DAOM_236422	20000000	trim	37				
-Tilletia_walkeri	DAOM_236422	20000000	trim	39				
-Tilletia_walkeri	DAOM_236422	20000000	trim	41				
+Tilletia_walkeri	DAOM_236422	20000000	trim	21	112	14773	31249076	502945407/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	23	2997	22653	24972149	539857665/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	25	4693	50709	24527438	523973927/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	27	5417	33695	24217785	512068839/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	29	5461	39043	24008035	500280271/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	31	5427	37070	23895934	494117144/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	33	5692	36992	23868491	485589103/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	35	6353	53251	23909739	475328921/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	37	7310	53253	23971979	469564371/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	39	8874	53263	24148803	463909337/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	41	11980	62256	25487820	460999716/594182206
 Tilletia_walkeri	DAOM_236422	20000000	trim	43				
-Tilletia_walkeri	DAOM_236422	20000000	trim	45				
-Tilletia_walkeri	DAOM_236422	20000000	trim	47				
-Tilletia_walkeri	DAOM_236422	20000000	trim	49				
+Tilletia_walkeri	DAOM_236422	20000000	trim	45	53596	322539	24844276	125359766/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	47	57302	361218	24618394	24901985/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	49	61849	379093	24620307	24818342/594182206
 Tilletia_walkeri	DAOM_236422	20000000	trim	51				
-Tilletia_walkeri	DAOM_236422	20000000	trim	53				
-Tilletia_walkeri	DAOM_236422	20000000	trim	55				
-Tilletia_walkeri	DAOM_236422	20000000	trim	57				
+Tilletia_walkeri	DAOM_236422	20000000	trim	53	66903	458018	24653243	24610191/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	55	68619	368351	24675886	24809263/594182206
+Tilletia_walkeri	DAOM_236422	20000000	trim	57	68555	476359	24689255	24719554/594182206
 Tilletia_walkeri	DAOM_236422	20000000	raw	21				
 Tilletia_walkeri	DAOM_236422	20000000	raw	23				
 Tilletia_walkeri	DAOM_236422	20000000	raw	25				
@@ -215,7 +215,7 @@ Tilletia_walkeri	DAOM_236422	20000000	raw	27
 Tilletia_walkeri	DAOM_236422	20000000	raw	29				
 Tilletia_walkeri	DAOM_236422	20000000	raw	31				
 Tilletia_walkeri	DAOM_236422	20000000	raw	33				
-Tilletia_walkeri	DAOM_236422	20000000	raw	35				
+Tilletia_walkeri	DAOM_236422	20000000	raw	35	6218	49812	24003013	491497861/594182206
 Tilletia_walkeri	DAOM_236422	20000000	raw	37				
 Tilletia_walkeri	DAOM_236422	20000000	raw	39				
 Tilletia_walkeri	DAOM_236422	20000000	raw	41				
@@ -231,21 +231,21 @@ Penicillium_verrucosum	KAS_4260	32190000	trim	21
 Penicillium_verrucosum	KAS_4260	32190000	trim	23				
 Penicillium_verrucosum	KAS_4260	32190000	trim	25				
 Penicillium_verrucosum	KAS_4260	32190000	trim	27				
-Penicillium_verrucosum	KAS_4260	32190000	trim	29				
+Penicillium_verrucosum	KAS_4260	32190000	trim	29	29	11893	45372311	605072259/840204878
 Penicillium_verrucosum	KAS_4260	32190000	trim	31				
-Penicillium_verrucosum	KAS_4260	32190000	trim	33				
+Penicillium_verrucosum	KAS_4260	32190000	trim	33	12835	78188	30518698	764905183/840204878
 Penicillium_verrucosum	KAS_4260	32190000	trim	35				
-Penicillium_verrucosum	KAS_4260	32190000	trim	37				
-Penicillium_verrucosum	KAS_4260	32190000	trim	39				
-Penicillium_verrucosum	KAS_4260	32190000	trim	41				
-Penicillium_verrucosum	KAS_4260	32190000	trim	43				
-Penicillium_verrucosum	KAS_4260	32190000	trim	45				
-Penicillium_verrucosum	KAS_4260	32190000	trim	47				
-Penicillium_verrucosum	KAS_4260	32190000	trim	49				
-Penicillium_verrucosum	KAS_4260	32190000	trim	51				
-Penicillium_verrucosum	KAS_4260	32190000	trim	53				
-Penicillium_verrucosum	KAS_4260	32190000	trim	55				
-Penicillium_verrucosum	KAS_4260	32190000	trim	57				
+Penicillium_verrucosum	KAS_4260	32190000	trim	37	13601	68235	30537141	746980489/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	39	13736	81123	30690212	739713762/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	41	14343	81124	30909981	733155097/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	43	15054	81126	31040836	723699187/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	45	15622	83825	31121467	717002177/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	47	16234	87135	31222150	368640582/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	49	39151	201520	31439628	59869351/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	51	49890	201058	31513969	59376352/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	53	55960	228425	31577119	58824527/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	55	67744	253254	31624658	58262400/840204878
+Penicillium_verrucosum	KAS_4260	32190000	trim	57	74371	229051	31661403	57677977/840204878
 Penicillium_verrucosum	KAS_4260	32190000	raw	21				
 Penicillium_verrucosum	KAS_4260	32190000	raw	23				
 Penicillium_verrucosum	KAS_4260	32190000	raw	25				
@@ -269,59 +269,59 @@ Tilletia_controversa	DAOM_236426	20000000	trim	21
 Tilletia_controversa	DAOM_236426	20000000	trim	23				
 Tilletia_controversa	DAOM_236426	20000000	trim	25				
 Tilletia_controversa	DAOM_236426	20000000	trim	27				
-Tilletia_controversa	DAOM_236426	20000000	trim	29				
+Tilletia_controversa	DAOM_236426	20000000	trim	29	2868	35398	28061366	526388266/576418916
 Tilletia_controversa	DAOM_236426	20000000	trim	31				
-Tilletia_controversa	DAOM_236426	20000000	trim	33				
-Tilletia_controversa	DAOM_236426	20000000	trim	35				
-Tilletia_controversa	DAOM_236426	20000000	trim	37				
-Tilletia_controversa	DAOM_236426	20000000	trim	39				
-Tilletia_controversa	DAOM_236426	20000000	trim	41				
-Tilletia_controversa	DAOM_236426	20000000	trim	43				
-Tilletia_controversa	DAOM_236426	20000000	trim	45				
-Tilletia_controversa	DAOM_236426	20000000	trim	47				
-Tilletia_controversa	DAOM_236426	20000000	trim	49				
-Tilletia_controversa	DAOM_236426	20000000	trim	51				
-Tilletia_controversa	DAOM_236426	20000000	trim	53				
-Tilletia_controversa	DAOM_236426	20000000	trim	55				
-Tilletia_controversa	DAOM_236426	20000000	trim	57				
-Tilletia_controversa	DAOM_236426	20000000	raw	21				
-Tilletia_controversa	DAOM_236426	20000000	raw	23				
-Tilletia_controversa	DAOM_236426	20000000	raw	25				
-Tilletia_controversa	DAOM_236426	20000000	raw	27				
-Tilletia_controversa	DAOM_236426	20000000	raw	29				
-Tilletia_controversa	DAOM_236426	20000000	raw	31				
-Tilletia_controversa	DAOM_236426	20000000	raw	33				
-Tilletia_controversa	DAOM_236426	20000000	raw	35				
-Tilletia_controversa	DAOM_236426	20000000	raw	37				
-Tilletia_controversa	DAOM_236426	20000000	raw	39				
-Tilletia_controversa	DAOM_236426	20000000	raw	41				
-Tilletia_controversa	DAOM_236426	20000000	raw	43				
-Tilletia_controversa	DAOM_236426	20000000	raw	45				
-Tilletia_controversa	DAOM_236426	20000000	raw	47				
-Tilletia_controversa	DAOM_236426	20000000	raw	49				
-Tilletia_controversa	DAOM_236426	20000000	raw	51				
-Tilletia_controversa	DAOM_236426	20000000	raw	53				
-Tilletia_controversa	DAOM_236426	20000000	raw	55				
-Tilletia_controversa	DAOM_236426	20000000	raw	57				
+Tilletia_controversa	DAOM_236426	20000000	trim	33	3182	28821	28059061	515450089/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	35	3542	46432	28441759	509191861/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	37	4243	112309	29257122	503970971/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	39	4991	163690	29996081	498360222/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	41	6851	336147	32416908	492300966/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	43	1226554	2218965	33264752	392318737/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	45	9867	79733	29433483	42419514/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	47	10608	80430	29560345	42302963/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	49	10919	74414	29667599	42325395/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	51	11463	102055	29808313	42187755/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	53	11544	105323	29995794	42084343/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	55	12362	105410	30130578	42034038/576418916
+Tilletia_controversa	DAOM_236426	20000000	trim	57	12900	142395	30221247	41833423/576418916
+Tilletia_controversa	DAOM_236426	20000000	raw	21	3592	82528	35596825	41090008/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	23	6429	102168	32471698	42471860/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	25	7887	101953	31091582	43185627/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	27	8975	109083	29175918	43965816/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	29	8988	82010	29306379	43857754/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	31	8987	74339	29392755	43729951/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	33	8599	87671	29410018	43607164/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	35	8542	74555	29348435	43340288/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	37	8769	74330	29420147	43198701/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	39	8972	79485	29467574	43110077/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	41	9565	92565	29448756	42914535/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	43	9925	105798	29609551	42851475/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	45	10299	80373	29544298	42643255/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	47	10987	79710	29654817	42480765/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	49	11419	102940	29567396	42446082/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	51	12540	107418	29736196	42303152/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	53	13194	106552	29890904	42168059/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	55	13729	119612	30020714	42166068/45777464
+Tilletia_controversa	DAOM_236426	20000000	raw	57	14375	142641	30122384	42040712/45777464
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	21				
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	23				
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	25				
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	27				
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	29				
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	31				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	33				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	35				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	37				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	39				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	41				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	43				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	45				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	47				
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	33	19461	1114385	1045365788	453608511/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	35	25426	1720455	945972873	443315411/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	37	35035	1883569	829255475	435356076/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	39	60627	2151584	714181765	424761830/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	41	120438	3723922	631703720	416784594/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	43	190014	2273384	565744021	405445484/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	45	279644	2747279	500486258	395561587/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	47	161046	1833814	553638346	226491495/595985964
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	49				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	51				
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	51	2962	85081	229787523	81413865/595985964
 Ditylenchus_destructor	Jiangsu_01	100000000	trim	53				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	55				
-Ditylenchus_destructor	Jiangsu_01	100000000	trim	57				
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	55	3186	65048	222681349	78946461/595985964
+Ditylenchus_destructor	Jiangsu_01	100000000	trim	57	3307	88339	218110995	77449308/595985964
 Ditylenchus_destructor	Jiangsu_01	100000000	raw	21				
 Ditylenchus_destructor	Jiangsu_01	100000000	raw	23				
 Ditylenchus_destructor	Jiangsu_01	100000000	raw	25				
@@ -348,55 +348,55 @@ Tilletia_caries	DAOM_238032	20000000	trim	27
 Tilletia_caries	DAOM_238032	20000000	trim	29				
 Tilletia_caries	DAOM_238032	20000000	trim	31				
 Tilletia_caries	DAOM_238032	20000000	trim	33				
-Tilletia_caries	DAOM_238032	20000000	trim	35				
-Tilletia_caries	DAOM_238032	20000000	trim	37				
+Tilletia_caries	DAOM_238032	20000000	trim	35	3724	53868	28478652	596835330/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	37	3846	53868	28643784	587935360/688480430
 Tilletia_caries	DAOM_238032	20000000	trim	39				
-Tilletia_caries	DAOM_238032	20000000	trim	41				
-Tilletia_caries	DAOM_238032	20000000	trim	43				
-Tilletia_caries	DAOM_238032	20000000	trim	45				
-Tilletia_caries	DAOM_238032	20000000	trim	47				
-Tilletia_caries	DAOM_238032	20000000	trim	49				
-Tilletia_caries	DAOM_238032	20000000	trim	51				
-Tilletia_caries	DAOM_238032	20000000	trim	53				
-Tilletia_caries	DAOM_238032	20000000	trim	55				
-Tilletia_caries	DAOM_238032	20000000	trim	57				
-Tilletia_caries	DAOM_238032	20000000	raw	21				
-Tilletia_caries	DAOM_238032	20000000	raw	23				
-Tilletia_caries	DAOM_238032	20000000	raw	25				
-Tilletia_caries	DAOM_238032	20000000	raw	27				
-Tilletia_caries	DAOM_238032	20000000	raw	29				
-Tilletia_caries	DAOM_238032	20000000	raw	31				
-Tilletia_caries	DAOM_238032	20000000	raw	33				
-Tilletia_caries	DAOM_238032	20000000	raw	35				
-Tilletia_caries	DAOM_238032	20000000	raw	37				
-Tilletia_caries	DAOM_238032	20000000	raw	39				
-Tilletia_caries	DAOM_238032	20000000	raw	41				
-Tilletia_caries	DAOM_238032	20000000	raw	43				
-Tilletia_caries	DAOM_238032	20000000	raw	45				
-Tilletia_caries	DAOM_238032	20000000	raw	47				
-Tilletia_caries	DAOM_238032	20000000	raw	49				
-Tilletia_caries	DAOM_238032	20000000	raw	51				
-Tilletia_caries	DAOM_238032	20000000	raw	53				
-Tilletia_caries	DAOM_238032	20000000	raw	55				
-Tilletia_caries	DAOM_238032	20000000	raw	57				
+Tilletia_caries	DAOM_238032	20000000	trim	41	4466	53855	30413348	569261589/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	43	471885	2676242	33102945	440559122/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	45	855893	2812152	35261422	362018494/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	47	9836	80096	30192280	53823163/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	49	10467	97286	30373189	53277785/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	51	11171	97352	30633118	53177573/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	53	11531	97369	30841360	53055639/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	55	11990	97371	30994924	52965952/688480430
+Tilletia_caries	DAOM_238032	20000000	trim	57	12305	98910	31097878	53185092/688480430
+Tilletia_caries	DAOM_238032	20000000	raw	21	44	46494	86888940	39064331/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	23	1046	56192	42623447	51173853/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	25	1336	53513	42385991	51121156/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	27	1688	65550	42218710	51001245/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	29	2180	67334	41973195	50951174/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	31	5279	77725	36139895	52858665/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	33	7273	123493	33264057	54207993/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	35	8974	69130	29887059	55088923/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	37	8528	56402	29629094	54875322/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	39	8379	57605	29695756	54555195/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	41	8553	75495	29811983	54429375/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	43	8737	61516	29921606	54066005/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	45	8882	57026	30007884	54344122/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	47	9476	80281	30196258	53935984/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	49	9997	69134	30329540	54085347/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	51	10541	80153	30563956	53779400/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	53	11232	97333	30805092	53681261/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	55	11897	97333	30996461	53676821/59029108
+Tilletia_caries	DAOM_238032	20000000	raw	57	12215	97349	31145521	53453652/59029108
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	21				
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	23				
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	25				
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	27				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	29				
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	29	146873	2689510	368868649	480633358/637684344
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	31				
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	33				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	35				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	37				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	39				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	41				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	43				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	45				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	47				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	49				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	51				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	53				
-Ditylenchus_dipsaci	Ontario_01	100000000	trim	55				
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	35	572577	3953346	327591810	458766402/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	37	624357	3493569	313514806	451758071/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	39	647391	3243326	312036949	444967320/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	41	602853	3236792	310816787	438360511/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	43	659743	3960875	307241231	432727616/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	45	668171	4012159	303769748	426220283/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	47	6589	81214	224653822	123721271/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	49	6802	85803	233162480	123759726/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	51	7549	84211	232471048	123089802/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	53	7779	97849	230217002	122342661/637684344
+Ditylenchus_dipsaci	Ontario_01	100000000	trim	55	8022	85803	226983537	121444380/637684344
 Ditylenchus_dipsaci	Ontario_01	100000000	trim	57				
 Ditylenchus_dipsaci	Ontario_01	100000000	raw	21				
 Ditylenchus_dipsaci	Ontario_01	100000000	raw	23				
@@ -424,34 +424,34 @@ Tilletia_indica	DAOM_236416	20000000	trim	27
 Tilletia_indica	DAOM_236416	20000000	trim	29				
 Tilletia_indica	DAOM_236416	20000000	trim	31				
 Tilletia_indica	DAOM_236416	20000000	trim	33				
-Tilletia_indica	DAOM_236416	20000000	trim	35				
-Tilletia_indica	DAOM_236416	20000000	trim	37				
-Tilletia_indica	DAOM_236416	20000000	trim	39				
-Tilletia_indica	DAOM_236416	20000000	trim	41				
-Tilletia_indica	DAOM_236416	20000000	trim	43				
-Tilletia_indica	DAOM_236416	20000000	trim	45				
-Tilletia_indica	DAOM_236416	20000000	trim	47				
-Tilletia_indica	DAOM_236416	20000000	trim	49				
-Tilletia_indica	DAOM_236416	20000000	trim	51				
-Tilletia_indica	DAOM_236416	20000000	trim	53				
-Tilletia_indica	DAOM_236416	20000000	trim	55				
-Tilletia_indica	DAOM_236416	20000000	trim	57				
-Tilletia_indica	DAOM_236416	20000000	raw	21				
-Tilletia_indica	DAOM_236416	20000000	raw	23				
-Tilletia_indica	DAOM_236416	20000000	raw	25				
-Tilletia_indica	DAOM_236416	20000000	raw	27				
-Tilletia_indica	DAOM_236416	20000000	raw	29				
-Tilletia_indica	DAOM_236416	20000000	raw	31				
+Tilletia_indica	DAOM_236416	20000000	trim	35	186	41938	44355480	494291219/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	37	265	41199	42888705	498910736/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	39	976	40910	35940931	533265756/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	41	3634	32293	31716113	549453570/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	43	8531	79534	30083820	500828799/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	45	9444	79395	32188852	414627851/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	47	8994	79443	30179017	84865882/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	49	10674	95660	30333332	84191730/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	51	13293	110347	30552743	84038811/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	53	15166	114585	30747853	83497377/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	55	16752	114596	30923179	82572047/726730660
+Tilletia_indica	DAOM_236416	20000000	trim	57	18848	114900	31115843	82943258/726730660
+Tilletia_indica	DAOM_236416	20000000	raw	21	20	28172	115662921	47633894/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	23	22	34902	109203352	49329125/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	25	24	34677	104260081	48625669/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	27	26	21597	99658219	48422914/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	29	27	42359	94976088	50108792/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	31	29	30519	89900506	50327578/93420942
 Tilletia_indica	DAOM_236416	20000000	raw	33				
-Tilletia_indica	DAOM_236416	20000000	raw	35				
-Tilletia_indica	DAOM_236416	20000000	raw	37				
-Tilletia_indica	DAOM_236416	20000000	raw	39				
+Tilletia_indica	DAOM_236416	20000000	raw	35	393	41823	40795473	74791735/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	37	463	41211	40362441	74344067/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	39	556	40919	39858125	73666340/93420942
 Tilletia_indica	DAOM_236416	20000000	raw	41				
-Tilletia_indica	DAOM_236416	20000000	raw	43				
-Tilletia_indica	DAOM_236416	20000000	raw	45				
+Tilletia_indica	DAOM_236416	20000000	raw	43	6402	56450	30857806	83054123/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	45	8953	79292	30124155	84921275/93420942
 Tilletia_indica	DAOM_236416	20000000	raw	47				
-Tilletia_indica	DAOM_236416	20000000	raw	49				
-Tilletia_indica	DAOM_236416	20000000	raw	51				
-Tilletia_indica	DAOM_236416	20000000	raw	53				
-Tilletia_indica	DAOM_236416	20000000	raw	55				
-Tilletia_indica	DAOM_236416	20000000	raw	57				
+Tilletia_indica	DAOM_236416	20000000	raw	49	10739	97810	30353833	84435672/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	51	13413	108170	30528783	83985792/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	53	15325	140860	30728377	84138435/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	55	17197	114819	30919157	83622727/93420942
+Tilletia_indica	DAOM_236416	20000000	raw	57	18901	141506	31094284	82992969/93420942
