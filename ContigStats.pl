@@ -183,10 +183,10 @@ sub all_contig_stats
 {
     my $records = shift;
     my $output_stats = [];
-    my $species = "Globodera_pallida";
-    my $strain = "A2_Cyprus_pathotype_Pa23";
-    my $trimraw = "trim";
-    my $kmer = 43;
+    my $species = ""; # "Globodera_pallida";
+    my $strain = ""; #"A2_Cyprus_pathotype_Pa23";
+    my $trimraw = ""; #"trim";
+    my $kmer = ""; #43;
     for my $species (keys %$records) {
         for my $strain (keys %{$records->{$species}->{DNA}}) {
             print "Workin gon specie $species strain $strain\n";
