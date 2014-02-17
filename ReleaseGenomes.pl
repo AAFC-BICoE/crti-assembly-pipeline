@@ -22,6 +22,9 @@ sub set_default_opts
         release_table input_data/Release.tab
         verbose 1
         testing 0
+        copy_reads 1
+        link_reads 0
+        no_version 1
         wiki_release_table output_files/wiki_release_table.txt
         wiki_genome_table output_files/wiki_genome_table.txt
         wiki_combined_table output_files/wiki_combined_table.txt
@@ -54,6 +57,9 @@ sub gather_opts
         'release_table|r=s',
         'verbose',
         'testing',
+        'copy_reads',
+        'link_reads',
+        'no_version',
         'wiki_release_table',
         'wiki_genome_table',
         'wiki_combined_table',
@@ -80,11 +86,19 @@ sub commify {
 sub get_software_versions
 {
     my $versions = {};
-    $versions->{fastqx} = `fastqc --version`;
-    $versions->{fastx_trimmer} = `fastx_trimmer -h | grep FASTX`;
-    $versions->{velvetk} = "2012\n";
-    $versions->{velveth} = `velveth_31 | grep Version`;
-    $versions->{velvetg} = `velvetg_31 | grep Version`;
+    if ($options->{no_version}) {
+        $versions->{fastqc} = "FastQC v0.10.1\n";
+        $versions->{fastx_trimmer} = "Part of FASTX Toolkit 0.0.13.2 by A. Gordon (gordon\@cshl.edu)\n";
+        $versions->{velvetk} = "2012\n";
+        $versions->{velveth} = "Version 1.2.08\n";
+        $versions->{velvetg} = "Version 1.2.08\n";
+    } else {
+        $versions->{fastqc} = `fastqc --version`;
+        $versions->{fastx_trimmer} = `fastx_trimmer -h | grep FASTX`;
+        $versions->{velvetk} = "2012\n";
+        $versions->{velveth} = `velveth_31 | grep Version`;
+        $versions->{velvetg} = `velvetg_31 | grep Version`;
+    }
     return $versions;
 }
 
@@ -179,8 +193,8 @@ sub get_genome_stanza
     $outrec->{min_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "min_contig_len"]);
     $outrec->{median_contig_len} = Assembly::Utils::get_check_record($inrec, ["velvet", $trimraw, "kmer", $release_kmer, "median_contig"]);
     my @types = ();
-    #for my $st (qw(PE PER MP MP3 MP8)) {
-    for my $st (qw(PE)) {
+    for my $st (qw(PE PER MP MP3 MP8)) {
+    #for my $st (qw(PE)) {
         if (Assembly::Utils::get_check_record($inrec, [$st])) {
             push (@types, $st);
         }
@@ -189,12 +203,31 @@ sub get_genome_stanza
     return $outrec;
 }
 
+# Determine whether to copy or link reads files to release dir
+# based on input options.
+sub copy_link_reads
+{
+    my $file_in = shift;
+    my $file_out = shift;
+    unless (-e $file_out and (-s $file_in) == (-s $file_out)) {
+        print_verbose "cp/ln -s $file_in $file_out\n";
+        unless ($options->{testing}) {
+            if ($options->{link_reads}) {
+                symlink($file_in, $file_out);
+            } elsif ($options->{copy_reads}) {
+                system("cp $file_in $file_out");
+            }
+        }
+    }
+} 
+
 sub get_sample_stanza
 {
     my $strain_rec = shift;
     my $sample_type = shift;
     my $trimraw = shift;
     my $sample_rec = Assembly::Utils::get_check_record($strain_rec, [$sample_type]);
+    my $versions = get_software_versions;
     my $outrec = {};
     $outrec->{sequencing_metadata} = Assembly::Utils::get_check_record($sample_rec, ["sequencing_metadata"]);
     # $outrec->{species_abbr} = Assembly::Utils::get_check_record($sample_rec, ["species_abbr"]);
@@ -235,18 +268,8 @@ sub get_sample_stanza
     $outrec->{release}->[1]->{output_file} = $r2_out;
 
     # copy the files here??
-    unless (-e $r1_out and (-s $r1_in) == (-s $r1_out)) {
-        print_verbose "cp $r1_in $r1_out\n";
-        unless ($options->{testing}) {
-            system("cp $r1_in $r1_out");
-        }
-    }
-    unless (-e $r2_out and (-s $r2_in) == (-s $r2_out)) {
-        print_verbose "cp $r2_in $r2_out\n";
-        unless ($options->{testing}) {
-            system("cp $r2_in $r2_out");
-        }
-    }
+    copy_link_reads($r1_in, $r1_out);
+    copy_link_reads($r2_in, $r2_out);
 
     if ($trimraw =~ /trim/) {
         $outrec->{read_data}->{R1}->{trim} = {};
@@ -272,24 +295,14 @@ sub get_sample_stanza
         $outrec->{release}->[3]->{input_file} = $tr2_in;
         $outrec->{release}->[3]->{output_file} = $tr2_out;
         
-        unless (-e $tr1_out and (-s $tr1_in) == (-s $tr1_out)) {
-            print_verbose "cp $tr1_in $tr1_out\n";
-            unless ($options->{testing}) {
-                system("cp $tr1_in $tr1_out");
-            }
-        }
-        unless (-e $tr2_out and (-s $tr2_in) == (-s $tr2_out)) {
-            print_verbose "cp $tr2_in $tr2_out\n";
-            unless ($options->{testing}) {
-                system("cp $tr2_in $tr2_out");
-            }
-        }
+        copy_link_reads ($tr1_in, $tr1_out);
+        copy_link_reads ($tr2_in, $tr2_out);
     }
     
     # Now add the fastqc info to the pipeline
     my $qcr1 = {};
     $qcr1->{description} = "FastQC";
-    $qcr1->{version} = `fastqc --version`;
+    $qcr1->{version} = $versions->{fastqc};
     chomp $qcr1->{version};
     $qcr1->{command} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R1", "raw_cmd"]);
     $qcr1->{qsub_cmd} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R1", "raw_qsub"]);
@@ -297,7 +310,7 @@ sub get_sample_stanza
     
     my $qcr2 = {};
     $qcr2->{description} = "FastQC";
-    $qcr2->{version} = `fastqc --version`;
+    $qcr2->{version} = $versions->{fastqc};
     chomp $qcr2->{version};
     $qcr2->{command} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R2", "raw_cmd"]);
     $qcr2->{qsub_cmd} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R2", "raw_qsub"]);
@@ -305,7 +318,7 @@ sub get_sample_stanza
     
     my $qtr1 = {};
     $qtr1->{description} = "Fastx_trimmer";
-    $qtr1->{version} = `fastx_trimmer -h | grep FASTX`;
+    $qtr1->{version} = $versions->{fastx_trimmer};
     chomp $qtr1->{version};
     $qtr1->{command} = Assembly::Utils::get_check_record($sample_rec, ["fastx_trimmer", "R1", "trim_cmd"]);
     $qtr1->{qsub_cmd} = Assembly::Utils::get_check_record($sample_rec, ["fastx_trimmer", "R1", "qsub_cmd"]);
@@ -313,7 +326,7 @@ sub get_sample_stanza
     
     my $qtr2 = {};
     $qtr2->{description} = "Fastx_trimmer";
-    $qtr2->{version} = `fastx_trimmer -h | grep FASTX`;
+    $qtr2->{version} = $versions->{fastx_trimmer};
     chomp $qtr2->{version};
     $qtr2->{command} = Assembly::Utils::get_check_record($sample_rec, ["fastx_trimmer", "R2", "trim_cmd"]);
     $qtr2->{qsub_cmd} = Assembly::Utils::get_check_record($sample_rec, ["fastx_trimmer", "R2", "qsub_cmd"]);
@@ -322,7 +335,7 @@ sub get_sample_stanza
     # Now add the fastqc info to the pipeline
     my $qct1 = {};
     $qct1->{description} = "FastQC";
-    $qct1->{version} = `fastqc --version`;
+    $qct1->{version} = $versions->{fastqc};
     chomp $qct1->{version};
     $qct1->{command} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R1", "trim_cmd"]);
     $qct1->{qsub_cmd} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R1", "trim_qsub"]);
@@ -335,7 +348,7 @@ sub get_sample_stanza
     
     my $qct2 = {};
     $qct2->{description} = "FastQC";
-    $qct2->{version} = `fastqc --version`;
+    $qct2->{version} = $versions->{fastqc};
     chomp $qct2->{version};
     $qct2->{command} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R2", "trim_cmd"]);
     $qct2->{qsub_cmd} = Assembly::Utils::get_check_record($sample_rec, ["fastqc", "R2", "trim_qsub"]);
@@ -362,11 +375,12 @@ sub get_pipeline_stanza
     my $release_prefix = shift;
     my $outrec = []; # note: it's an array this time
     my $krec = Assembly::Utils::get_check_record($strain_rec, ["velvet", $trimraw, "kmer", $release_kmer]);
+    my $versions = get_software_versions;
     
     my $vh = {};
     $vh->{description} = "velveth";
     $vh->{run_dir} = getcwd;
-    $vh->{version} = `velveth_31 | grep Version`;
+    $vh->{version} = $versions->{velveth};
     chomp $vh->{version};
     $vh->{command} = Assembly::Utils::get_check_record($krec, ["velveth_cmd"]);
     $vh->{qsub_cmd} = Assembly::Utils::get_check_record($krec, ["velveth_qsub_cmd"]);
@@ -374,7 +388,7 @@ sub get_pipeline_stanza
     my $vg = {};
     $vg->{description} = "velvetg";
     $vg->{run_dir} = getcwd;
-    $vg->{version} = `velvetg_31 | grep Version`;
+    $vg->{version} = $versions->{velvetg};
     chomp $vg->{version};
     $vg->{command} = Assembly::Utils::get_check_record($krec, ["velvetg_cmd"]);
     $vg->{qsub_cmd} = Assembly::Utils::get_check_record($krec, ["velvetg_qsub_cmd"]);

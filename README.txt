@@ -221,6 +221,15 @@ Use the ReleaseContigs.pl script for this.
 (Potential bug: note that the release prefix that is used is actualyl the part before
 _contigs.fa in the **input contigs filenam only**! This should be changed.)
 
+Or to run ReleaseContigs.pl on a bunch of releases:
+for f in `find ../../processing_test2/ -maxdepth 2 -name "release" -exec find {} -name "*contigs.fa" \;`; do g=`echo $f | sed 's/contigs\.fa/contigs2.fa/'`; cmd="./ReleaseContigs.pl --contigs_in $f --contigs_out $g"; echo $cmd; $cmd; done
+
+# move to trash
+find . -maxdepth 3 -name "release" -exec find {} -maxdepth 4 -name "*contigs.fa" \; | xargs -I {} mv {} ~/.Trash/
+
+contigs=`find . -maxdepth 3 -name "release" -exec find {} -maxdepth 4 -name "*contigs2.fa" \;`
+for f in $contigs; do g=`echo $f | sed 's/igs2\.fa/igs.fa/'`; mv $f $g; done
+
 Now check that the node names are correct in the output file
 less !$
 
@@ -236,6 +245,11 @@ output_files/wiki_combined_table.txt
 Move the folder to the correct folder within specimen/dir:
 [cullisj@biocluster AssemblyPipeline]$ cd ../..
 [cullisj@biocluster specimen]$ mv processing_lanthierii/A_lanthierii/release/Al_AF1440_R01 A_lanthierii/release/
+
+More general:
+release_dirs=`find . -maxdepth 2 -name "release" -exec find {} -maxdepth 1 \; | egrep -v "release$" | sed 's/^`
+for d in $release_dirs; do echo mv $d ../$d; done
+
 
 Now modify the link in the wiki table above to reflect the new folder location, and add the 
 new line to the wiki.
