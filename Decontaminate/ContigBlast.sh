@@ -26,8 +26,9 @@ blast_working_dir=`echo $genome_file | sed 's/\..*/_work/'`
 mkdir -p $blast_working_dir
 
 # Setup and run the blast identification, given an input contigs file.
-svn export http://biodiversity/svn/source/BlastParallel/parallel-blast.pl
-svn export http://biodiversity/svn/source/misc_scripts/parseBlastOutput.pl
+[ -e qsubParseBlast.sh ] || svn export http://biodiversity/svn/source/AssemblyPipeline/Decontaminate/qsubParseBlast.sh
+[ -e parallel-blast.pl ] || svn export http://biodiversity/svn/source/BlastParallel/parallel-blast.pl
+[ -e parseBlastOutput.pl] || svn export http://biodiversity/svn/source/misc_scripts/parseBlastOutput.pl
 
 chmod +x parallel-blast.pl
 chmod +x parseBlastOutput.pl
