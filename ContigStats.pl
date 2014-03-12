@@ -167,7 +167,7 @@ sub get_stats
     my $kmer_rec = shift;
     my ($num_contigs, $min_contig_len, $median_contig_len) = get_contig_recs($kmer_rec);
     unless ($num_contigs and $min_contig_len and $median_contig_len) {
-        print "Couldnt get rec !\n";
+        #print "Couldnt get rec !\n";
         my $kmer_dir = Assembly::Utils::get_check_record($kmer_rec, ["kmer_dir"]);
         my $contigs_file = $kmer_dir . "/contigs.fa";
         if (-e $contigs_file and -s $contigs_file) { # file exists and has nonzero size
