@@ -29,7 +29,7 @@ my $cufflinks_path = "/opt/bio/cufflinks/bin/cufflinks";
 #my $gtf2gff_path = getcwd . "/gtf2gff.pl";
 my $gtf2gff_rename_path = getcwd . "/gtf2gff_rename.sh";
 
-my $qsub_path = "/opt/gridengine/bin/lx26-amd64/qsub";
+my $qsub_path = "/opt/gridengine/bin/linux-x64/qsub";
 my $qsub_script = "./qsub_script.sh";
 my $qsub_nprocs = 10;
 
@@ -169,6 +169,7 @@ sub check_submit_cmd
     my $qsub_cmd = shift;
     my $qsub_jobid = 1;
     if (output_files_exist ($cmd_name, $base_dir)) {
+        print_verbose ("base dir is $base_dir\n");
         print_verbose ("Output $cmd_name files already exist - not issuing the following command:\n$qsub_cmd\n");
     } else {
         $qsub_jobid = submit_job ($qsub_cmd);
@@ -343,8 +344,8 @@ sub run_tophat
     my $genome_prefix = Assembly::Utils::get_check_record($asm_rec, ["genome_prefix"]);
     my $r1data = Assembly::Utils::get_check_record($asm_rec, ["r1data"]);
     my $r2data = Assembly::Utils::get_check_record($asm_rec, ["r2data"]);
-    my $tophat_cmd = $tophat_path . " -p " . $qsub_nprocs . " -o " . $tophat_dir . " " . 
-        $genome_prefix . " " . $r1data . " " . $r2data;
+    my $tophat_cmd = $tophat_path . " -p " . $qsub_nprocs . " -o " . $tophat_dir . 
+        " --mate-inner-dist 100 " . $genome_prefix . " " . $r1data . " " . $r2data;
     my $tophat_qsub_cmd = $qsub_path . " -N tophat -hold_jid " . $bowtie_jobid . 
         " -pe smp " . $qsub_nprocs . " " . $qsub_script . " '" . $tophat_cmd . "'";
     my $tophat_qsub_jobid = check_submit_cmd("tophat", $tophat_dir . "/", $tophat_qsub_cmd);
@@ -428,11 +429,12 @@ sub create_assembly
 {
     my ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix) = @_;
     my $species_dir = Assembly::Utils::get_check_record ($yaml_recs, [$species, "RNA", $strain, $sample, "species_dir"]);
+    #my $species_dir = Assembly::Utils::get_check_record ($yaml_recs, [$species, "RNA", $strain, "PE", "species_dir"]);
+    print "species $species $strain $sample\n";
     print "Sepcies dir is $species_dir\n";
     if (-e $species_dir) {
         print "It exists!\n";
         my $asm_rec = add_file_info ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
-    
         my $bowtie_jobid = run_bowtie ($asm_rec);
         my $tophat_jobid = run_tophat ($asm_rec, $bowtie_jobid, $sample);
         my $cufflinks_jobid = run_cufflinks ($asm_rec, $tophat_jobid, $sample);
@@ -455,11 +457,14 @@ sub run_rna_assembly
         my $reference_strain = $table_recs->{$sample}->{"Reference_Strain"};
         my ($genome_file, $genome_prefix) = get_genome_assembly ($table_recs->{$sample}->{"Reference_Metafile"});
         my $output_release_prefix = $table_recs->{$sample}->{"Output_Release_Prefix"};
-        next unless (-s $genome_file);
-        for my $trimraw (qw(trim)) {
-            create_assembly ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
+        if (-s $genome_file) {
+            for my $trimraw (qw(trim)) {
+                create_assembly ($yaml_recs, $species, $strain, $sample, $reference_strain, $trimraw, $genome_file, $genome_prefix, $output_release_prefix);
+            }
+            print "Finished sample $sample\n";
+        } else {
+            print "Error: genome file $genome_file not found for $species $strain\n";
         }
-        print "Finished sample $sample\n";
     }
 }
 
