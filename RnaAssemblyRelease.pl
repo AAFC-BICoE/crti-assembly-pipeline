@@ -38,6 +38,7 @@ sub check_options
                                 --testing
                                 --verbose
                                 --create_release
+                                --fastq_nocopy
                                 ";
         }
 }
@@ -47,6 +48,7 @@ sub gather_options
         GetOptions($options,
                 'rna_assembly_table|a=s',
                 'testing|t',
+                'fastq_nocopy',
                 'verbose|v',
                 'create_release|r',
                 'yaml_in|i=s',
@@ -66,9 +68,9 @@ sub print_verbose
 sub create_dir
 {
     my $dirname = shift;
-    unless ($options->{testing}) {
-        unless (-e $dirname) {
-            print_verbose ("Creating directory $dirname\n");
+    unless (-e $dirname) {
+        print_verbose ("Creating directory $dirname\n");
+        unless ($options->{testing}) {
             mkpath $dirname;
         }
     }
@@ -98,6 +100,7 @@ sub parse_assembly_table
                 $line_record->{Reference_Strain} = $reference_strain_key;
                 my $sample = $line_record->{"Sample_ID"};
                 $table_recs->{$sample} = $line_record;
+                print_verbose ("Got reference metafile " . $line_record->{Reference_Metafile} . "\n");
             } else {
                 print_verbose ("Error on line $. of rna assembly table file - incorrect number of cols.\n");
             }
@@ -153,7 +156,7 @@ sub get_sample_stanza
     
     $r1_in =~ s/fq$/fq.gz/;
     $r2_in =~ s/fq$/fq.gz/;
-
+    
     $outrec->{release} = [];
     $outrec->{release}->[0] = {};
     $outrec->{release}->[0]->{input_file} = $r1_in;
@@ -165,18 +168,19 @@ sub get_sample_stanza
     # copy the files here??
     unless (-e $r1_out and (-s $r1_in) == (-s $r1_out)) {
         print_verbose "cp $r1_in $r1_out\n";
-        unless ($options->{testing}) {
+        unless ($options->{testing} or $options->{fastq_nocopy}) {
             system("cp $r1_in $r1_out");
         }
     }
     unless (-e $r2_out and (-s $r2_in) == (-s $r2_out)) {
         print_verbose "cp $r2_in $r2_out\n";
-        unless ($options->{testing}) {
+        unless ($options->{testing} or $options->{fastq_nocopy}) {
             system("cp $r2_in $r2_out");
         }
     }
-
+    
     if ($trimraw =~ /trim/) {
+        
         $outrec->{read_data}->{R1}->{trim} = {};
         $outrec->{read_data}->{R1}->{trim}->{file_path} = Assembly::Utils::get_check_record($sample_rec, ["R1", "trimdata"]);
         $outrec->{read_data}->{R1}->{trim}->{num_reads} = Assembly::Utils::get_check_record($sample_rec, ["data_stats", "R1", "trimdata", "num_reads"]);
@@ -185,7 +189,7 @@ sub get_sample_stanza
         $outrec->{read_data}->{R2}->{trim}->{file_path} = Assembly::Utils::get_check_record($sample_rec, ["R2", "trimdata"]);
         $outrec->{read_data}->{R2}->{trim}->{num_reads} = Assembly::Utils::get_check_record($sample_rec, ["data_stats", "R2", "trimdata", "num_reads"]);
         $outrec->{read_data}->{R2}->{trim}->{read_length} = Assembly::Utils::get_check_record($sample_rec, ["data_stats", "R2", "trimdata", "read_length"]);
-
+        
         my $tr1_in = Assembly::Utils::get_check_record($sample_rec, ["R1", "trimdata"]);
         my $tr1_out = $fpath_base . "trim_R1.fq";
         my $tr2_in = Assembly::Utils::get_check_record($sample_rec, ["R2", "trimdata"]);
@@ -201,7 +205,8 @@ sub get_sample_stanza
         #unless (-e $tr1_out and (-s $tr1_in) == (-s $tr1_out)) {
         #unless (-e $tr1_out . ".gz") {
         
-        unless ($options->{testing}) {
+        unless ($options->{testing} or $options->{fastq_nocopy}) {
+            
             unless (-e $tr1_out or -e $tr1_out . ".gz") {
                 print_verbose "cp $tr1_in $tr1_out\n";
                 system("cp $tr1_in $tr1_out");
@@ -213,7 +218,8 @@ sub get_sample_stanza
         #unless (-e $tr2_out and (-s $tr2_in) == (-s $tr2_out)) {
         
         print_verbose "cp $tr2_in $tr2_out\n";
-        unless ($options->{testing}) {
+        unless ($options->{testing} or $options->{fastq_nocopy}) {
+            print "1.33\n";
             unless (-e $tr2_out or -e $tr2_out . ".gz") {
                 system("cp $tr2_in $tr2_out");
             }
@@ -221,8 +227,9 @@ sub get_sample_stanza
                 system("gzip $tr2_out");
             }
         }
+        
     }
-
+    
     # my $fastqc_version = `fastqc --version`; 
     my $fastqc_version = "FastQC v0.10.1";
     # my $fastx_version = `fastx_trimmer -h | grep FASTX`;
@@ -397,6 +404,7 @@ sub update_release
     link_previous_fa ($release_rec, $output_release_dir);
     
     my ($sample_stanza, $qc_cmds) = get_sample_stanza ($strain, $dna_strain, $strain_rec, $sample, $trimraw, $output_release_prefix, $output_release_dir);   
+    
     push (@{$release_rec->[2]->{samples}}, $sample_stanza);
     my $pipeline_ref = $release_rec->[3]->{pipeline};
     for my $rec (@$qc_cmds) {
@@ -424,6 +432,7 @@ sub update_release
     # Copy the transcripts.gff file to the release folder.
     unless ($options->{testing}) {
         unless (-e $transcripts_out) {
+            print_verbose ("cp $transcripts_in $transcripts_out\n");
             system ("cp $transcripts_in $transcripts_out");
         }
     }
