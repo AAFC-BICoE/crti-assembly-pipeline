@@ -21,6 +21,7 @@ GetOptions($options,
         'reads_in_R2=s',
         'reads_out_R1=s',
         'reads_out_R2=s',
+        'sam_out=s',
         'delete_sam',);
 unless ($options->{keep_mapped_reads} xor $options->{keep_unmapped_reads}) {
     die "Error: exactly one of --keep_mapped_reads or --keep_unmapped_reads must be set\n";
@@ -29,20 +30,6 @@ for my $opt (qw(genome reads_in_R1 reads_in_R2 reads_out_R1 reads_out_R2)) {
     unless ($options->{$opt}) {
         die "Error: option $opt must be set\n";
     }
-}
-
-sub get_unique_temp_file
-{
-    my $fpre = shift;
-    my $fpost = shift;
-    my $i=0;
-    my $fname = "";
-    do {
-        #$fname = "/tmp/" . $fpre . $i . $fpost; #broken; /tmp dir on compute nodes is tiny. could try /state/partiition1 here
-        $fname = "./" . $fpre . $i . $fpost;
-        $i++;
-    } while -e $fname;
-    return $fname;
 }
 
 sub run_bowtie2_build
@@ -67,7 +54,7 @@ sub run_bowtie2_build
 
 sub run_bowtie2
 {
-    my $samfile = get_unique_temp_file("temp", ".sam");
+    my $samfile = $options->{sam_out};
     my $ri1 = $options->{reads_in_R1};
     my $ri2 = $options->{reads_in_R2};
     my $bowtie2_cmd = $bowtie2_path . " -x " . $options->{genome} . " -q -1 " . $ri1 . " -2 " .

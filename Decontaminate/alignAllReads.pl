@@ -12,7 +12,7 @@ my $alignReads_path = getcwd . "/alignReads.pl";
 my $qsub_path = "/opt/gridengine/bin/linux-x64/qsub";
 my $qsub_script = "qsub_script.sh";
 
-my @alignment_headers = qw(genome_file keep_reads reads_in_R1 reads_in_R2 reads_out_R1 
+my @alignment_headers = qw(genome_file keep_reads reads_in_R1 reads_in_R2 sam_out reads_out_R1 
         reads_out_R2);
 my $options = {};
 GetOptions($options,
@@ -29,7 +29,6 @@ my %reads_jobids = (); # Stores the jobid that will create a pair of reads files
 # fix so we 'use' the module above rather than copy the function.
 sub get_jobid
 {
-    my $self = shift;
     my $qsub_str = shift;
     my $hold_jobid = '';
     if ($qsub_str =~ /Your job[^\s]*\s(\d+)[\.\s]/) {
@@ -53,6 +52,7 @@ sub parse_list
             for (my $i=0; $i<scalar @fields; $i++) {
                 my $key = $headers->[$i];
                 my $value = $fields[$i];
+                if ($key =~ /sam_out/ and $value !~ /sam/) { $value .= ".sam"; } 
                 $frec->{$key} = $value;
             }
             push (@$records, $frec);
@@ -101,7 +101,7 @@ sub submit_align_job
     my $arec = shift;
     my $parent_qsub_jobid = shift;
     my $alignReads_cmd = $alignReads_path . " --keep_" . $arec->{keep_reads} . "_reads " .
-        " --genome " . $arec->{genome_file};
+        " --genome " . $arec->{genome_file} . " --sam_out " . $arec->{sam_out};
     for my $arg (qw(reads_in_R1 reads_in_R2 reads_out_R1 reads_out_R2)) {
         my $str = " --" . $arg . " " . $arec->{$arg} . " ";
         $alignReads_cmd .= $str;
