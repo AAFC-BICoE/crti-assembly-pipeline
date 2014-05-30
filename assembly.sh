@@ -111,10 +111,10 @@ dir_setup()
 {
     ln -s $reads_R1_in $reads_R1
     ln -s $reads_R2_in $reads_R2
-    mkdir $velvet_raw_dir
-    ln -s $reads_R1_in $velvet_raw_dir/
-    ln -s $reads_R2_in $velvet_raw_dir/
-    mkdir $velvet_trim_dir
+    mkdir $raw_velvet_dir
+    ln -s $reads_R1_in $raw_velvet_dir/
+    ln -s $reads_R2_in $raw_velvet_dir/
+    mkdir $trim_velvet_dir
     svn export http://biodiversity/svn/source/AssemblyPipeline/ExpKmerCov.pl
 }
 
@@ -446,7 +446,7 @@ velvetkh_raw()
     
 }
 
-velvetkh_trim
+velvetkh_trim()
 {
     run_velvetk_trim
     run_exp_cov_trim

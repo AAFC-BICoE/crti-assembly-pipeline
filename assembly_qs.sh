@@ -2,7 +2,7 @@ usage() { echo "Usage: $0 [ -a <assembly script args> -f <function> ]" 1>&2; exi
 
 qsub_script="qsub_script.sh"
 [ -s $qsub_script ] || svn export http://biodiversity/svn/source/AssemblyPipeline/qsub_script.sh
-assembly_script="./assembly.sh"
+assembly_script="assembly.sh"
 
 assembly_script_args=
 config_file=
@@ -42,14 +42,14 @@ submit_job()
     count=0
     hold_jid_str=
     for j in "$@"; do
-        if [ $count -gt $min_count]; then
+        if [ $count -gt $min_count ]; then
             hold_jid_str="${hold_jid_str} -hold_jid $j"
         fi
         ((count++))
     done
     qout=`qsub -N "${fn}" $hold_jid_str $qsub_script "$assembly_script $assembly_script_args -c $config_file -f $fn"`
     echo $qout 1>&2
-    rjid=`echo $qout | awk '{print $3}'`
+    rjid=`echo $qout | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
     echo $rjid
 }
 
