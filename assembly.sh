@@ -21,10 +21,12 @@ trim_velvetg_bin="velvetg_127"
 raw_velveth_bin="velveth_145"
 raw_velvetg_bin="velvetg_145"
 
+kmer_index_raw=
+kmer_index_trim=
 velvetg_kmer=
 func=
 config_file=
-while getopts "c:f:k:" opt; do
+while getopts "c:f:i:j:k:" opt; do
     case "${opt}" in
         c)
             config_file=${OPTARG}
@@ -32,8 +34,14 @@ while getopts "c:f:k:" opt; do
         f)
             func=${OPTARG}
             ;;
+        i)
+            kmer_index_raw=${OPTARG}
+            ;;
+        j)
+            kmer_index_trim=${OPTARG}
+            ;;
         k)
-            velvetg_kmer=${OPTARG}
+            velvetg_kmer=${OPTARG} # Not implemented
             ;;
     esac
 done
@@ -162,14 +170,14 @@ run_fastx_trim()
 {
     reads_in_fq=$1
     reads_out_fqgz=$2
-    reads_base_fq=`basename ${reads_fq}`
+    reads_base_fq=`basename ${reads_in_fq}`
     ext="${reads_base_fq##*.}"
     #trim_reads=`get_trim_reads_fname $reads_fq`
-    echo "Starting fastx_trim for $reads_fq"
+    echo "Starting fastx_trim for $reads_in_fq"
     if [ $ext = "gz" ]; then
-        gunzip -c $reads_fq | /opt/bio/fastx/bin/fastx_trimmer -f $trim_start -l $trim_stop -z -o $trim_reads -Q33
+        gunzip -c $reads_in_fq | /opt/bio/fastx/bin/fastx_trimmer -f $trim_start -l $trim_stop -z -o $reads_out_fqgz -Q33
     else
-        /opt/bio/fastx/bin/fastx_trimmer -f $trim_start -l $trim_stop -z -i $reads_fq -o $trim_reads -Q33
+        /opt/bio/fastx/bin/fastx_trimmer -f $trim_start -l $trim_stop -z -i $reads_in_fq -o $reads_out_fqgz -Q33
     fi
     echo "Done fastx_trim for $reads_fq"
 }
@@ -363,36 +371,42 @@ run_velvetg()
 
 run_velvetg_raw()
 {
-    #kmer=$1
-    #exp_cov=$2
-    kmer=$velvetg_kmer # set using -k <kmer> option
-    echo kmer $kmer
-    if [[ -z $exp_cov && -s $exp_cov_raw_file ]]; then
-        exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_raw_file`
+    kmer=
+    exp_cov=
+    if [[ ! -z $kmer_index_raw && -s $exp_cov_raw_file ]]; then
+        #exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_raw_file`
+        line=`awk -v idx=$kmer_index_raw '{if(FNR==idx) { print $0; }}' $exp_cov_raw_file`
+        kmer=`echo $line | awk '{print $1}'`
+        exp_cov=`echo $line | awk '{print $2}'`
     fi
     if [ -z $exp_cov ]; then
         exp_cov="auto"
     fi
-    cd $raw_velvet_dir
-    run_velvetg $raw_velvetg_bin $kmer $exp_cov
-    cd ..
+    if [ ! -z $kmer ]; then
+        cd $raw_velvet_dir
+        run_velvetg $raw_velvetg_bin $kmer $exp_cov
+        cd ..
+    fi
 }
 
 run_velvetg_trim()
 {
-    #kmer=$1
-    #exp_cov=$2
-    kmer=$velvetg_kmer # set using -k <kmer> option
-    echo kmer $kmer
+    kmer=
+    exp_cov=
     if [[ -z $exp_cov && -s $exp_cov_trim_file ]]; then
-        exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_trim_file`
+        #exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_trim_file`
+        line=`awk -v idx=$kmer_index_trim '{if(FNR==idx) { print $0; }}' $exp_cov_trim_file`
+        kmer=`echo $line | awk '{print $1}'`
+        exp_cov=`echo $line | awk '{print $2}'`        
     fi
     if [ -z $exp_cov ]; then
         exp_cov="auto"
     fi
-    cd $trim_velvet_dir
-    run_velvetg $trim_velvetg_bin $kmer $exp_cov
-    cd ..
+    if [ ! -z $kmer ]; then
+        cd $trim_velvet_dir
+        run_velvetg $trim_velvetg_bin $kmer $exp_cov
+        cd ..
+    fi
 }
 
 assembly_stats()
