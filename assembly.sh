@@ -1,32 +1,32 @@
 #reads_R1_in= # not to be set here - set these in user-defined config before sourcing this file.
 #reads_R2_in=
 reads_prefix="@M01696"
-est_genome_size=20000000
+est_genome_size=25000000
 insert_length=301
 raw_readlen=${insert_length}
 trim_start=5
 trim_stop=175
-trim_readlen=$((trim_stop-trim_start+1))
 
 velvetk_cov=30
 velvetk_path="velvetk.pl"
-trim_kmer_start=77
+trim_kmer_start=65
 trim_kmer_end=127
 trim_kmer_step=4
-raw_kmer_start=105
-raw_kmer_end=145
+raw_kmer_start=65
+raw_kmer_end=129
 raw_kmer_step=4
 trim_velveth_bin="velveth_127"
 trim_velvetg_bin="velvetg_127"
-raw_velveth_bin="velveth_145"
-raw_velvetg_bin="velvetg_145"
+raw_velveth_bin="velveth_127"
+raw_velvetg_bin="velvetg_127"
 
-kmer_index_raw=
-kmer_index_trim=
+kmer_index=
+#kmer_index_raw=
+#kmer_index_trim=
 velvetg_kmer=
 func=
 config_file=
-while getopts "c:f:i:j:k:" opt; do
+while getopts "c:f:i:k:" opt; do
     case "${opt}" in
         c)
             config_file=${OPTARG}
@@ -35,11 +35,11 @@ while getopts "c:f:i:j:k:" opt; do
             func=${OPTARG}
             ;;
         i)
-            kmer_index_raw=${OPTARG}
+            kmer_index=${OPTARG}
             ;;
-        j)
-            kmer_index_trim=${OPTARG}
-            ;;
+        #j)
+        #    kmer_index_trim=${OPTARG}
+        #    ;;
         k)
             velvetg_kmer=${OPTARG} # Not implemented
             ;;
@@ -48,8 +48,10 @@ done
 
 [[ ! -z $config_file && -s $config_file ]] && source $config_file
 
+trim_readlen=$((trim_stop-trim_start+1))
 reads_R1=`pwd`/`basename $reads_R1_in`
 reads_R2=`pwd`/`basename $reads_R2_in`
+echo "reads_R1=${reads_R1}"
 trim_range="${trim_start}-${trim_stop}"
 raw_velvet_dir="velvet_raw"
 trim_velvet_dir="velvet_trim_${trim_range}"
@@ -245,7 +247,9 @@ read_counts()
     count=""
     if [[ -e $numreads_fname && -s $numreads_fname ]]; then
         count=`cat $numreads_fname`
-    else
+    fi
+    
+    if [[ -z $count || $count -eq 0 ]]; then
         reads_base_fq=`basename $reads_fq`
         ext="${reads_base_fq##*.}"
         if [ $ext = "gz" ]; then
@@ -373,9 +377,9 @@ run_velvetg_raw()
 {
     kmer=
     exp_cov=
-    if [[ ! -z $kmer_index_raw && -s $exp_cov_raw_file ]]; then
+    if [[ ! -z $kmer_index && -s $exp_cov_raw_file ]]; then
         #exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_raw_file`
-        line=`awk -v idx=$kmer_index_raw '{if(FNR==idx) { print $0; }}' $exp_cov_raw_file`
+        line=`awk -v idx=$kmer_index '{if(FNR==idx) { print $0; }}' $exp_cov_raw_file`
         kmer=`echo $line | awk '{print $1}'`
         exp_cov=`echo $line | awk '{print $2}'`
     fi
@@ -393,9 +397,9 @@ run_velvetg_trim()
 {
     kmer=
     exp_cov=
-    if [[ -z $exp_cov && -s $exp_cov_trim_file ]]; then
+    if [[ ! -z $kmer_index && -s $exp_cov_trim_file ]]; then
         #exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_trim_file`
-        line=`awk -v idx=$kmer_index_trim '{if(FNR==idx) { print $0; }}' $exp_cov_trim_file`
+        line=`awk -v idx=$kmer_index '{if(FNR==idx) { print $0; }}' $exp_cov_trim_file`
         kmer=`echo $line | awk '{print $1}'`
         exp_cov=`echo $line | awk '{print $2}'`        
     fi
@@ -409,23 +413,52 @@ run_velvetg_trim()
     fi
 }
 
+# Dummy function for assembly_qs.sh so it can perform jobid holding
+dummy_velvetg()
+{
+    x=
+}
+
 assembly_stats()
 {
-    kmer=$1
-    vdir="velvet_$kmer"
-    log="$vdir/Log"
-    ctg="$vdir/contigs.fa"
-    printf "\n$kmer:\n"
-    if [[ -e $vdir && -e $log && -e $ctg ]]; then
-        echo "$log:"
-        tail -2 $log
-        echo "quast:"
-        quast.py $ctg | grep "N50"
-        echo "contigs:"
-        grep -c "^>" $ctg
-    else
-        echo "Some assembly outputs are missing for kmer $kmer"
-    fi
+    velvet_dir=$1
+    start_dir=`pwd`
+    if [[ -s "$velvet_dir/contigs.fa" && -s "$velvet_dir/Log" ]]; then
+        cd $velvet_dir
+        mkdir -p assembly_stats
+        cd assembly_stats
+        if [ ! -d quast_results ]; then
+            quast.py "../contigs.fa" 2>&1 >/dev/null
+        fi
+        assembly_stats.pl --contig_file "../contigs.fa" --velvet_log "../Log" --quast_report_tsv "quast_results/latest/report.tsv" --name "$velvet_dir"
+        cd $start_dir
+    fi 
+}
+
+combine_assembly_stats()
+{
+    base_dir=$1
+    stats_outfile=$2
+    dir_list=`find $base_dir -name "contigs.fa" -exec dirname {} \; | sort | uniq`
+    #printf "" >$stats_outfile # clear/touch the stats file
+    assembly_stats.pl -h >$stats_outfile # Add just the header to the stats file.
+    for d in $dir_list; do
+        assembly_stats $d
+        asm_stats_file="$d/assembly_stats/assembly_stats_transpose.tab"
+        if [ -s $asm_stats_file ]; then
+            cat $asm_stats_file >>$stats_outfile
+        fi
+    done
+}
+
+combine_assembly_stats_raw()
+{
+    combine_assembly_stats $raw_velvet_dir $raw_velvet_dir/assembly_stats_ts_combined.tab
+}
+
+combine_assembly_stats_trim()
+{
+    combine_assembly_stats $trim_velvet_dir $trim_velvet_dir/assembly_stats_ts_combined.tab
 }
 
 # Some combined functions below to perform tasks in larger chunks with simpler qsub ordering
@@ -471,7 +504,9 @@ velvetkh_trim()
 
 # Finally, get stats for all output assemblies
 
-[ ! -z `echo $func | awk '{print $1;}'` ] && eval $func
+if [ ! -z `echo $func | awk '{print $1;}'` ]; then
+    eval "$func";
+fi
     
     
     
