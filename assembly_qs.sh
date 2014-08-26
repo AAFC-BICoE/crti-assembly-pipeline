@@ -10,7 +10,7 @@ num_kmers_raw=
 num_kmers_trim=
 func=
 holdid=
-velveth_host="biocomp-0-9" # Host to submit potentially memory-intensive velveth jobs to
+velveth_host=" -l h=biocomp-0-9 " # Host to submit potentially memory-intensive velveth jobs to
 while getopts "a:c:f:h:n:m:" opt; do
     case "${opt}" in
         a)

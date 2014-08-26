@@ -10,7 +10,7 @@ trim_stop=175
 velvetk_cov=30
 velvetk_path="velvetk.pl"
 trim_kmer_start=65
-trim_kmer_end=127
+trim_kmer_end=129
 trim_kmer_step=4
 raw_kmer_start=65
 raw_kmer_end=129
@@ -51,7 +51,6 @@ done
 trim_readlen=$((trim_stop-trim_start+1))
 reads_R1=`pwd`/`basename $reads_R1_in`
 reads_R2=`pwd`/`basename $reads_R2_in`
-echo "reads_R1=${reads_R1}"
 trim_range="${trim_start}-${trim_stop}"
 raw_velvet_dir="velvet_raw"
 trim_velvet_dir="velvet_trim_${trim_range}"
@@ -124,7 +123,7 @@ dir_setup()
     mkdir $raw_velvet_dir
     ln -s $reads_R1_in $raw_velvet_dir/
     ln -s $reads_R2_in $raw_velvet_dir/
-    mkdir $trim_velvet_dir
+    # mkdir -p $trim_velvet_dir
     svn export http://biodiversity/svn/source/AssemblyPipeline/ExpKmerCov.pl
 }
 
@@ -305,6 +304,7 @@ run_velvetk_trim()
 {
     best_kmer=`run_velvetk $reads_R1_trim $reads_R2_trim`
     echo "$best_kmer"
+    mkdir -p $trim_velvet_dir
     echo "$best_kmer" >$velvetk_trim_outfile
 }
 
@@ -397,6 +397,7 @@ run_velvetg_trim()
 {
     kmer=
     exp_cov=
+    echo "exp cov file: $exp_cov_trim_file"
     if [[ ! -z $kmer_index && -s $exp_cov_trim_file ]]; then
         #exp_cov=`awk -v kmer=$kmer '{if ($1==kmer) { print $2; }}' $exp_cov_trim_file`
         line=`awk -v idx=$kmer_index '{if(FNR==idx) { print $0; }}' $exp_cov_trim_file`
