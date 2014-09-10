@@ -137,7 +137,7 @@ run_bowtie() {
     echo $qsub_bowtie2_cmd
     qsub_bowtie2_out=`eval $qsub_bowtie2_cmd`
     qsub_bowtie2_jobid=`echo $qsub_bowtie2_out | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
-    sam2bam_cmd="samtools view -S $samfile -b $bamfile"
+    sam2bam_cmd="samtools view -S $samfile -b  -o $bamfile"
     qsub_sam2bam_cmd="qsub -N sam2bam -pe orte 1 -hold_jid ${qsub_bowtie2_jobid} qsub_script.sh \"${sam2bam_cmd}\""
     echo $qsub_sam2bam_cmd
     qsub_sam2bam_out=`eval $qsub_sam2bam_cmd`
