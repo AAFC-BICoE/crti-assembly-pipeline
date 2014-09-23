@@ -20,6 +20,7 @@ trim_velvetg_bin="velvetg_127"
 raw_velveth_bin="velveth_127"
 raw_velvetg_bin="velvetg_127"
 
+velvetg_params=
 kmer_index=
 #kmer_index_raw=
 #kmer_index_trim=
@@ -368,7 +369,7 @@ run_velvetg()
     velvetg_bin=$1
     kmer=$2
     exp_cov=$3
-    velvetg_cmd="$velvetg_bin velvet_$kmer -amos_file yes -cov_cutoff auto -exp_cov $exp_cov -unused_reads yes -scaffolding yes -ins_length $insert_length"
+    velvetg_cmd="$velvetg_bin velvet_$kmer -amos_file yes -cov_cutoff auto -exp_cov $exp_cov -unused_reads yes -scaffolding yes -ins_length $insert_length $velvetg_params"
     echo "$velvetg_cmd"
     eval $velvetg_cmd
 }
