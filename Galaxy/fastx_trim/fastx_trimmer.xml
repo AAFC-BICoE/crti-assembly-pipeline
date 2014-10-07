@@ -1,0 +1,112 @@
+<tool id="fastx_trimmer" name="FastX Trimmer" version="1.0.0">
+  <description>to fixed length</description>
+ <requirements>
+  <requirement type="package" version="0.0.13.2">fastx_trimmer</requirement>
+ </requirements>
+	<command> 
+		fastx_trimmer
+	<!--	#if $input.ext == "fastqsanger":
+			 -Q 33
+		#elif $input.ext == "fastq":
+		 	-Q 33
+		#elif $input.ext == "fq":
+		 	-Q 33
+		#end if
+		-v -f $first -l $last -->
+		#if $minQual.Qselect == "yes":
+			-Q $minQual.quality
+		#end if
+		-f $first
+		
+		#if $lastB.lastSelect == "yes"
+		
+			-l $lastB.last
+
+		#end if
+		
+		-i $input -o '$output'
+		
+        </command>
+	<inputs>
+
+		<conditional name="minQual">
+			<param name="Qselect" type="select" label="Use a minimum base score ?" value="yes" >
+				<option value="yes">Yes</option>
+				<option value="no">No</option>
+			</param>
+			<when value="yes" >
+				<param name="quality" type="integer" value="33" label="Minimum quality"/>
+			</when>
+			
+		</conditional>
+				
+		<param format="fasta,fastq,fastqsanger" name="input" type="data" label="Library to clip" />
+
+		<param name="first" size="4" type="integer" value="1">
+			<label>First base to keep</label>
+		</param>
+
+
+		<conditional name="lastB">
+			<param name="lastSelect" type="select" label="Enter a last base to keep? (By default it will keep the rest of the sequence" value="yes" >
+				<option value="yes">Yes</option>
+				<option value="no">No</option>
+			</param>
+			<when value="yes" >
+				<param name="last" size="4" type="integer" value="21">
+					<label>Last base to keep</label>
+				</param>
+			</when>
+			
+		</conditional>
+
+
+
+
+		
+		
+	</inputs>
+
+	<outputs>
+		<data format="input" name="output" metadata_source="input"/>
+	</outputs>
+
+
+	<help>
+		**What it does**
+
+This tool trims (cut nucleotides from) sequences in a FASTA/Q file.
+  
+--------
+
+**Example**
+
+Input Fasta file (with 36 bases in each sequences)::
+
+    >1-1
+    TATGGTCAGAAACCATATGCAGAGCCTGTAGGCACC
+    >2-1
+    CAGCGAGGCTTTAATGCCATTTGGCTGTAGGCACCA
+    
+
+Trimming with First=1 and Last=21, we get a FASTA file with 21 bases in each sequences (starting from the first base)::
+
+    >1-1
+    TATGGTCAGAAACCATATGCA
+    >2-1
+    CAGCGAGGCTTTAATGCCATT
+
+Trimming with First=6 and Last=10, will generate a FASTA file with 5 bases (bases 6,7,8,9,10) in each sequences::
+
+    >1-1
+    TCAGA
+    >2-1
+    AGGCT
+    
+------
+
+This tool is based on `FASTX-toolkit`__ by Assaf Gordon.
+
+ .. __: http://hannonlab.cshl.edu/fastx_toolkit/
+	</help>
+</tool>

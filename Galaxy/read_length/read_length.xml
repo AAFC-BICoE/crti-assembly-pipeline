@@ -1,0 +1,25 @@
+<tool id="read_length" name="Read Length" version="1.0.0">
+  <description> </description>
+	<options sanitize="False" />
+  	<command interpreter="perl"> 
+		
+		read_length.pl $file $read > $output;
+		
+        </command>
+	
+	<inputs>
+		<param name="file" type="data" format="fastq" label="Fastq File"/>
+		<param name="read" type="text" label="Reads Prefix"/>
+	</inputs>
+	
+	<outputs>
+		
+		<data name="output" format="txt"/>
+			
+	</outputs>
+
+	<help>
+	</help>
+
+
+</tool>

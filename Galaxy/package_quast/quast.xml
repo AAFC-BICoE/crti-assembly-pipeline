@@ -1,0 +1,11 @@
+<tool id="quast" name="Qwuast" version="1.0.0">
+	<command>
+		echo Hello World;
+	</command>
+	<inputs>
+		
+	</inputs>
+	<outputs>
+		
+	</outputs>
+</tool>

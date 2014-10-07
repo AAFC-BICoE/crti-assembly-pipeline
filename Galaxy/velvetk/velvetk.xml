@@ -1,0 +1,107 @@
+<tool id="velvetk" name="velvetk" version="1.0.0">
+	<description>Tool for assisting with k-mer size choice for Velvet assemblies.</description>
+		<command interpreter='perl'>
+			velvetk.pl
+			#if $sizetype.sizetypes == "size":
+				-s $sizetype.gsize
+			#elif $sizetype.sizetypes == "fasta":
+				-g $sizetype.gfile
+			#end if
+			#if $optimum.best:
+				-b -c $optimum.coverage
+			#end if
+			#for i in $inputs
+				${i.filetype.input}
+			#end for
+			1> '$velvetkout' 2> /dev/null ;
+			
+		</command>
+<!--		<command interpreter='perl'>
+			echo  $build_range.make_range;
+			echo $build_range.getting_input.input_type;
+			#if $build_range.make_range:
+				echo $build_range.make_range;
+				#if $build_range.getting_input.input_type == 'manual':
+					echo $build_range.getting_input.input_type;
+					build_kmer_range.pl manual $build_range.getting_input.start_kmer $build_range.getting_input.size_set $build_range.getting_input.end_kmer $velvetkout > $build_kmer_range;
+				#end if
+				#if $build_range.getting_input.input_type == 'offset':
+					echo $build_range.getting_input.input_type;
+					build_kmer_range.pl offset $build_range.getting_input.offset $velvetkout > $build_kmer_range;
+				#end if	
+			#end if
+		</command>
+	</commands> -->
+	<inputs>
+		
+	<!--	<conditional name="build_range" value="false">
+			<param name="make_range" type="boolean" truevalue="true" value="false" label="Build the kmer range"/>
+			<when value="true">
+				<conditional name="getting_input">
+					<param name="input_type" type="select" label="Select the way you want to build the range." >
+						<option value="manual"> Manually specify the range</option>
+						<option value="offset"> Specify the offset from the best kmer</option>
+					</param>
+					<when value="manual">
+						<param name="start_kmer" type="integer" value="0" label="The first Kmer of the range."/>
+						<param name="size_set" type="integer" value="2" label="The step size of the kmer range (By default usually 2)"/>
+						<param name="end_kmer" type="integer" value="0" label="The end kmer"/>
+					</when>
+					<when value="offset">
+						<param name="offset" type="integer" value="0" label="Build the kmer range around best kmer +/- offset"/> 
+					</when>
+				</conditional>
+			</when>	
+		</conditional> -->
+		
+		<conditional name="sizetype">
+			<param name="sizetypes" type="select" label="Specify a size or a fasta file" help="The expected length of the genome can come from an estimation of its length from the user or by measuring the length of the supplied fasta file.">
+				<option value="size" selected="true">User supplied size</option>
+				<option value="fasta">Fasta file</option>
+			</param>
+			<when value="size">
+				<param name="gsize" type="text" label="Target genome size in bp (can use k/M/G suffix)"/>
+			</when>
+			<when value="fasta">
+				<param name="gfile" type="data" label="Target genome fasta file" help="Target genome fasta file to get genome size from"/>
+			</when>
+		</conditional>
+		<conditional name="optimum">
+			<param name="best" type="boolean" checked="false" truevalue="-b" falsevalue="" label="Show only best result(output will be in the form best,kmer offset,final kmer this is needed to build the kmer range.)" help="Only show best k-mer value">
+			</param>
+			<when value="">
+			</when>
+			<when value="-b">
+				<param name="coverage" type="integer" value="25" label="Target coverage" help="The target k-mer coverage (integer)"/>
+			</when>
+		</conditional>
+		<repeat name="inputs" title="Input Files">
+			<conditional name="filetype" >
+				<param name="select_type" type="select" label="Choose between fasta and fastq file type" >
+					<option value="fasta"> Fasta </option>
+					<option value="fastq"> Fastq </option>
+				</param>
+				<when value="fasta">
+					<param name="input" type="data" format="fasta" label="Dataset"/>
+				</when>
+				<when value="fastq">
+					<param name="input" type="data" format="fastq" label="Dataset"/>
+				</when>
+			</conditional>
+		</repeat>
+	
+	</inputs>
+	
+	<outputs>
+		<data name="velvetk" format="txt" label="${tool.name} on ${on_string}: Velvetkout"/>
+	<!--	<data name="build_kmer_range" format="txt" label="Build Kmer range"/>   -->
+	</outputs>
+	
+	<stdio>
+		<exit_code range="1:"   level="fatal"   description="Velvet k error" />
+  </stdio>
+	
+	<help>
+	
+	</help>
+</tool>

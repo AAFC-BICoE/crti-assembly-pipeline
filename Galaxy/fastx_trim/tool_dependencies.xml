@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<tool_dependency>
+		<package name="fastx_trimmer" version="0.0.13.2" >
+			<install version="1.0">	
+				<actions>
+					<action type="shell_command">pwd</action>
+					<action type="shell_command">wget http://hannonlab.cshl.edu/fastx_toolkit/fastx_toolkit-0.0.13.2.tar.bz2</action>
+					<action type="shell_command">tar -xjf fastx_toolkit-0.0.13.2.tar.bz2</action>
+					<action type="shell_command">ls</action>
+					<action type="shell_command">pwd</action>
+					<action type="change_directory">fastx_toolkit-0.0.13.2</action>
+					<action type="shell_command">./configure</action>
+					<action type="shell_command">make</action> 
+					<action type="shell_command">mv * $INSTALL_DIR</action>
+					<action type="set_environment">
+						<environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/src/fastx_trimmer</environment_variable>
+					</action> 
+				</actions>
+			</install>
+		</package>
+   		<help>
+			Need both pkg-config and libtextutils(-dev).
+		</help>
+</tool_dependency>

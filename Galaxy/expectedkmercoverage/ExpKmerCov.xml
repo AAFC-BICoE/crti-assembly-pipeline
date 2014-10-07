@@ -1,0 +1,70 @@
+<tool id="expectedkmercoverage" name="ExpKmerCov" version="1.0.0">
+	<command interpreter='perl'>
+		ExpKmerCov.pl 
+		#for $i in $files:
+
+			#if $i.input_file_or_user.selection == "Manual" :
+				--read_length $i.input_file_or_user.read_length --num_reads $i.input_file_or_user.num_reads
+			#else :
+				--read_length `head -n 1 $i.input_file_or_user.length_file` --num_reads `tail -n 1 $i.input_file_or_user.count_file`
+			#end if
+				
+		#end for
+
+		--genome_size $genome_size
+		
+		#if $range_input.range_select == "Manual" :
+		
+			--kmer_range $kmer_range_min,$kmer_range_max,$kmer_range_inc 
+		
+		#else :
+			
+			--kmer_range `cat $range_file `
+			
+		#end if
+		> $output
+	</command> 
+	<inputs>
+		<repeat name="files" title="Files">
+			<conditional name="input_file_or_user" >
+				<param name="selection" type="select" label="Input reads length and count manually or from a file?">
+					<option value="Manual"> Manual</option>
+					<option value="File" > File </option>
+				</param>			
+				<when value="Manual">	
+					<param name="read_length" type="integer" value="0" label="read_length"/>
+					<param name="num_reads" type="integer" value="0" label="nums_reads" />
+				</when>
+					
+				<when value="File">
+					<param name="length_file" type="data" label= "The reads length file" />
+				</when>	
+			</conditional>
+		</repeat>
+		<param name="genome_size" type="integer" value="0" label="Estimate for genome size" />
+		<conditional name="range_input">
+			<param name="range_select" type="select" label="Select input option for Kmer range"  > 
+				<option value="Manual">Manual</option>
+				<option value="File">File</option>
+			</param>
+			
+			
+			
+			<when value="Manual">
+				<param name="kmer_range_min" type="integer" value="0" label="The minimum of the kmer range" />
+				<param name="kmer_range_max" type="integer" value="0" label="The maximum of the kmer range" />
+				<param name="kmer_range_inc" type="integer" value="0" label="The even increment of the kmer range" />
+			</when>	
+		
+			<when value="File">
+			
+				<param name="range_file" type="data" format="txt" label="The range file"/>
+			
+			</when>
+		</conditional>
+		
+	</inputs>
+	<outputs>
+		<data format="txt" name="output"/>
+	</outputs>
+</tool>

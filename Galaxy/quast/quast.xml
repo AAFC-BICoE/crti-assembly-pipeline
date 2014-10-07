@@ -1,0 +1,21 @@
+<tool id="quast" name="Quast" version="1.0.0">
+	<requirements>
+		<requirement type="package" version="2.3">quast</requirement>
+	</requirements>
+	<command>
+		quast.py
+		-M $min_config
+		#for $i in $inputs :
+			${i.contigs}
+		#end for
+	</command> 
+	<inputs>
+		<repeat name="inputs" title="Input Files">
+			<param name="contigs" type="data" format="contigs" label="A contigs velvetg output file"/>
+		</repeat>
+		<param name="min_config" type="integer" value="500" label="Threshold for contig length (default 500)"/>
+	</inputs>
+	<outputs>
+		<data format="kmer_range" name="output"/>
+	</outputs>
+</tool>
