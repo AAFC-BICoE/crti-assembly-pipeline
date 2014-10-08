@@ -1,11 +1,26 @@
-<tool id="quast" name="Qwuast" version="1.0.0">
-	<command>
-		echo Hello World;
+<tool id="quast" name="Quast" version="1.0.0">
+	<requirements>
+		<requirement type="package" version="2.3">quast</requirement>
+	</requirements>
+	<command interpreter='python'>
+		quast.py 
+		#for $i in $files :
+			
+			$i.contig_file
+			
+		#end for
+
+		-o output;
+		cp ./output $report
+
+		
 	</command>
 	<inputs>
-		
+		<repeat name="files" title="Contig Files">
+			<param name="contig_file" type="fasta" />
+		</repeat>
 	</inputs>
 	<outputs>
-		
+		<data name="report" format="txt" />
 	</outputs>
 </tool>
