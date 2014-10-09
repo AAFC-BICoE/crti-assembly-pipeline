@@ -38,7 +38,7 @@ velveth $output.extra_files_path
 
 $strand_specific
 
-<!--#if $short_select == "Separated":
+<!--#if $short_select == "separated":
 	-separate
 #end if
 
@@ -56,10 +56,9 @@ $i.filetype.file
 
 #if $shortUse.shortSelect == "yes":
 
-	#if $shortUse.short_select == "Separate" :
-		-separate
-	#end if
-	
+	-$shortUse.short_select	
+
+
 	
 	$shortUse.short.libtype
 	
@@ -76,7 +75,7 @@ $i.filetype.file
 
 
 <!--
-#if $short_select2 == "Separated":
+#if $short_select2 == "separated":
 	-separate
 #end if
 
@@ -85,7 +84,7 @@ $i.filetype.file
 $short2.libtype $i.filetype.select $i.filetype.file
 #end for
 
-#if $short_select3 == "Separated":
+#if $short_select3 == "separated":
 	-separate
 #end if
 -->
@@ -93,11 +92,8 @@ $short2.libtype $i.filetype.select $i.filetype.file
 #if $shortUse2.shortSelect2 == "yes":
 
 	$shortUse2.short2.libtype
-
-	#if $shortUse2.short_select2 == "Separate" :
-                -separate
-        #end if
-
+	
+	-$shortUse2.short_select2
 		
 	#for $i in $shortUse2.short2.files
 		$i.filetype.select
@@ -115,7 +111,7 @@ $short3.libtype $i.filetype.select $i.filetype.file
 #end for
 
 
-#if $short_select4 == "Separated":
+#if $short_select4 == "separated":
 	-separate
 #end if
  -->
@@ -124,10 +120,8 @@ $short3.libtype $i.filetype.select $i.filetype.file
 #if $shortUse3.shortSelect3 == "yes":
 	
 	$shortUse3.short3.libtype
+	-$shortUse3.short_select3
 	
-	#if $shortUse3.short_select3 == "Separate" :
-                -separate
-        #end if
 
 	
 	#for $i in $shortUse3.short3.files
@@ -148,11 +142,7 @@ $short4.libtype $i.filetype.select $i.filetype.file
 #if $shortUse4.shortSelect4 == "yes":
 	
 	$shortUse4.short4.libtype
-	
-	#if $shortUse4.short_select4 == "Separate" :
-                -separate
-        #end if
-
+	-$shortUse4.short_select4
 	
 	#for $i in $shortUse4.short4.files
 		$i.filetype.select
@@ -167,7 +157,7 @@ $short4.libtype $i.filetype.select $i.filetype.file
 
 
 
-<!--#if $short_select5 == "Separated":
+<!--#if $short_select5 == "separated":
 	-separate
 #end if
 
@@ -177,7 +167,7 @@ $short4.libtype $i.filetype.select $i.filetype.file
 $short5.libtype $i.filetype.select $i.filetype.file
 #end for
 
-#if $short_selectlong == "Separated":
+#if $short_selectlong == "separated":
 	-separate
 #end if
 -->
@@ -185,11 +175,7 @@ $short5.libtype $i.filetype.select $i.filetype.file
 #if $shortUse5.shortSelect5 == "yes":
 	
 	$shortUse5.short5.libtype
-	
-	#if $shortUse5.short_select5 == "Separate" :
-                -separate
-        #end if
-
+	-$shortUse5.short_select5
 	
 	#for $i in $shortUse5.short5.files
 		$i.filetype.select
@@ -273,10 +259,10 @@ $long.libtype $i.filetype.select $i.filetype.file
 
 	</param>
 	<when value="yes">
-<param name="short_select" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
+	<param name="short_select" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="Separate">Separate</option>
-		<option value="Interleaved">Interleaved</option>
+		<option value="separate">separate</option>
+		<option value="interleaved">interleaved</option>
 		
 	</param>
     		<conditional name="short">
@@ -333,8 +319,8 @@ $long.libtype $i.filetype.select $i.filetype.file
 	<when value="yes">
 	<param name="short_select2" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="Separate">Separate</option>
-		<option value="Interleaved">Interleaved</option>
+		<option value="separate">separate</option>
+		<option value="interleaved">interleaved</option>
 		
 	</param>
     <conditional name="short2">
@@ -388,8 +374,8 @@ $long.libtype $i.filetype.select $i.filetype.file
 	<when value="yes">
 	<param name="short_select3" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="Separate">Separate</option>
-		<option value="Interleaved">Interleaved</option>
+		<option value="separate">separate</option>
+		<option value="interleaved">interleaved</option>
 		
 	</param>
     <conditional name="short3">
@@ -442,8 +428,8 @@ $long.libtype $i.filetype.select $i.filetype.file
 <when value="yes">
 	<param name="short_select4" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="Separate">Separate</option>
-		<option value="Interleaved">Interleaved</option>
+		<option value="separate">separate</option>
+		<option value="interleaved">interleaved</option>
 		
 	</param>
 
@@ -499,8 +485,8 @@ $long.libtype $i.filetype.select $i.filetype.file
 	<when value="yes">
 	<param name="short_select5" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="Separate">Separate</option>
-		<option value="Interleaved">Interleaved</option>
+		<option value="separate">separate</option>
+		<option value="interleaved">interleaved</option>
 		
 	</param>
     <conditional name="short5">
@@ -553,8 +539,8 @@ $long.libtype $i.filetype.select $i.filetype.file
 	<when value="yes">
 	<param name="short_selectlong" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="Separate">Separate</option>
-		<option value="Interleaved">Interleaved</option>
+		<option value="separate">separate</option>
+		<option value="interleaved">interleaved</option>
 		
 	</param>
 
