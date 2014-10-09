@@ -55,6 +55,11 @@ $i.filetype.file
 #end for  -->
 
 #if $shortUse.shortSelect == "yes":
+
+	#if $shortUse.short_select == "Separate" :
+		-separate
+	#end if
+	
 	
 	$shortUse.short.libtype
 	
@@ -86,9 +91,14 @@ $short2.libtype $i.filetype.select $i.filetype.file
 -->
 
 #if $shortUse2.shortSelect2 == "yes":
-	
+
 	$shortUse2.short2.libtype
-	
+
+	#if $shortUse2.short_select2 == "Separate" :
+                -separate
+        #end if
+
+		
 	#for $i in $shortUse2.short2.files
 		$i.filetype.select
 	#end for
@@ -115,6 +125,11 @@ $short3.libtype $i.filetype.select $i.filetype.file
 	
 	$shortUse3.short3.libtype
 	
+	#if $shortUse3.short_select3 == "Separate" :
+                -separate
+        #end if
+
+	
 	#for $i in $shortUse3.short3.files
 		$i.filetype.select
 	#end for
@@ -133,6 +148,11 @@ $short4.libtype $i.filetype.select $i.filetype.file
 #if $shortUse4.shortSelect4 == "yes":
 	
 	$shortUse4.short4.libtype
+	
+	#if $shortUse4.short_select4 == "Separate" :
+                -separate
+        #end if
+
 	
 	#for $i in $shortUse4.short4.files
 		$i.filetype.select
@@ -165,6 +185,11 @@ $short5.libtype $i.filetype.select $i.filetype.file
 #if $shortUse5.shortSelect5 == "yes":
 	
 	$shortUse5.short5.libtype
+	
+	#if $shortUse5.short_select5 == "Separate" :
+                -separate
+        #end if
+
 	
 	#for $i in $shortUse5.short5.files
 		$i.filetype.select
