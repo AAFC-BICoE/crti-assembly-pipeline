@@ -56,11 +56,11 @@ $i.filetype.file
 
 #if $shortUse.shortSelect == "yes":
 
-	-$shortUse.short_select	
-
+        $shortUse.short.libtype
 
 	
-	$shortUse.short.libtype
+	-$shortUse.short_select	
+	
 	
 	#for $i in $shortUse.short.files
 		$i.filetype.select
