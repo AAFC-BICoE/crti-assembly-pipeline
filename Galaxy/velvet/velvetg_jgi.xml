@@ -15,69 +15,154 @@ $amos_outfile
 velvetg $velvetg_outfile.extra_files_path
 -very_clean yes
 #if  $insLen.insLenSelect == "yes"
--ins_length $ins_length
-    #if $ins_length_sd != '':
-
+-ins_length $insLen.ins_length
+    #if $insLen.insLenSD.insLenSDSelect == "yes"  :
+	-ins_length_sd $insLen.insLenSD.ins_length_sd
     #end if
 #end if
 #if  $insLen2.insLenSelect2 == "yes"
-    -ins_length2 $ins_length2
-    #if $ins_length2_sd != '':
-           -ins_length2_sd $ins_length2_sd
+    -ins_length2 $insLen2.ins_length2
+    #if $insLen2.insLenSD2.insLenSDSelect2 == "yes" :
+           -ins_length2_sd $insLen2.insLenSD2.ins_length_sd2
     #end if
 #end if
+
+
 #if  $insLen3.insLenSelect3 == "yes"
-    -ins_length3 $ins_length3
-    #if $ins_length3_sd != '':
-          -ins_length3_sd $ins_length3_sd
+-ins_length $insLen3.ins_length3
+    #if $insLen3.insLenSD3.insLenSDSelect3 == "yes"  :
+        -ins_length3_sd $insLen3.insLenSD3.ins_length_sd3
     #end if
 #end if
 #if  $insLen4.insLenSelect4 == "yes"
-    -ins_length4 $ins_length4
-    #if $ins_length4_sd != '':
-    	-ins_length4_sd $ins_length4_sd
+    -ins_length4 $insLen4.ins_length4
+    #if $insLen4.insLenSD4.insLenSDSelect4== "yes" :
+           -ins_length4_sd $insLen4.insLenSD4.ins_length_sd4
     #end if
-#end if
-#if  $insLen5.insLenSelect5 == "yes"
-    -ins_length5 $ins_length5
-    #if $ins_length5_sd != '':
-    	-ins_length5_sd $ins_length5_sd
-    #end if
-#end if
-<!--#if $ins_length_longBool:
-    -ins_length_long $ins_length_long
-    #if $ins_length_long_sd != '':
-    	-ins_length_long_sd $ins_length_long_sd
-    #end if
-#end if
-#if $exp_covBool:
-	#if $exp_cov_input.exp_selection == "Manual" :
-		-exp_cov $exp_cov_input.exp_cov
-	#else :
-		-exp_cov ` head -n 1 $exp_cov_input.exp_cov_file | cut -f2- `
-	#end if
 #end if
 
-#if $cov_cutoffBool:
+
+#if  $insLen5.insLenSelect5 == "yes"
+    -ins_length5 $insLen5.ins_length5
+    #if $insLen5.insLenSD5.insLenSDSelect5 == "yes" :
+           -ins_length5_sd $insLen5.insLenSD5.ins_length_sd5
+    #end if
+#end if
+
+
+
+#if  $insLenLong.insLenSelectLong == "yes"
+    -ins_length_long $insLenLong.ins_lengthLong
+#end if
+
+#if $exp_cov_input.exp_selection == "Manual" :
+	-exp_cov $exp_cov_input.exp_cov
+#else :
+	-exp_cov ` head -n 1 $exp_cov_input.exp_cov_file | cut -f2- `
+#end if
+
+<!--#if $cov_cutoffBool:
 	-cov_cutoff $cov_cutoff
 #end if
 
 #if $long_cov_cutoffBool:
 	-long_cov_cutoff $long_cov_cutoff
 #end if -->
-max_coverage $max_coverage
+
+#if $cov_cutoff_condition.cov_cutoff_select == "yes" :
+	-cov_cutoff $cov_cutoff
+#end if
+
+#if $long_cov_cutoff_condition.long_cov_cutoff_select == "yes" :
+	-long_cov_cutoff
+#end if
+
+
+
+
+
+#if $max_coverage_condition.max_coverage_select == "yes":
+
+-max_coverage $max_coverage
+
+#end if
+
+
+#if $min_contig_lgth_condition.min_contig_lgth_select == "yes" :
+
 -min_contig_lgth $min_contig_lgth
+
+#end if
+
+
+#if $read_trkg:
+
 -read_trkg $read_trkg 
+
+#end if
+
+
+#if $amos_file:
+
 -amos_file $amos_file
+
+#end if
+
+#if $unused_reads:
+
 -unused_reads $unused_reads
+
+#end if
+
+#if $max_branch_length_condition.max_branch_length_select == "yes":
+
 -max_branch_length $max_branch_length
+
+#end if
+
+
+#if $max_divergence_condition.max_divergence_length_select == "yes":
+
 -max_divergence $max_divergence
+
+#end if
+
+#if $max_gap_count_condition.max_gap_count_select == "yes":
+
 -max_gap_count $max_gap_count 
+
+#end if
+#if $scaffolding :
 -scaffolding $scaffolding
+
+#end if
+
+
+#if $long_mult_cutoff_condition.long_mult_cutoff_select == "yes" :
+
 -long_mult_cutoff $long_mult_cutoff
+
+#end if
+
+#if $min_pair_count_condition.min_pair_count_select =="yes":
+
 -min_pair_count $min_pair_count
+
+#end if
+
+#if $alignments:
+
 -alignments $alignments
+
+#end if
+
+
+#if $exportFiltered:
+
 -exportFiltered $exportFiltered
+
+#end if
+
 </command>
 <inputs>
     <param name="velveth" type="data" format="txt" label="velvet hash"/>
@@ -89,84 +174,145 @@ max_coverage $max_coverage
 		</param>
 		
 		 <when value="yes">   		
-		 	<param name="ins_length" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="-1=no read pairing; auto=infer; or supply value (integer)" />
+		 	<param name="ins_length" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
+			
+			<conditional name="insLenSD" >
+				<param name="insLenSDSelect" type="select" label="Enter a length standard deviation (bp) of short library">
+					<option value="no">No</option>
+					<option value="yes">Yes</option>
+				</param>
+				<when value="yes">	
+					<param name="ins_length_sd" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
+				</when>
+			</conditional>
+				
 		</when>	
 	</conditional>
-    <param name="ins_length_sd" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) -1" />
+
+
+
+    
 		<conditional name="insLen2">
 		
-			<param name="insLenSelect2" type="select" label="Enter a expected distance between two paired end reads for the first data set">
+			<param name="insLenSelect2" type="select" label="Enter a expected distance between two paired end reads for the second data set">
 				<option value="no">No</option>
 				<option value="yes">Yes</option>
 			</param>
 		
 			 <when value="yes"> 
-    				<param name="ins_length2" type="text" value='auto' label="[ins_length2] Insert length (bp) of short2 library" help="n=no read pairing; auto=infer; or supply value (integer)" />
-   			 </when>
-		</condition>
+    				<param name="ins_length2" type="text" value='auto' label="[ins_length2] Insert length (bp) of short2 library" help="auto=infer; or supply value (integer)" />
+   			 	
+				
+				<conditional name="insLenSD2" >
+	                                 <param name="insLenSDSelect2" type="select" label="Enter a length standard deviation (bp) of short library">
+        	                                  <option value="no">No</option>
+                	                          <option value="yes">Yes</option>
+                        	         </param>
+                                	 <when value="yes">
+                                        	 <param name="ins_length_sd2" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
+                                 </when>
+                         </conditional>
 
-
-
- <param name="ins_length2_sd" type="text" value='auto' label="[-ins_length2_sd] Insert length standard deviation (bp) of short2 library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer)" />
-
-
-    <param name="ins_length_sd" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) -1" />
-
-
-		<conditional name="insLen3">
-			<param name="insLenSelect3" type="select" label="Enter a expected distance between two paired end reads for the first data set">
-				<option value="no">No</option>
-				<option value="yes">Yes</option>
-			</param>
-		
-			 <when value="yes"> 
-    				<param name="ins_length3" type="text" value='auto' label="[ins_length3] Insert length (bp) of short3 library" help="n=no read pairing; auto=infer; or supply value (integer)" />
+				
+				
 			</when>
 		</conditional>
 
 
-
- <param name="ins_length3_sd" type="text" value='auto' label="[-ins_length3_sd] Insert length standard deviation (bp) of short3 library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer)" />
-	
-<conditional name="insLen4">
-			<param name="insLenSelect4" type="select" label="Enter a expected distance between two paired end reads for the first data set">
+		<conditional name="insLen3">
+			<param name="insLenSelect3" type="select" label="Enter a expected distance between two paired end reads for the third data set">
 				<option value="no">No</option>
 				<option value="yes">Yes</option>
 			</param>
 		
 			 <when value="yes"> 
-    <param name="ins_length4" type="text" value='auto' label="[ins_length4] Insert length (bp) of short4 library" help="n=no read pairing; auto=infer; or supply value (integer)" />
-    			</when>
+    				<param name="ins_length3" type="text" value='auto' label="[ins_length3] Insert length (bp) of short3 library" help="auto=infer; or supply value (integer)" />
+				
+				<conditional name="insLenSD3" >
+					<param name="insLenSDSelect3" type="select" label="Enter a length standard deviation (bp) of short library">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</param>
+					<when value="yes">	
+						<param name="ins_length_sd3" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
+					</when>
+				</conditional>
+				
+			</when>
+
+		</conditional> 
+
+<conditional name="insLen4">
+			<param name="insLenSelect4" type="select" label="Enter a expected distance between two paired end reads for the fourth data set">
+				<option value="no">No</option>
+				<option value="yes">Yes</option>
+			</param>
+		
+			 <when value="yes"> 
+    				<param name="ins_length4" type="text" value='auto' label="[ins_length4] Insert length (bp) of short4 library" help="auto=infer; or supply value (integer)" />
+    				
+				<conditional name="insLenSD4" >
+					<param name="insLenSDSelect4" type="select" label="Enter a length standard deviation (bp) of short library">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</param>
+					<when value="yes">	
+						<param name="ins_length_sd4" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
+					</when>
+			</conditional>
+				
+				
+			</when>
 </conditional>
 
-<param name="ins_length4_sd" type="text" value='auto' label="[-ins_length4_sd] Insert length standard deviation (bp) of short4 library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer)" />
 
 
-
-
-<conditional name="insLen4">
-			<param name="insLenSelect4" type="select" label="Enter a expected distance between two paired end reads for the first data set">
+<conditional name="insLen5">
+			<param name="insLenSelect5" type="select" label="Enter a expected distance between two paired end reads for the fifth data set">
 				<option value="no">No</option>
 				<option value="yes">Yes</option>
 			</param>
 		
 			 <when value="yes"> 
 
-    				<param name="ins_length5" type="text" value='auto' label="[ins_length5] Insert length (bp) of short5 library" help="n=no read pairing; auto=infer; or supply value (integer)" />
-   			</when>
-</conditional>			
- <param name="ins_length5_sd" type="text" value='auto' label="[-ins_length5_sd] Insert length standard deviation (bp) of short5 library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer)" />
+    				<param name="ins_length5" type="text" value='auto' label="[ins_length5] Insert length (bp) of short5 library" help="auto=infer; or supply value (integer)" />
+				   
+				
+				<conditional name="insLenSD5" >
+					<param name="insLenSDSelect5" type="select" label="Enter a length standard deviation (bp) of short library">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</param>
+					<when value="yes">	
+						<param name="ins_length_sd5" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
+					</when>
+				</conditional>
+				
+				
+				
+			</when>
+</conditional>
+ 
 
-    <param name="ins_length_long" type="text" value='auto' label="[ins_length_long] Insert length (bp) of long library" help="n=no read pairing; auto=infer; or supply value (integer)" />
-    <param name="ins_length_long_sd" type="text" value='auto' label="[-ins_length_sd_long] Insert length standard deviation (bp) of long library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer)" />
-    <param name="exp_covBool" type="boolean" checked='true' label="Do you have a read pairing" truevalue='yes' falsevalue='no'/>
+<conditional name="insLenLong">
+                        <param name="insLenSelectLong" type="select" label="Enter a expected distance between two paired end reads for the first data set">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                        </param>
+
+                         <when value="yes">
+
+                                <param name="ins_lengthLong" type="text" value='auto' label="[ins_length5] Insert length (bp) of short long library" help="n=no read pairing; auto=infer; or supply value (integer)" />
+                        </when>
+</conditional>
+
 	<conditional name="exp_cov_input">
 		<param name="exp_selection" type="select">
 			<option value="Manual" > Manual </option>
 			<option value="file"   > File   </option>
 		</param>
 		<when value="Manual">   		 
-			<param name='exp_cov' type='text' value='-1' label='[-exp_cov] Expected short read k-mer coverage' help='-1=no long or paired-end read resolution; auto=infer it; or supply value (real number)' />
+			<param name='exp_cov' type='text' value='-1' label='[-exp_cov] Expected short read k-mer coverage' help='auto=infer it; or supply value (real number)' />
     		</when>
 		<when value="file">
 			<param name="exp_cov_file" type="data" format="txt" label="Input from the expected kmer coverage tool" help= "Note can only accept 1 kmer will always run on the first kmer in the file."/>
@@ -177,24 +323,119 @@ max_coverage $max_coverage
 		
 		
 
-    <param name="cov_cutoff" type="text" value='-1' label="[-cov_cutoff] Removal of low coverage nodes AFTER tour bus" help="-1=no removal; auto=infer cutoff; or specify cutoff (real number)" />
+	<conditional name="cov_cutoff_condition">
+		<param name="cov_cutoff_select" type="select" label="Enter the coverage cutoff to remove low coverage nodes after tour bus or allow the system to infer it ? ">
+			<option value="no">No</option>
+			<option value="yes">Yes</option>
+		</param>
+		<when value="yes">
+			<param name="cov_cutoff" type="text" value='-1' label="[-cov_cutoff] Removal of low coverage nodes AFTER tour bus" help="auto=infer cutoff; or specify cutoff (real number)" />
+	   	</when>	
+	</conditional>	
 
-    <param name="long_cov_cutoff" type="float" value='-1' label="[-long_cov_cutoff] Removal of low long-read coverage nodes AFTER tour bus" help="-1=no removal; or specify cutoff (real number)" />
-    <param name="max_coverageBool" type="boolean" checked='true' label="Do you have a read pairing" truevalue='yes' falsevalue='no'/>
-    <param name='max_coverage' type='float' value='-1' label="[-max_coverage] Exclude highly covered data from your assembly (e.g. plasmid, mitochondrial, and chloroplast sequences)" help='-1 for default: no removal' />
-    <param name="min_contig_lgth" type="integer" value='-1' label="Minimum contig length" help="-1 for default: hash length *2" />
+
+
+	<conditional name="long_cov_cutoff_condition">
+                <param name="long_cov_cutoff_select" type="select" label="Remove nodes with low long-read coverage after tour bus ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+    			<param name="long_cov_cutoff" type="float" value='-1' label="[-long_cov_cutoff] Removal of low long-read coverage nodes AFTER tour bus" help="Specify cutoff (real number)" />
+		</when>
+	</conditional>
+
+	<conditional name="max_coverage_condition">
+                <param name="max_coverage_select" type="select" label="Remove high coverage nodes after tour bus ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+   			 <param name='max_coverage' type='float' value='-1' label="[-max_coverage] Exclude highly covered data from your assembly (e.g. plasmid, mitochondrial, and chloroplast sequences)" help='-1 for default: no removal' />
+		</when>
+	</conditional>
+
+
+
+	<conditional name="min_contig_lgth_condition">
+                <param name="min_contig_lgth_select" type="select" label="Set the minimum contigs length exported to contigs.fa (default:hash length * 2) ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+			<param name="min_contig_lgth" type="integer" value='-1' label="Minimum contig length" />
+		</when>
+	</conditional>
+
+
     <param name="scaffolding" type="boolean" checked='true' label="Scaffolding" truevalue='yes' falsevalue='no'/>
 
     <!-- Tour Bus Parameters -->
-    <param name="max_branch_length" type="integer" value='100' label="Maximum branch length" help="Default recommended"/>
-    <param name="max_divergence" type="float" value='0.20' label="Maximum divergence rate" help="Default recommended"/>
-    <param name="max_gap_count" type="integer" value='3' label="Maximum gap count" help="Default recommended"/>
+    
+	<conditional name="max_branch_length_condition">
+		<param name="max_branch_length_select" type="select" label="Set the maximum length in the base pair of bubble (default 100) ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+    			<param name="max_branch_length" type="integer" value='100' label="Maximum branch length" help="Default recommended"/>
+    		</when>
+	</conditional>
+
+
+	<conditional name="max_divergence_condition">
+                <param name="max_divergence_length_select" type="select" label="Set the maximum divergence rate between two branches in bubble? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+                	<param name="max_divergence" type="float" value='0.20' label="Maximum divergence rate" help="Default recommended"/>
+		</when>
+        </conditional>
+
+   
+
+	<conditional name="max_gap_count_condition">
+                <param name="max_gap_count_select" type="select" label="Set maximum number of gaps allowed in the alignment of two branches of a bubble (default: 3) ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+                	    <param name="max_gap_count" type="integer" value='3' label="Maximum gap count" help="Default recommended"/>
+		</when>
+        </conditional>
+
+
+
+
 
     <!-- Rock Band Parameters -->
-    <param name='long_mult_cutoff' type="integer" value='2' label="Minimum long read connection cutoff"/> 
+
+	<conditional name="long_mult_cutoff_condition">
+                <param name="long_mult_cutoff_select" type="select" label="Set the minimum number of reads required to merge contigs (default 2) ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+                	    <param name='long_mult_cutoff' type="integer" value='2' label="Minimum long read connection cutoff"/>
+		</when>
+        </conditional>
+
+	
 
     <!-- Pebble Parameters -->
-    <param name="min_pair_count" type="integer" value='10' label="Minimum Read-Pair Validation"/>
+
+	<conditional name="min_pair_count_condition">
+                <param name="min_pair_count_select" type="select" label="Set the mimum paired end connections to justify the scaffolding of two long contigs(default: 5) ? ">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                </param>
+                <when value="yes">
+		    <param name="min_pair_count" type="integer" value='5' label="Minimum Read-Pair Validation"/>
+		</when> 
+        </conditional>
+
+
 
     <!-- Output Parameters -->
     <param name='unused_reads' type='boolean' truevalue='yes' falsevalue='no' checked='true' label='Export unused reads' />

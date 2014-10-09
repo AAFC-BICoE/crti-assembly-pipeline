@@ -180,13 +180,13 @@ $short5.libtype $i.filetype.select $i.filetype.file
 
 #if $shortUseLong.shortSelectLong == "yes":
 	
-	$shortUselong.long.libtype
+	$shortUseLong.long.libtype
 	
-	#for $i in $shortUselong.long.files
+	#for $i in $shortUseLong.long.files
 		$i.filetype.select
 	#end for
 	
-	#for $i in $shortUselong.long.files
+	#for $i in $shortUseLong.long.files
 		$i.filetype.file
 	#end for
 	
@@ -300,7 +300,7 @@ $long.libtype $i.filetype.select $i.filetype.file
 
 
 	
-	<param name="shortSelect2" type="select" label="Do you have a first short libary" > 
+	<param name="shortSelect2" type="select" label="Do you have a second short libary" > 
 		<option value="no">No</option>		
 		<option value="yes">Yes</option>
 
@@ -353,7 +353,7 @@ $long.libtype $i.filetype.select $i.filetype.file
 </when>
 </conditional>
 <conditional name="shortUse3">
-	<param name="shortSelect3" type="select" label="Do you have a first short libary" > 
+	<param name="shortSelect3" type="select" label="Do you have a third short libary" > 
 		<option value="no">No</option>		
 		<option value="yes">Yes</option>
 
@@ -409,7 +409,7 @@ $long.libtype $i.filetype.select $i.filetype.file
 </conditional>
 
 <conditional name="shortUse4">
-	<param name="shortSelect4" type="select" label="Do you have a first short libary" > 
+	<param name="shortSelect4" type="select" label="Do you have a fourth short libary" > 
 		<option value="no">No</option>		
 		<option value="yes">Yes</option>
 
@@ -466,7 +466,7 @@ $long.libtype $i.filetype.select $i.filetype.file
 	
 
 <conditional name="shortUse5">
-	<param name="shortSelect5" type="select" label="Do you have a first short libary" > 
+	<param name="shortSelect5" type="select" label="Do you have a fifth short libary" > 
 		<option value="no">No</option>		
 		<option value="yes">Yes</option>
 
@@ -520,7 +520,7 @@ $long.libtype $i.filetype.select $i.filetype.file
 </conditional>
 
 <conditional name="shortUseLong">
-	<param name="shortSelectLong" type="select" label="Do you have a first short libary" > 
+	<param name="shortSelectLong" type="select" label="Do you have a long short libary" > 
 		<option value="no">No</option>		
 		<option value="yes">Yes</option>
 

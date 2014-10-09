@@ -1,21 +1,48 @@
-<tool id="quast" name="Quast" version="1.0.0">
+<tool id="quast" name="quast" version="1.0.0" >
+	<description> Quast tool</description>
+		
 	<requirements>
 		<requirement type="package" version="2.3">quast</requirement>
 	</requirements>
+
 	<command>
-		quast.py
-		-M $min_config
-		#for $i in $inputs :
-			${i.contigs}
+		
+		quast.py 
+		 -o outputdir
+		
+		#if $gene_selection == "eukaryote" :
+			--eukaryote
+		#end if
+		
+		#if $gene_selection == "Metagenes" :
+			--meta
+                #end if
+		
+		--min-contig $min_contig
+		
+		
+		#for $i in $files:
+			$i.input
 		#end for
-	</command> 
+		;
+		cp outputdir/report.txt $quast_out;
+	</command>
+	
 	<inputs>
-		<repeat name="inputs" title="Input Files">
-			<param name="contigs" type="data" format="contigs" label="A contigs velvetg output file"/>
+		<repeat name="files" title="Input contig files">	
+			<param type="data" format="fasta" name="input" label="Contigs output file" />	
 		</repeat>
-		<param name="min_config" type="integer" value="500" label="Threshold for contig length (default 500)"/>
+		<param name="gene_selection" type="select" >
+			<option value="eukaryote">Eukaryote</option>
+			<option value="prokaryotes">Prokaryotes</option>
+			<option value="Metagenes">Metagenomes</option>
+		</param>
+		<param name="min_config" type="integer" value="500" label="Set the threshold for the contig length (default is 500)"/>
 	</inputs>
+	
 	<outputs>
-		<data format="kmer_range" name="output"/>
+		
+	<data format="txt" name="quast_out" label="Quast report.txt" />
+		
 	</outputs>
 </tool>
