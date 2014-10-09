@@ -70,11 +70,11 @@ velvetg $velvetg_outfile.extra_files_path
 #end if -->
 
 #if $cov_cutoff_condition.cov_cutoff_select == "yes" :
-	-cov_cutoff $cov_cutoff
+	-cov_cutoff $cov_cutoff_condition.cov_cutoff
 #end if
 
 #if $long_cov_cutoff_condition.long_cov_cutoff_select == "yes" :
-	-long_cov_cutoff
+	-long_cov_cutoff $long_cov_cutoff_condition.long_cov_cutoff
 #end if
 
 
