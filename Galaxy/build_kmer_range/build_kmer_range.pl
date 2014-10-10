@@ -49,6 +49,11 @@ if ($option eq "manual")
 if ($option eq "offset")
 {	
 	my $offset= $ARGV[1];
+
+	if ($offset < 0)
+	{
+		die "The offset should be greater then or equal to zero."
+	}
 	
 	open FH, $ARGV[2];
 	
