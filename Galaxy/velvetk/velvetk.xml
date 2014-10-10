@@ -13,7 +13,7 @@
 			#for i in $inputs
 				${i.filetype.input}
 			#end for
-			1> '$velvetkout' 2> /dev/null ;
+			1> '$velvetk' 2> /dev/null ;
 			
 		</command>
 <!--		<command interpreter='perl'>
