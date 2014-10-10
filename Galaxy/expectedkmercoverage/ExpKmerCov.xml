@@ -6,7 +6,7 @@
 			#if $i.input_file_or_user.selection == "Manual" :
 				--read_length $i.input_file_or_user.read_length --num_reads $i.input_file_or_user.num_reads
 			#else :
-				--read_length `head -n 1 $i.input_file_or_user.length_file` --num_reads `tail -n 1 $i.input_file_or_user.count_file`
+				--read_length `head -n 1 $i.input_file_or_user.length_file` --num_reads `tail -n 1 $i.input_file_or_user.length_file`
 			#end if
 				
 		#end for
@@ -15,7 +15,7 @@
 		
 		#if $range_input.range_select == "Manual" :
 		
-			--kmer_range $kmer_range_min,$kmer_range_max,$kmer_range_inc 
+			--kmer_range $range_input.kmer_range_min,$range_input.kmer_range_max,$range_input.kmer_range_inc 
 		
 		#else :
 			
