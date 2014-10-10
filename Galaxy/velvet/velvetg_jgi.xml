@@ -14,12 +14,51 @@ $unused_reads_outfile
 $amos_outfile
 velvetg $velvetg_outfile.extra_files_path
 -very_clean yes
-#if  $insLen.insLenSelect == "yes"
--ins_length $insLen.ins_length
-    #if $insLen.insLenSD.insLenSDSelect == "yes"  :
-	-ins_length_sd $insLen.insLenSD.ins_length_sd
+
+
+
+#if  $insLenSelect :
+-ins_length $ins_length
+    #if $insLenSDSelect:
+		-ins_length_sd $ins_length_sd
     #end if
 #end if
+
+
+
+#if  $insLenSelect2 :
+-ins_length2 $ins_length2
+    #if $insLenSDSelect2:
+		-ins_length2_sd $ins_length_sd2
+    #end if
+#end if
+
+
+#if  $insLenSelect3 :
+-ins_length3 $ins_length3
+    #if $insLenSDSelect3:
+		-ins_length3_sd $ins_length_sd3
+    #end if
+#end if
+
+
+#if  $insLenSelect4 :
+-ins_length4 $ins_length4
+    #if $insLenSDSelect4:
+		-ins_length4_sd $ins_length_sd4
+    #end if
+#end if
+
+#if  $insLenSelect5 :
+-ins_length5 $ins_length5
+    #if $insLenSDSelect5:
+		-ins_length5_sd $ins_length_sd5
+    #end if
+#end if
+
+
+<!--
+
 #if  $insLen2.insLenSelect2 == "yes"
     -ins_length2 $insLen2.ins_length2
     #if $insLen2.insLenSD2.insLenSDSelect2 == "yes" :
@@ -49,10 +88,10 @@ velvetg $velvetg_outfile.extra_files_path
     #end if
 #end if
 
+-->
 
-
-#if  $insLenLong.insLenSelectLong == "yes"
-    -ins_length_long $insLenLong.ins_lengthLong
+#if  $insLenSelectLong :
+    -ins_length_long $ins_lengthLong
 #end if
 
 #if $exp_cov_input.exp_selection == "Manual" :
@@ -166,145 +205,42 @@ velvetg $velvetg_outfile.extra_files_path
 </command>
 <inputs>
     <param name="velveth" type="data" format="txt" label="velvet hash"/>
-	<conditional name="insLen">
-		
-		<param name="insLenSelect" type="select" label="Enter a expected distance between two paired end reads for the first data set">
-			<option value="no">No</option>
-			<option value="yes">Yes</option>
-		</param>
-		
-		 <when value="yes">   		
-		 	<param name="ins_length" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
-			
-			<conditional name="insLenSD" >
-				<param name="insLenSDSelect" type="select" label="Enter a length standard deviation (bp) of short library">
-					<option value="no">No</option>
-					<option value="yes">Yes</option>
-				</param>
-				<when value="yes">	
-					<param name="ins_length_sd" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
-				</when>
-			</conditional>
-				
-		</when>	
-	</conditional>
+	<param name="insLenSelect" type="boolean" label="Do you want to enter an expected distance between two paired end reads for the first data set?"/>
+	<param name="ins_length" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
+	<param name="insLenSDSelect" type="boolean" label="Do you want to enter a length standard deviation (bp) of short library for the first data set?"/>
+	<param name="ins_length_sd" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
+
+
+	<param name="insLenSelect2" type="boolean" label="Do you want to enter an expected distance between two paired end reads for the second data set?"/>
+	<param name="ins_length2" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
+	<param name="insLenSDSelect2" type="boolean" label="Do you want to enter a length standard deviation (bp) of short library for the second data set?"/>
+	<param name="ins_length_sd2" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
 
 
 
-    
-		<conditional name="insLen2">
-		
-			<param name="insLenSelect2" type="select" label="Enter a expected distance between two paired end reads for the second data set">
-				<option value="no">No</option>
-				<option value="yes">Yes</option>
-			</param>
-		
-			 <when value="yes"> 
-    				<param name="ins_length2" type="text" value='auto' label="[ins_length2] Insert length (bp) of short2 library" help="auto=infer; or supply value (integer)" />
-   			 	
-				
-				<conditional name="insLenSD2" >
-	                                 <param name="insLenSDSelect2" type="select" label="Enter a length standard deviation (bp) of short library">
-        	                                  <option value="no">No</option>
-                	                          <option value="yes">Yes</option>
-                        	         </param>
-                                	 <when value="yes">
-                                        	 <param name="ins_length_sd2" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
-                                 </when>
-                         </conditional>
-
-				
-				
-			</when>
-		</conditional>
+	<param name="insLenSelect3" type="boolean" label="Do you want to enter an expected distance between two paired end reads for the third data set?"/>
+	<param name="ins_length3" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
+	<param name="insLenSDSelect3" type="boolean" label="Do you want to enter a length standard deviation (bp) of short library for the third data set?"/>
+	<param name="ins_length_sd3" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
 
 
-		<conditional name="insLen3">
-			<param name="insLenSelect3" type="select" label="Enter a expected distance between two paired end reads for the third data set">
-				<option value="no">No</option>
-				<option value="yes">Yes</option>
-			</param>
-		
-			 <when value="yes"> 
-    				<param name="ins_length3" type="text" value='auto' label="[ins_length3] Insert length (bp) of short3 library" help="auto=infer; or supply value (integer)" />
-				
-				<conditional name="insLenSD3" >
-					<param name="insLenSDSelect3" type="select" label="Enter a length standard deviation (bp) of short library">
-						<option value="no">No</option>
-						<option value="yes">Yes</option>
-					</param>
-					<when value="yes">	
-						<param name="ins_length_sd3" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
-					</when>
-				</conditional>
-				
-			</when>
+	<param name="insLenSelect4" type="boolean" label="Do you want to enter an expected distance between two paired end reads for the fourth data set?"/>
+	<param name="ins_length4" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
+	<param name="insLenSDSelect4" type="boolean" label="Do you want to enter a length standard deviation (bp) of short library for the fourth data set?"/>
+	<param name="ins_length_sd4" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
 
-		</conditional> 
-
-<conditional name="insLen4">
-			<param name="insLenSelect4" type="select" label="Enter a expected distance between two paired end reads for the fourth data set">
-				<option value="no">No</option>
-				<option value="yes">Yes</option>
-			</param>
-		
-			 <when value="yes"> 
-    				<param name="ins_length4" type="text" value='auto' label="[ins_length4] Insert length (bp) of short4 library" help="auto=infer; or supply value (integer)" />
-    				
-				<conditional name="insLenSD4" >
-					<param name="insLenSDSelect4" type="select" label="Enter a length standard deviation (bp) of short library">
-						<option value="no">No</option>
-						<option value="yes">Yes</option>
-					</param>
-					<when value="yes">	
-						<param name="ins_length_sd4" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
-					</when>
-			</conditional>
-				
-				
-			</when>
-</conditional>
+	<param name="insLenSelect5" type="boolean" label="Do you want to enter an expected distance between two paired end reads for the fifth data set?"/>
+	<param name="ins_length5" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
+	<param name="insLenSDSelect5" type="boolean" label="Do you want to enter a length standard deviation (bp) of short library for the fifth data set?"/>
+	<param name="ins_length_sd5" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
 
 
 
-<conditional name="insLen5">
-			<param name="insLenSelect5" type="select" label="Enter a expected distance between two paired end reads for the fifth data set">
-				<option value="no">No</option>
-				<option value="yes">Yes</option>
-			</param>
-		
-			 <when value="yes"> 
+	<param name="insLenSelectLong" type="boolean" label="Do you want to enter an expected distance between two paired end reads for the long data set?"/>
+	<param name="ins_lengthLong" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
 
-    				<param name="ins_length5" type="text" value='auto' label="[ins_length5] Insert length (bp) of short5 library" help="auto=infer; or supply value (integer)" />
-				   
-				
-				<conditional name="insLenSD5" >
-					<param name="insLenSDSelect5" type="select" label="Enter a length standard deviation (bp) of short library">
-						<option value="no">No</option>
-						<option value="yes">Yes</option>
-					</param>
-					<when value="yes">	
-						<param name="ins_length_sd5" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
-					</when>
-				</conditional>
-				
-				
-				
-			</when>
-</conditional>
- 
 
-<conditional name="insLenLong">
-                        <param name="insLenSelectLong" type="select" label="Enter a expected distance between two paired end reads for the first data set">
-                                <option value="no">No</option>
-                                <option value="yes">Yes</option>
-                        </param>
 
-                         <when value="yes">
-
-                                <param name="ins_lengthLong" type="text" value='auto' label="[ins_length5] Insert length (bp) of short long library" help="n=no read pairing; auto=infer; or supply value (integer)" />
-                        </when>
-</conditional>
 
 	<conditional name="exp_cov_input">
 		<param name="exp_selection" type="select">
