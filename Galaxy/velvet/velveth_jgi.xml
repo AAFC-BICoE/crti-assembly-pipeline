@@ -19,85 +19,30 @@ velveth $output.extra_files_path
 #end if
 
 
-#if $reuse_Seq:
--reuse_Sequences
-#end if
-
-#if $reuse_binary :
--reuse_binary
-#end if
-
-#if $noHash  :
--noHash
-#end if
-
-#if $create_binary :
--create_binary
-#end if
-
-
-$strand_specific
-
-<!--#if $short_select == "separated":
-	-separate
-#end if
-
-$short.libtype
-
-
-
-#for $i in $short.files
-$i.filetype.select
-#end for
-
-#for $i in $short.files
-$i.filetype.file
-#end for  -->
 
 #if $shortUse.shortSelect == "yes":
 
-        $shortUse.short.libtype
+    -fmtAuto
+
+    $shortUse.short.libtype
 
 	
 	-$shortUse.short_select	
 	
 	
 	#for $i in $shortUse.short.files
-		$i.filetype.select
-	#end for
-	
-	#for $i in $shortUse.short.files
 		$i.filetype.file
 	#end for
 	
 #end if	
-	
-
-
-<!--
-#if $short_select2 == "separated":
-	-separate
-#end if
-
-
-#for $i in $short2.files
-$short2.libtype $i.filetype.select $i.filetype.file
-#end for
-
-#if $short_select3 == "separated":
-	-separate
-#end if
--->
 
 #if $shortUse2.shortSelect2 == "yes":
+
+    -fmtAuto
 
 	$shortUse2.short2.libtype
 	
 	-$shortUse2.short_select2
-		
-	#for $i in $shortUse2.short2.files
-		$i.filetype.select
-	#end for
 	
 	#for $i in $shortUse2.short2.files
 		$i.filetype.file
@@ -106,38 +51,23 @@ $short2.libtype $i.filetype.select $i.filetype.file
 #end if	
 
 
-<!--#for $i in $short3.files
-$short3.libtype $i.filetype.select $i.filetype.file
-#end for
 
-
-#if $short_select4 == "separated":
-	-separate
-#end if
- -->
 
 
 #if $shortUse3.shortSelect3 == "yes":
 	
+    -fmtAuto
 	$shortUse3.short3.libtype
 	-$shortUse3.short_select3
 	
 
 	
 	#for $i in $shortUse3.short3.files
-		$i.filetype.select
-	#end for
-	
-	#for $i in $shortUse3.short3.files
 		$i.filetype.file
 	#end for
 	
 #end if	
 
-<!--#for $i in $short4.files
-$short4.libtype $i.filetype.select $i.filetype.file
-#end for
--->
 
 #if $shortUse4.shortSelect4 == "yes":
 	
@@ -155,22 +85,6 @@ $short4.libtype $i.filetype.select $i.filetype.file
 #end if	
 
 
-
-
-<!--#if $short_select5 == "separated":
-	-separate
-#end if
-
-
-
-#for $i in $short5.files
-$short5.libtype $i.filetype.select $i.filetype.file
-#end for
-
-#if $short_selectlong == "separated":
-	-separate
-#end if
--->
 
 #if $shortUse5.shortSelect5 == "yes":
 	
@@ -204,15 +118,25 @@ $short5.libtype $i.filetype.select $i.filetype.file
 #end if	
 
 
-<!--
 
-#for $i in $long.files
-$long.libtype $i.filetype.select $i.filetype.file
-#end for
+#if $reuse_Seq:
+-reuse_Sequences
+#end if
 
--->
+#if $reuse_binary :
+-reuse_binary
+#end if
+
+#if $noHash  :
+-noHash
+#end if
+
+#if $create_binary :
+-create_binary
+#end if
 
 
+$strand_specific
 
 
 

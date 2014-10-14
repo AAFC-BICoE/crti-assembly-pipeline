@@ -22,7 +22,7 @@ my $outdir=shift @ARGV;
 my $kmer=$ARGV[2];
 #die ("USER ERROR: Hash length (kmer) must be odd!\n") unless $kmer % 2;
 my $tot_reads=0;
-#print "@ARGV 2>&1|\n";
+print "The arguments @ARGV 2>&1|\n";
 open (VELVETH, "@ARGV 2>&1|") or die("Unable to run velveth: $!\n");
 open(OUT, ">$outfile") or die($!);
 while (<VELVETH>) {

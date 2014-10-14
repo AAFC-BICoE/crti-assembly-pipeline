@@ -20,20 +20,62 @@ my $stats_outfile=shift @ARGV or die;
 my $lastgraph_outfile=shift @ARGV or die;
 my $unused_reads_outfile=shift @ARGV or die;
 my $amos_outfile=shift @ARGV or die;
+my $exp_cov_file=shift@ARGV or die;
 
 # setup velvetg folder
-die("Velveth folder does not exist: $velveth_path\n") unless -d $velveth_path;
+
+my $exp_cov;
+my $size= @ARGV;
+
+for (my $i = 0; $i < $size ; $i ++)
+{
+
+	if ($ARGV[$i] eq "-exp_cov") {
+
+		$exp_cov = $ARGV[$i+1];
+
+	}
+
+}
+
+if ($exp_cov eq "fun_time")
+{
+
+    open FH, $exp_cov_file;
+    my @array;
+    while (<FH>)
+    {
+
+        push @array , $_ ;
+
+    }
+
+    print @array;
+
+
+
+    close FH;
+
+}
+
+if(!(-d $velveth_path))
+{
+
+	$velveth_path = $velveth_path . "*";
+
+	$velveth_path = ` ls -d $velveth_path | head -n 1`;
+
+}
+chomp $velveth_path;
+print "My velvetg_path is $velvetg_path\n";
+print "My velveth path is $velveth_path\n";
+
 -d $velvetg_path or mkdir($velvetg_path) or die("Unable to create output folder, $velvetg_path: $!\n");
-#die("velveth Sequences file does not exist: $velveth_path/Sequences") unless -f "$velveth_path/Sequences";
-#symlink("$velveth_path/Sequences", "$velvetg_path/Sequences");
-#die("velveth Roadmaps file does not exist: $velveth_path/Roadmaps") unless -f "$velveth_path/Roadmaps";
-#symlink("$velveth_path/Roadmaps", "$velvetg_path/Roadmaps");
-#die("velveth Log file does not exist: $velveth_path/Log") unless -f "$velveth_path/Log";
-copy("$velveth_path/Log", "$velvetg_path/Log");
 
 # run command (remaining args, starting with exe path)
 print "The args @ARGV \n";
-`cp -r $velveth_path/* $velvetg_path`;
+print `cp -r $velveth_path/* $velvetg_path`;
+
 open (VELVETG, "@ARGV|") or die("Unable to run velvetg\n");
 open (OUT, ">$velvetg_outfile") or die("Unable to open outfile, $velvetg_outfile: $!\n");
 while (<VELVETG>) {
@@ -55,8 +97,8 @@ if ( -f "$velvetg_path/LastGraph") {
 } elsif ( -f "$velvetg_path/Graph2") {
     move("$velvetg_path/Graph2", $lastgraph_outfile);
 } else {
-    open(OUT, ">$lastgraph_outfile") or die($!);
-    print OUT "ERROR: $velvetg_path/LastGraph not found!\n";
+   open(OUT, ">$lastgraph_outfile") or die($!);
+   print OUT "ERROR: $velvetg_path/LastGraph not found!\n";
     close OUT;
 }
 unlink($unused_reads_outfile);
@@ -66,4 +108,3 @@ if ( $amos_outfile ne 'None' ) {
     move("$velvetg_path/velvet_asm.afg", $amos_outfile);
 }
 exit;
-
