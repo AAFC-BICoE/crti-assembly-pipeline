@@ -261,13 +261,61 @@ run_bowtie_tophat_cufflinks()
     RNA_R2=$2
     genome=$3
     prefix=$4
+    get_qsub_script
     qsub_holdid=1
     [ ! -z $4 ] && qsub_holdid=$4
     bowtie2_build_jid=`run_bowtie2_build $genome`
     tophat_jid=`run_tophat ${RNA_R1} ${RNA_R2} $genome ${prefix}_tophat ${bowtie2_build_jid}`
     cufflinks_jid=`run_cufflinks ${prefix}_tophat/accepted_hits.bam ${prefix}_cufflinks ${tophat_jid}`
 }
- 
+
+# Additional bowtie-alignment funcs added in context of bug 4260
+run_bowtie2_lib() {
+    reads_R1=$1
+    reads_R2=$2
+    lib_type=$3
+    genome=$4
+    samfile=$5
+    qsub_holdid=1
+    [ ! -z $5 ] && qsub_holdid=$5
+    nprocs=6
+    get_qsub_script
+    lib_args=""
+    if [ $libtype = "PE" ]; then
+        lib_args=" --fr --minins 200 --maxins 400 "
+    elif [ $libtype = "MP3" ]; then
+        lib_args="  --rf --minins 2000 --maxins 4000 "
+    elif [ $libtype = "MP8" ]; then
+        lib_args="  --rf --minins 6000 --maxins 10000 "
+    fi
+    bowtie2_cmd="bowtie2 -x $genome -q -1 $reads_R1 -2 $reads_R2 ${lib_args} -S $samfile --threads $nprocs"
+    qsub_bowtie2_cmd="qsub -N bowtie2_${lib_type} -pe smp $nprocs -hold_jid ${qsub_holdid} qsub_script.sh \"${bowtie2_cmd}\""
+    >&2 echo ${qsub_bowtie2_cmd}
+    qsub_bowtie2_out=`eval ${qsub_bowtie2_cmd}`
+    >&2 echo ${qsub_bowtie2_out}
+    qsub_bowtie2_jobid=`echo $qsub_bowtie2_out | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    echo ${qsub_bowtie2_jobid}
+}
+
+run_bowtie2_all_lib() {
+    reads_R1=$1
+    reads_R2=$2
+    lib_type=$3
+    genome=$4
+    prefix=$5
+    samfile=$prefix.sam
+    bamfile=$prefix.bam
+    bamfile_sort=${prefix}_sort.bam
+    insert_hist_prefix=${prefix}_sort
+    
+    #bowtie2_build_jid=`run_bowtie2_build $genome`
+    bowtie2_jid=`run_bowtie2_${lib_type} $reads_R1 $reads_R2 $genome $samfile ${bowtie2_build_jid}`
+    sam2bam_jid=`run_sam2bam $samfile $bamfile ${bowtie2_jid}`
+    sort_bam_jid=`sort_bam $bamfile ${bamfile_sort} ${sam2bam_jid}`
+    index_bam_jid=`index_bam ${bamfile_sort} ${sort_bam_jid}`
+    insert_hist_jid=`insert_histogram ${bamfile_sort} ${insert_hist_prefix} ${index_bam_jid}`
+}
+
 # Convert cuff GTF to GFF + release renaming steps.
     
 # Run quake
