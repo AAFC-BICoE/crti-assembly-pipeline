@@ -5,14 +5,6 @@
  </requirements>
 	<command> 
 		fastx_trimmer
-	<!--	#if $input.ext == "fastqsanger":
-			 -Q 33
-		#elif $input.ext == "fastq":
-		 	-Q 33
-		#elif $input.ext == "fq":
-		 	-Q 33
-		#end if
-		-v -f $first -l $last -->
 		#if $Qselect :
 			-Q $quality
 		#end if

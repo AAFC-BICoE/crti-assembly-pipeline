@@ -12,8 +12,7 @@ $stats_outfile
 $lastgraph_outfile
 $unused_reads_outfile
 $amos_outfile
-$exp_cov_input.exp_cov_file
-
+$kmer
 
 
 velvetg $velvetg_outfile.extra_files_path
@@ -67,7 +66,8 @@ velvetg $velvetg_outfile.extra_files_path
 #if $exp_cov_input.exp_selection == "Manual" :
 	-exp_cov $exp_cov_input.exp_cov
 #else :
-	-exp_cov fun_time     <!--` head -n 1 $exp_cov_input.exp_cov_file | cut -f2- ` -->
+-exp_cov `egrep "^$kmer" $exp_cov_input.exp_cov_file |  cut -f2` 
+ <!--` head -n 1 $exp_cov_input.exp_cov_file | cut -f2- `   -->
 #end if
 
 #if $cov_cutoff_condition.cov_cutoff_select == "yes" :
@@ -163,6 +163,7 @@ velvetg $velvetg_outfile.extra_files_path
 </command>
 <inputs>
     <param name="velveth" type="data" format="txt" label="velvet hash"/>
+    <param name="kmer" type="integer" value="-1" label="What kmer do you want to run the velvetg job on ?" />
 	<param name="insLenSelect" type="boolean" value="false" label="Do you want to enter an expected distance between two paired end reads for the first data set?"/>
 	<param name="ins_length" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
 	<param name="insLenSDSelect" type="boolean" value="false" label="Do you want to enter a length standard deviation (bp) of short library for the first data set?"/>
@@ -340,7 +341,10 @@ velvetg $velvetg_outfile.extra_files_path
 </inputs>
 
 <outputs>
-    <data name="velvetg_outfile" format="txt" />
+    <data name="velvetg_outfile" format="txt" >
+     <!--   <discover_datasets pattern="*" directory="apps" visible="true" />  -->
+    </data>
+
     <data name="contigs_outfile" format="fasta" label='Contigs' />
     <data name="stats_outfile" format="tabular" label='Contig Stats' />
     <data name="lastgraph_outfile" format="txt" label="LastGraph" />
@@ -349,7 +353,7 @@ velvetg $velvetg_outfile.extra_files_path
     </data>
     <data name='amos_outfile' format='txt' label='Amos Assembly'>
         <filter>amos_file is True</filter>
-    </data>
+    </data> 
 </outputs>
 
 <help>

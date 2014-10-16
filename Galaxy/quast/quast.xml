@@ -41,8 +41,6 @@
 	</inputs>
 	
 	<outputs>
-		
-	<data format="txt" name="quast_out" label="Quast report.txt" />
-		
+		<data format="txt" name="quast_out" label="Quast report.txt" />
 	</outputs>
 </tool>

@@ -67,4 +67,25 @@
 	<outputs>
 		<data format="txt" name="output"/>
 	</outputs>
+	<help>
+
+		Calculates the expected kmer coverage for each kmer in the range.
+
+		First enter the read lengths and the read counts for each fastq file or provide a file with this data for each. Then provide the genome size and the range.
+
+		
+		Output will be in the format
+
+		Kmer 		Expected Kmer Coverage
+
+		Example output
+
+		1 937032
+
+		3 917511
+		
+		5 897989
+
+
+	</help>
 </tool>

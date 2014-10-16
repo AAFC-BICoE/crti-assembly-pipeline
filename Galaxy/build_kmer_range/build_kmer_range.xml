@@ -12,7 +12,7 @@
 
 	</command> 
 	<inputs>
-		<param name="velvetk" type="data" format="txt" label="The velvetk best output file"/>
+		<param name="velvetk" type="data" format="txt" label="The velvetk best output file" help="You need to give the best kmer output for error checking"/>
 		<conditional name="input_opt">
 			<param name="input_select" type="select" >
 				<option value="manual"> Manually enter the range </option>
@@ -35,4 +35,10 @@
 	<outputs>
 		<data format="kmer_range" name="output"/>
 	</outputs>
+	<help>
+		Enter the velvetk best kmer output file. Then select whether you want to enter the kmer range as an offset from the best kmer or as a range.
+		Performs error checking to ensure that the range does not go out of bounds.
+		Output is three comma separated values the first which is the first kmer of the range, the second which is the final kmer of the range and the third is the step size.
+
+	</help>
 </tool>

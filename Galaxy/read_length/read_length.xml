@@ -19,6 +19,7 @@
 	</outputs>
 
 	<help>
+		Enter a fastq file then it outputs a file with the read lengths on the first line and the read counts on the second.
 	</help>
 
 
