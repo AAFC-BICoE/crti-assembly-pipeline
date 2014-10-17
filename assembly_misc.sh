@@ -277,15 +277,17 @@ run_bowtie2_lib() {
     genome=$4
     samfile=$5
     qsub_holdid=1
-    [ ! -z $5 ] && qsub_holdid=$5
+    [ ! -z $6 ] && qsub_holdid=$6
     nprocs=6
     get_qsub_script
     lib_args=""
-    if [ $libtype = "PE" ]; then
+    if [ $lib_type = "PE" ]; then
         lib_args=" --fr --minins 200 --maxins 400 "
-    elif [ $libtype = "MP3" ]; then
+    elif [ $lib_type = "MSPE" ]; then
+        lib_args=" --fr --minins 200 --maxins 400 "
+    elif [ $lib_type = "MP3" ]; then
         lib_args="  --rf --minins 2000 --maxins 4000 "
-    elif [ $libtype = "MP8" ]; then
+    elif [ $lib_type = "MP8" ]; then
         lib_args="  --rf --minins 6000 --maxins 10000 "
     fi
     bowtie2_cmd="bowtie2 -x $genome -q -1 $reads_R1 -2 $reads_R2 ${lib_args} -S $samfile --threads $nprocs"
@@ -300,16 +302,15 @@ run_bowtie2_lib() {
 run_bowtie2_all_lib() {
     reads_R1=$1
     reads_R2=$2
-    lib_type=$3
+    lib_type=$3 # options are PE, MSPE, MP3, MP8 (MSPE=MiSeq PE, though params are same as PE).
     genome=$4
     prefix=$5
     samfile=$prefix.sam
     bamfile=$prefix.bam
-    bamfile_sort=${prefix}_sort.bam
-    insert_hist_prefix=${prefix}_sort
-    
+    bamfile_sort=${prefix}_sort
+    insert_hist_prefix=${prefix}_sort.bam
     #bowtie2_build_jid=`run_bowtie2_build $genome`
-    bowtie2_jid=`run_bowtie2_${lib_type} $reads_R1 $reads_R2 $genome $samfile ${bowtie2_build_jid}`
+    bowtie2_jid=`run_bowtie2_lib $reads_R1 $reads_R2 $lib_type $genome $samfile ${bowtie2_build_jid}`
     sam2bam_jid=`run_sam2bam $samfile $bamfile ${bowtie2_jid}`
     sort_bam_jid=`sort_bam $bamfile ${bamfile_sort} ${sam2bam_jid}`
     index_bam_jid=`index_bam ${bamfile_sort} ${sort_bam_jid}`
