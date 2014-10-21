@@ -73,8 +73,8 @@ if (!( -d $velveth_path))
   move("$velvetg_path/stats.txt", $stats_outfile);
 
   unlink($lastgraph_outfile);
-  if ( -f "$velvetg_path/LastGraph") {
-    move("$velvetg_path/LastGraph", $lastgraph_outfile);
+  if ( -f "$velvetg_path/PreGraph") {
+    move("$velvetg_path/PreGraph", $lastgraph_outfile);
   } elsif ( -f "$velvetg_path/Graph2") {
     move("$velvetg_path/Graph2", $lastgraph_outfile);
   } else {

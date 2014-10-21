@@ -2,6 +2,7 @@
 <description>Assemble preprocessed reads</description>
 <requirements>
 <requirement type="package" version="1.2.10">velvet</requirement>
+<requirement type="package" version="5.18.1">perl</requirement>
 </requirements>
 <command interpreter='perl'>velvetg_jgi_wrapper.pl
 $velveth.extra_files_path
@@ -9,7 +10,7 @@ $velvetg_outfile.extra_files_path
 $velvetg_outfile
 $contigs_outfile
 $stats_outfile
-$lastgraph_outfile
+$pregraph_outfile
 $unused_reads_outfile
 $amos_outfile
 $kmer
@@ -347,7 +348,7 @@ velvetg $velvetg_outfile.extra_files_path
 
     <data name="contigs_outfile" format="fasta" label='Contigs' />
     <data name="stats_outfile" format="tabular" label='Contig Stats' />
-    <data name="lastgraph_outfile" format="txt" label="LastGraph" />
+    <data name="pregraph_outfile" format="txt" label="PreGraph" />
     <data name='unused_reads_outfile' format='fasta' label='Unused Reads'>
         <filter>unused_reads is True</filter>
     </data>
