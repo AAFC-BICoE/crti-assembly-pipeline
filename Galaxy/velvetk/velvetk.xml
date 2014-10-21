@@ -1,4 +1,7 @@
 <tool id="velvetk" name="velvetk" version="1.0.0">
+<requirements>
+  <requirement type="package" version="5.18.1">perl</requirement>
+</requirements>
 	<description>Tool for assisting with k-mer size choice for Velvet assemblies.</description>
 		<command interpreter='perl'>
 			velvetk.pl

@@ -37,7 +37,7 @@
 			<option value="prokaryotes">Prokaryotes</option>
 			<option value="Metagenes">Metagenomes</option>
 		</param>
-		<param name="min_config" type="integer" value="500" label="Set the threshold for the contig length (default is 500)"/>
+		<param name="min_contig" type="integer" value="500" label="Set the threshold for the contig length (default is 500)"/>
 	</inputs>
 	
 	<outputs>

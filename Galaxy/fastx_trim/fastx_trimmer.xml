@@ -2,6 +2,8 @@
   <description>to fixed length</description>
  <requirements>
   <requirement type="package" version="0.0.13.2">fastx_trimmer</requirement>
+  <requirement type="package" version="5.18.1">perl</requirement>
+  <requirement type="package" version="0.6">libgtextutils</requirement> 
  </requirements>
 	<command> 
 		fastx_trimmer

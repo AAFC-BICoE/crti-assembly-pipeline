@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <tool_dependency>
+		<package name="perl" version="5.18.1" >
+			<repository name="package_perl" owner="jacob" prior_installation_required="True"  changeset_revision="010bf5fcdc21" toolshed="http://onottar669810x:9009" />
+		</package>
+		<package name="libgtextutils" version="0.6">
+			<repository name="libgtextutils" owner="jacob" prior_installation_required="True" changeset_revision="c68f283d9267"  toolshed="http://onottar669810x:9009" />
+		</package> 
 		<package name="fastx_trimmer" version="0.0.13.2" >
 			<install version="1.0">	
 				<actions>
