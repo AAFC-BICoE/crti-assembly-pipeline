@@ -1,0 +1,47 @@
+<tool id="build_kmer_range" name="Build_Kmer_Range" version="1.0.0">
+
+	<requirements>
+  		<requirement type="package" version="5.18.1">perl</requirement>
+	</requirements>
+
+	<command interpreter='perl'>
+		
+		#if $input_opt.input_select =="manual":
+			build_kmer_range.pl manual $input_opt.start_kmer $input_opt.end_size $input_opt.step_size $velvetk > $output
+		#end if
+		
+		#if $input_opt.input_select =="offset":
+			build_kmer_range.pl offset $input_opt.offset $velvetk > $output
+		#end if
+		
+
+	</command> 
+	<inputs>
+		<param name="velvetk" type="data" format="txt" label="The velvetk best output file" help="You need to give the best kmer output for error checking"/>
+		<conditional name="input_opt">
+			<param name="input_select" type="select" >
+				<option value="manual"> Manually enter the range </option>
+				<option value="offset"> Ener and offset and use the best kmer as the mediam </option>
+			</param>
+			<when value="manual">
+			
+				<param name="start_kmer" type="integer" value="0" label="The first Kmer of the range." />
+				<param name="end_size" type="integer" value="0" label="The final Kmer of the range"/>
+				<param name="step_size" type="integer" value="2" label="The step size of the Kmer"/>
+			</when>
+			
+			<when value="offset" >
+				<param name="offset" type="integer" value="0" label="The desired offset of the range from the best kmer"/>
+			</when>
+						
+		</conditional>
+
+	</inputs>
+	<outputs>
+		<data format="kmer_range" name="output"/>
+	</outputs>
+	<help>
+		Enter the velvetk best kmer output file. Then select whether you want to enter the kmer range as an offset from the best kmer or as a range.
+		Performs error checking to ensure that the range does not go out of bounds.
+	</help>
+</tool>

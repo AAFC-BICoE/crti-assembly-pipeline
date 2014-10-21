@@ -1,0 +1,31 @@
+<tool id="read_length" name="Read Length" version="1.0.0">
+  <description> </description>
+	<requirements>
+  		<requirement type="package" version="5.18.1">perl</requirement>
+	</requirements>
+
+
+	<options sanitize="False" />
+  	<command interpreter="perl"> 
+		
+		read_length.pl $file $read > $output;
+		
+        </command>
+	
+	<inputs>
+		<param name="file" type="data" format="fastq" label="Fastq File"/>
+		<param name="read" type="text" label="Reads Prefix"/>
+	</inputs>
+	
+	<outputs>
+		
+		<data name="output" format="txt"/>
+			
+	</outputs>
+
+	<help>
+		Enter a fastq file then it outputs a file with the read lengths on the first line and the read counts on the second.
+	</help>
+
+
+</tool>

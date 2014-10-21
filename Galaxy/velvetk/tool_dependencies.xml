@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+		<package name="perl" version="5.18.1" >
+			<repository name="package_perl" owner="jacob" prior_installation_required="True"  changeset_revision="010bf5fcdc21" toolshed="http://onottar669810x:9009" />
+		</package>
+</tool_dependency>
