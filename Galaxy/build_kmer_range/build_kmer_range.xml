@@ -1,4 +1,9 @@
 <tool id="build_kmer_range" name="Build_Kmer_Range" version="1.0.0">
+
+	<requirements>
+  		<requirement type="package" version="5.18.1">perl</requirement>
+	</requirements>
+
 	<command interpreter='perl'>
 		
 		#if $input_opt.input_select =="manual":
