@@ -5,15 +5,37 @@
 <requirement type="package" version="5.18.1">perl</requirement>
 </requirements>
 <command interpreter='perl'>velvetg_jgi_wrapper.pl
-$velveth.extra_files_path
+ $velveth.extra_files_path
 $velvetg_outfile.extra_files_path
 $velvetg_outfile
-$contigs_outfile
-$stats_outfile
+<!--$contigs_outfile -->
+<!--$stats_outfile
 $pregraph_outfile
-$unused_reads_outfile
-$amos_outfile
+$velvetg_log_file -->
 $kmer
+
+$kmerBoolean
+
+
+<!-- STUFF GOES HEREEEE -->
+
+<!--$contigs_outfile.id -->
+$velvetg_outfile.id
+$__new_file_path__
+fasta
+
+
+
+#if $kmerBoolean :
+
+#else :
+	$exp_cov_input.exp_cov_file
+
+#end if
+
+
+<!--$unused_reads_outfile
+$amos_outfile -->
 
 
 velvetg $velvetg_outfile.extra_files_path
@@ -67,7 +89,12 @@ velvetg $velvetg_outfile.extra_files_path
 #if $exp_cov_input.exp_selection == "Manual" :
 	-exp_cov $exp_cov_input.exp_cov
 #else :
--exp_cov `egrep "^$kmer" $exp_cov_input.exp_cov_file |  cut -f2` 
+	#if $kmerBoolean :
+		-exp_cov `egrep "^$kmer" $exp_cov_input.exp_cov_file |  cut -f2` 
+	#else :
+		-exp_cov EXPECTED
+	#end if
+
  <!--` head -n 1 $exp_cov_input.exp_cov_file | cut -f2- `   -->
 #end if
 
@@ -163,8 +190,9 @@ velvetg $velvetg_outfile.extra_files_path
 
 </command>
 <inputs>
-    <param name="velveth" type="data" format="txt" label="velvet hash"/>
-    <param name="kmer" type="integer" value="-1" label="What kmer do you want to run the velvetg job on ?" />
+	<param name="velveth" type="data" format="txt" label="velvet hash"/>
+	<param name="kmerBoolean" type="boolean" label="Submit a single kmer?" help="If selected it will run the velvetg job on only one kmer, if it is not selected then below you MUST use a file as input for the expected kmer range velvetg will then be run on all kmers." /> 
+	<param name="kmer" type="integer" value="-1" label="What kmer do you want to run the velvetg job on ?" />
 	<param name="insLenSelect" type="boolean" value="false" label="Do you want to enter an expected distance between two paired end reads for the first data set?"/>
 	<param name="ins_length" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
 	<param name="insLenSDSelect" type="boolean" value="false" label="Do you want to enter a length standard deviation (bp) of short library for the first data set?"/>
@@ -342,19 +370,23 @@ velvetg $velvetg_outfile.extra_files_path
 </inputs>
 
 <outputs>
-    <data name="velvetg_outfile" format="txt" >
-     <!--   <discover_datasets pattern="*" directory="apps" visible="true" />  -->
-    </data>
-
-    <data name="contigs_outfile" format="fasta" label='Contigs' />
-    <data name="stats_outfile" format="tabular" label='Contig Stats' />
+<!--	<data format="txt" name="report">
+	 <discover_datasets pattern="__designation_and_ext__" directory="subdir" visible="true" />
+	</data> -->
+    <data name="velvetg_outfile" format="txt" />
+	
+       <!--<discover_datasets pattern="*" directory="apps" visible="true" /> 
+    </data> -->
+<!--    <data name="velvetg_log_file" format="txt" label="Log" /> -->
+<!--    <data name="contigs_outfile" format="fasta" label='Contigs' /> -->
+<!--    <data name="stats_outfile" format="tabular" label='Contig Stats' />
     <data name="pregraph_outfile" format="txt" label="PreGraph" />
     <data name='unused_reads_outfile' format='fasta' label='Unused Reads'>
         <filter>unused_reads is True</filter>
     </data>
     <data name='amos_outfile' format='txt' label='Amos Assembly'>
         <filter>amos_file is True</filter>
-    </data> 
+    </data> -->
 </outputs>
 
 <help>

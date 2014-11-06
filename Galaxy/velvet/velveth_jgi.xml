@@ -4,6 +4,8 @@
   <requirement type="package" version="1.2.10">velvet</requirement>
 </requirements>
 <command interpreter='perl'>velveth_jgi_wrapper.pl $output $output.extra_files_path
+$output.id
+$__new_file_path__
 
 
 velveth $output.extra_files_path

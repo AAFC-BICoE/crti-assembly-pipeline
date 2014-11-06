@@ -1,4 +1,4 @@
-<tool id="read_length" name="Read Length" version="1.0.0">
+<tool id="read_length_and_count" name="Read Length and Count" version="1.0.0">
   <description> </description>
 	<options sanitize="False" />
   	<command interpreter="perl"> 
