@@ -20,7 +20,76 @@ GetOptions ($options,
     'kmer_list|k=s@',
     'genome_size|g=i',
     'contig_file|f=s',
+    'file|f=s@'
     );
+
+
+
+
+
+
+
+
+
+
+sub get_read_lengths 
+{
+        my @array;
+        my $r;
+        for (my $i = 0; $i < @_ ; $i++)
+        {
+                $r = `head -n 2 $_[$i] | tail -n 1 | wc -m `;
+        #       print $r;
+                chomp $r;
+                $r = $r - 1;
+                push ( @array , $r);
+
+        }
+        return @array;
+}
+
+
+sub get_read_count
+{
+        my @array;
+        my $r;
+        for (my $i = 0; $i < @_ ; $i++)
+        {
+                $r = `head -n 1 $_[$i]`;
+                chomp $r;
+                my $y;
+                for($y = 0; $y < length($r); $y ++)
+                {
+
+                        if (substr($r,$y-1,1) eq "-"   )
+                        {
+                                last;
+                        }
+
+                }
+
+                my $str = substr($r,0, $y-1);
+
+                my $o = `grep -c ^$str $_[$i] `;
+
+                chomp $o;
+
+                push (@array , $o);
+        }
+        return @array;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Currently only works with read lengths, num reads, and genome size (e.g. no file parsing).
 
@@ -63,8 +132,8 @@ sub get_kmer_list
 
 sub calc_common_stats
 {
-    my @rls = @{$options->{read_length}};
-    my @nrs = @{$options->{num_reads}};
+    my @rls =  get_read_lengths ( @{$options->{"file"}});          # @{$options->{read_length}};
+    my @nrs =  get_read_count( @{ $options->{"file" }});          # @{$options->{num_reads}};
     my ($total_cov, $avg_readlen) = ('','');
     if (scalar (@rls) != scalar (@nrs)) {
         die "Error: number of values differs between read lengths and num reads\n";

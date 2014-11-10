@@ -8,12 +8,12 @@
 		ExpKmerCov.pl 
 		#for $i in $files:
 
-			#if $i.input_file_or_user.selection == "Manual" :
-				--read_length $i.input_file_or_user.read_length --num_reads $i.input_file_or_user.num_reads
-			#else :
-				--read_length `head -n 1 $i.input_file_or_user.length_file` --num_reads `tail -n 1 $i.input_file_or_user.length_file`
-			#end if
-				
+		<!--	
+				-->
+			
+			--file $i.File
+			
+			
 		#end for
 
 		--genome_size $genome_size
@@ -31,20 +31,7 @@
 	</command> 
 	<inputs>
 		<repeat name="files" title="Files">
-			<conditional name="input_file_or_user" >
-				<param name="selection" type="select" label="Input reads length and count manually or from a file?">
-					<option value="Manual"> Manual</option>
-					<option value="File" > File </option>
-				</param>			
-				<when value="Manual">	
-					<param name="read_length" type="integer" value="0" label="read_length"/>
-					<param name="num_reads" type="integer" value="0" label="nums_reads" />
-				</when>
-					
-				<when value="File">
-					<param name="length_file" type="data" label= "The reads length file" />
-				</when>	
-			</conditional>
+			<param name="File" type="data" label= "The Fastq file"/>
 		</repeat>
 		<param name="genome_size" type="integer" value="0" label="Estimate for genome size" />
 		<conditional name="range_input">
@@ -76,17 +63,15 @@
 
 		Calculates the expected kmer coverage for each kmer in the range.
 
-		First enter the read lengths and the read counts for each fastq file or provide a file with this data for each. Then provide the genome size and the range.
-
-		
-		Output will be in the format
-
-		Kmer 		Expected Kmer Coverage
+		The user supplies the Fastq files and the expected kmer coverage program will determine the number of reads and
+		the reads length and use this to calculate the expected coverage for each kmer.
 
 		Example output
 
 		1 937032
+
 		3 917511
+
 		5 897989
 
 
