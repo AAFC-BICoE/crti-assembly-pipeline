@@ -1,18 +1,17 @@
-<tool id="expectedkmercoverage" name="ExpKmerCov" version="1.0.0">
+<?xml version="1.0"?>
+<tool id="expectedkmercoverage" name="Expected Kmer Coverage" version="1.0.0">
+
+<description>Wrapper was created by Jacob Jablonski.</description>
 	<requirements>
   		<requirement type="package" version="5.18.1">perl</requirement>
-		<requirement type="package" version="1.0.0">pod</requirement>
+		<requirement type="package" version="1.0.0">ExtraPerl</requirement>
 	</requirements>
 
 	<command interpreter='perl'>
 		ExpKmerCov.pl 
 		#for $i in $files:
 
-		<!--	
-				-->
-			
-			--file $i.File
-			
+			--file $i.File			
 			
 		#end for
 
@@ -76,4 +75,25 @@
 
 
 	</help>
+
+
+
+
+
+<stdio>
+	<exit_code range="1:" level="fatal" description="Expected Kmer Coverage Error"/>
+</stdio>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </tool>

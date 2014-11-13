@@ -14,49 +14,12 @@
 				-b -c $optimum.coverage
 			#end if
 			#for i in $inputs
-				${i.filetype.input}
+				${i.input}
 			#end for
 			1> '$velvetk' 2> /dev/null ;
 			
 		</command>
-<!--		<command interpreter='perl'>
-			echo  $build_range.make_range;
-			echo $build_range.getting_input.input_type;
-			#if $build_range.make_range:
-				echo $build_range.make_range;
-				#if $build_range.getting_input.input_type == 'manual':
-					echo $build_range.getting_input.input_type;
-					build_kmer_range.pl manual $build_range.getting_input.start_kmer $build_range.getting_input.size_set $build_range.getting_input.end_kmer $velvetkout > $build_kmer_range;
-				#end if
-				#if $build_range.getting_input.input_type == 'offset':
-					echo $build_range.getting_input.input_type;
-					build_kmer_range.pl offset $build_range.getting_input.offset $velvetkout > $build_kmer_range;
-				#end if	
-			#end if
-		</command>
-	</commands> -->
 	<inputs>
-		
-	<!--	<conditional name="build_range" value="false">
-			<param name="make_range" type="boolean" truevalue="true" value="false" label="Build the kmer range"/>
-			<when value="true">
-				<conditional name="getting_input">
-					<param name="input_type" type="select" label="Select the way you want to build the range." >
-						<option value="manual"> Manually specify the range</option>
-						<option value="offset"> Specify the offset from the best kmer</option>
-					</param>
-					<when value="manual">
-						<param name="start_kmer" type="integer" value="0" label="The first Kmer of the range."/>
-						<param name="size_set" type="integer" value="2" label="The step size of the kmer range (By default usually 2)"/>
-						<param name="end_kmer" type="integer" value="0" label="The end kmer"/>
-					</when>
-					<when value="offset">
-						<param name="offset" type="integer" value="0" label="Build the kmer range around best kmer +/- offset"/> 
-					</when>
-				</conditional>
-			</when>	
-		</conditional> -->
-		
 		<conditional name="sizetype">
 			<param name="sizetypes" type="select" label="Specify a size or a fasta file" help="The expected length of the genome can come from an estimation of its length from the user or by measuring the length of the supplied fasta file.">
 				<option value="size" selected="true">User supplied size</option>
@@ -79,18 +42,7 @@
 			</when>
 		</conditional>
 		<repeat name="inputs" title="Input Files">
-			<conditional name="filetype" >
-				<param name="select_type" type="select" label="Choose between fasta and fastq file type" >
-					<option value="fasta"> Fasta </option>
-					<option value="fastq"> Fastq </option>
-				</param>
-				<when value="fasta">
-					<param name="input" type="data" format="fasta" label="Dataset"/>
-				</when>
-				<when value="fastq">
-					<param name="input" type="data" format="fastq" label="Dataset"/>
-				</when>
-			</conditional>
+			<param name="input" type="data" format=' ' label="Dataset"/>
 		</repeat>
 	
 	</inputs>
@@ -102,9 +54,9 @@
 	
 	<stdio>
 		<exit_code range="1:"   level="fatal"   description="Velvet k error" />
-  </stdio>
+	</stdio>
 	
 	<help>
-	
+	 VelvetK can estimate the best k-mer size to use for your Velvet de novo assembly. It needs two inputs: the estimated genome size, and all your sequence read files. The genome size can be supplied as as a number (eg. 3.5M) or as a FASTA file of a closely related genome. The reads can be FASTA or FASTQ, and may optionally be compressed with GZIP or BZIP2. 
 	</help>
 </tool>

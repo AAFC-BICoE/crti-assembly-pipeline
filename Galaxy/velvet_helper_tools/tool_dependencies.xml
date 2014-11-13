@@ -1,8 +1,8 @@
 <tool_dependency>
 	<package name="perl" version="5.18.1">	
-		<repository name="package_perl" owner="jacob" prior_installation_required="True"  changeset_revision="79a573ad2417" toolshed="http://onottar669810x:9009" />
+		<repository name="package_perl" prior_installation_required="True"/>
 	</package>
-	<package name="pod" version="1.0.0">
+	<package name="ExtraPerl" version="1.0.0">
         <install version="1.0">
             <actions>
                 <action type="setup_perl_environment">

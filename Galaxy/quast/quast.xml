@@ -1,5 +1,5 @@
 <tool id="quast" name="quast" version="1.0.0" >
-	<description> Quast tool</description>
+	<description>Quast tool. Wrapper was created by Jacob Jablonski</description>
 		
 	<requirements>
 		<requirement type="package" version="2.3">quast</requirement>

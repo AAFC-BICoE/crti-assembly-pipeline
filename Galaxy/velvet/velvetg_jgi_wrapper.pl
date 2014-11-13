@@ -99,9 +99,38 @@ if ($kmerBool eq "true" )
 #	print  "Velveth path is $velveth_path \n";
 #	print  "The args @ARGV \n";
 	print  `cp -r $velveth_path/* $velvetg_path`;
-
+	if ($kmer <= 31)
+	{
+		$ARGV[0] = "velvetg31";
+	}
+	elsif ($kmer <= 63  )
+	{
+		$ARGV[0] = "velvetg63";
+	}
+	elsif ($kmer <= 127  )
+	{
+		$ARGV[0] = "velvetg127";
+	}
+	elsif ($kmer <= 145 )
+	{
+		$ARGV[0] = "velvetg145";
+	}
+	elsif ($kmer <= 195  )
+	{
+		$ARGV[0] = "velvetg195";
+	}
+	else
+	{
+		$ARGV[0] = "velvetg245";
+	}
 	open (VELVETG, "@ARGV|") or die("Unable to run velvetg\n");
 	#open (OUT, ">$velvetg_outfile") or die("Unable to open outfile, $velvetg_outfile: $!\n");
+
+	
+
+
+
+
 	while (<VELVETG>) {
 		print OUT $_;
 		print if /^Final graph/;
@@ -116,6 +145,10 @@ if ($kmerBool eq "true" )
 		
 	
 	chomp $velvetg_path;
+
+	
+
+
 #	print OUT "Loc $velvetg_path/contigs.fa";
 	open FH, "< $velvetg_path/contigs.fa" or die "Cannot open file $velvetg_path/contigs.fa : $!";
 	chomp $loc;
@@ -129,8 +162,9 @@ if ($kmerBool eq "true" )
 	}
 
 	close O;
-
-
+	
+	
+	
 
 
 	$loc = $outpath . "/primary_" . "$outputID" . "_statsKmer$kmer" . "_visible_txt"      ;
@@ -203,7 +237,7 @@ if ($kmerBool eq "true" )
 			chomp $line;
 			print O $line, "\n";
 		}
-				close O;	
+		close O;	
 	}
 		
 	
@@ -243,9 +277,34 @@ if ($kmerBool eq "true" )
 		chomp $kmers[$i];
 		my $rty = $velveth_path . "/kmer_$kmers[$i]" ;
 		
-		print OUT $rty;
+		print OUT $rty;		
 		
 		
+		if ($kmers[$i] <= 31)
+		{
+			$ARGV[0] = "velvetg31";
+		}
+		elsif ($kmers[$i] <= 63  )
+		{
+			$ARGV[0] = "velvetg63";
+		}
+		elsif ($kmers[$i] <= 127  )
+		{
+			$ARGV[0] = "velvetg127";
+		}
+		elsif ($kmers[$i] <= 145 )
+		{
+			$ARGV[0] = "velvetg145";
+		}
+		elsif ($kmers[$i] <= 195  )
+		{
+			$ARGV[0] = "velvetg195";
+		}
+		else
+		{
+			$ARGV[0] = "velvetg245";
+		}
+
 		chomp $rty;
 		print OUT `cp $rty/*  $velvetg_path/temp `;
 		chomp $expected[$i];

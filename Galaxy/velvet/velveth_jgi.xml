@@ -1,149 +1,89 @@
+<?xml version="1.0"?>
 <tool id="velveth_jgi" name="velveth" version="1.0.0">
 <description>Preprocess sequences for velvet assembly</description>
 <requirements>
   <requirement type="package" version="1.2.10">velvet</requirement>
 </requirements>
-<command interpreter='perl'>velveth_jgi_wrapper.pl $output $output.extra_files_path
-$output.id
-$__new_file_path__
+<command interpreter='perl'>
 
-
-velveth $output.extra_files_path
-
-#if $Hash_Length.hash_select =="user_input" :
-
-	$Hash_Length.hash_length
-
-#else :
-
-	`cat $Hash_Length.hash_range_file `
-
-#end if
-
-
-
-#if $shortUse.shortSelect == "yes":
-
-    -fmtAuto
-
-    $shortUse.short.libtype
+	velveth_jgi_wrapper.pl $output $output.extra_files_path
+	$output.id
+	$__new_file_path__
 
 	
-	-$shortUse.short_select	
+	velveth
+
+
+	$output.extra_files_path
+
+	#if $Hash_Length.hash_select =="user_input" :
+
+		$Hash_Length.hash_length
+
+	#else :
+
+		`cat $Hash_Length.hash_range_file `
+
+	#end if
+
+
+	#for $i in $shortLibs:
+		
+		-fmtAuto
+		
+		$i.short.libtype
+		
+		-$i.short_select
+		
+		#if $i.short.libtype == '-shortPaired' :
+		
+			#for $j in $i.short.files:
+				$j.file
+			#end for
+		#else :
+			$i.short.file
+		#end if
 	
+		
 	
-	#for $i in $shortUse.short.files
-		$i.filetype.file
 	#end for
+
+
+	#if $shortUseLong.shortSelectLong == "yes":
+		
+		$shortUseLong.long.libtype
+		
+		#for $i in $shortUseLong.long.files
+			$i.filetype.select
+		#end for
+		
+		#for $i in $shortUseLong.long.files
+			$i.filetype.file
+		#end for
+		
+	#end if	
+		
 	
-#end if	
-
-#if $shortUse2.shortSelect2 == "yes":
-
-    -fmtAuto
-
-	$shortUse2.short2.libtype
 	
-	-$shortUse2.short_select2
 	
-	#for $i in $shortUse2.short2.files
-		$i.filetype.file
-	#end for
-	
-#end if	
+	#if $reuse_Seq:
+		-reuse_Sequences
+	#end if
+
+	#if $reuse_binary :
+		-reuse_binary
+	#end if
+
+	#if $noHash  :
+		-noHash
+	#end if
+
+	#if $create_binary :
+		-create_binary
+	#end if
 
 
-
-
-
-#if $shortUse3.shortSelect3 == "yes":
-	
-    -fmtAuto
-	$shortUse3.short3.libtype
-	-$shortUse3.short_select3
-	
-
-	
-	#for $i in $shortUse3.short3.files
-		$i.filetype.file
-	#end for
-	
-#end if	
-
-
-#if $shortUse4.shortSelect4 == "yes":
-	
-	$shortUse4.short4.libtype
-	-$shortUse4.short_select4
-	
-	#for $i in $shortUse4.short4.files
-		$i.filetype.select
-	#end for
-	
-	#for $i in $shortUse4.short4.files
-		$i.filetype.file
-	#end for
-	
-#end if	
-
-
-
-#if $shortUse5.shortSelect5 == "yes":
-	
-	$shortUse5.short5.libtype
-	-$shortUse5.short_select5
-	
-	#for $i in $shortUse5.short5.files
-		$i.filetype.select
-	#end for
-	
-	#for $i in $shortUse5.short5.files
-		$i.filetype.file
-	#end for
-	
-#end if	
-
-
-
-#if $shortUseLong.shortSelectLong == "yes":
-	
-	$shortUseLong.long.libtype
-	
-	#for $i in $shortUseLong.long.files
-		$i.filetype.select
-	#end for
-	
-	#for $i in $shortUseLong.long.files
-		$i.filetype.file
-	#end for
-	
-#end if	
-
-
-
-#if $reuse_Seq:
--reuse_Sequences
-#end if
-
-#if $reuse_binary :
--reuse_binary
-#end if
-
-#if $noHash  :
--noHash
-#end if
-
-#if $create_binary :
--create_binary
-#end if
-
-
-$strand_specific
-
-
-
-
-
+	$strand_specific
 
 </command>
 <inputs>
@@ -173,347 +113,93 @@ $strand_specific
     
 	<param name="strand_specific" type='boolean' label="All libraries strand-specific?" truevalue='-strand_specific' falsevalue=''/>
 
-	
-
-
-<conditional name="shortUse">
-	
-	
-	<param name="shortSelect" type="select" label="Do you have a first short libary" > 
-		<option value="no">No</option>		
-		<option value="yes">Yes</option>
-
-	</param>
-	<when value="yes">
-	<param name="short_select" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
+	<repeat name="shortLibs" title="Short Libraries" min="0" max="5" >
 		
-		<option value="separate">separate</option>
-		<option value="interleaved">interleaved</option>
+		<param name="short_select" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-	</param>
-    		<conditional name="short">
+			<option value="separate">separate</option>
+			<option value="interleaved">interleaved</option>
+		
+		</param>
+		
+		<conditional name="short">
         		<param name="libtype" type="select" label="Short Library Type">
         			<option value="-shortPaired">Paired</option>
 				<option value="-short">Unpaired</option>
         		</param>
         		<when value="-shortPaired">
 				<repeat name="files" title="Files">
-                			<conditional name="filetype">
-                 				<param name='select' type='select' label='File Type'>
-                        				<option value='-fastq'>Fastq</option>
-                        				<option value='-fasta'>Fasta</option>
-                    				</param>
-                    				<when value="-fasta">
-                    		  			  <param name="file" type="data" format="fasta" label="File"/>
-                    				</when>
-                    				<when value="-fastq">
-                    				    <param name="file" type="data" format="fastq" label="File"/>
-                   				</when>
-               				</conditional>
+					<param name="file" type="data" format=' ' label="File"/>
           			</repeat>
         		</when>
         		<when value="-short">
-        		    <repeat name="files" title="Files">
-                		<conditional name="filetype">
-                			    <param name='select' type='select' label='File Type'>
-                	        		<option value='-fastq'>Fastq</option>
-                	        		<option value='-fasta'>Fasta</option>
-                	    		    </param>
-                	    		<when value="-fasta">
-                	        		<param name="file" type="data" format="fasta" label="File"/>
-                	    		</when>
-                	    		<when value="-fastq">
-                	        		<param name="file" type="data" format="fastq" label="File"/>
-                	    		</when>
-                		</conditional>
-            		   </repeat>
+                	       	<param name="file" type="data" format=' ' label="File"/>
         		</when>
     		</conditional>
-	</when>
-</conditional>
-
-<conditional name="shortUse2">
-	
-
-
-	
-	<param name="shortSelect2" type="select" label="Do you have a second short libary" > 
-		<option value="no">No</option>		
-		<option value="yes">Yes</option>
-
-	</param>
-	<when value="yes">
-	<param name="short_select2" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="separate">separate</option>
-		<option value="interleaved">interleaved</option>
 		
-	</param>
-    <conditional name="short2">
-        <param name="libtype" type="select" label="Short2 Library Type">
-            <option value="-shortPaired2">Paired</option>
-            <option value="-short2">Unpaired</option>
-        </param>
-        <when value="-shortPaired2">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-        <when value="-short2">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-    </conditional>
-</when>
-</conditional>
-<conditional name="shortUse3">
-	<param name="shortSelect3" type="select" label="Do you have a third short libary" > 
-		<option value="no">No</option>		
-		<option value="yes">Yes</option>
-
-	</param>
-	
-
-	<when value="yes">
-	<param name="short_select3" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
 		
-		<option value="separate">separate</option>
-		<option value="interleaved">interleaved</option>
-		
-	</param>
-    <conditional name="short3">
-        <param name="libtype" type="select" label="Short3 Library Type">
-            <option value="-shortPaired3">Paired</option>
-            <option value="-short3">Unpaired</option>
-        </param>
-        <when value="-shortPaired3">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-        <when value="-short3">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-    </conditional>
-</when>
-</conditional>
+	</repeat>	
 
-<conditional name="shortUse4">
-	<param name="shortSelect4" type="select" label="Do you have a fourth short libary" > 
-		<option value="no">No</option>		
-		<option value="yes">Yes</option>
+	<conditional name="shortUseLong">
+		<param name="shortSelectLong" type="select" label="Do you have a long short libary" > 
+			<option value="no">No</option>		
+			<option value="yes">Yes</option>
+		</param>
+		<when value="yes">
+			<param name="short_selectlong" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
+				<option value="separate">separate</option>
+				<option value="interleaved">interleaved</option>	
+			</param>
 
-	</param>
-<when value="yes">
-	<param name="short_select4" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
-		
-		<option value="separate">separate</option>
-		<option value="interleaved">interleaved</option>
-		
-	</param>
-
-
-    <conditional name="short4">
-        <param name="libtype" type="select" label="Short4 Library Type">
-            <option value="-shortPaired4">Paired</option>
-        	    <option value="-short4">Unpaired</option>
-        	</param>
-        	<when value="-shortPaired4">
-            	<repeat name="files" title="Files">
-                	<conditional name="filetype">
-                   	 <param name='select' type='select' label='File Type'>
-                   	     <option value='-fastq'>Fastq</option>
-                   	     <option value='-fasta'>Fasta</option>
-                   	 </param>
-                   	 <when value="-fasta">
-                   	     <param name="file" type="data" format="fasta" label="File"/>
-                   	 </when>
-                   	 <when value="-fastq">
-                   	     <param name="file" type="data" format="fastq" label="File"/>
-                   	 </when>
-            	    </conditional>
-            	</repeat>
-        	</when>
-        	<when value="-short4">
-            	<repeat name="files" title="Files">
-                	<conditional name="filetype">
-                	    <param name='select' type='select' label='File Type'>
-                	        <option value='-fastq'>Fastq</option>
-                	        <option value='-fasta'>Fasta</option>
-                	    </param>
-                	    <when value="-fasta">
-                	        <param name="file" type="data" format="fasta" label="File"/>
-                	    </when>
-                	    <when value="-fastq">
-                	        <param name="file" type="data" format="fastq" label="File"/>
-                	    </when>
-                	</conditional>
-            	</repeat>
-        	</when>
-    	</conditional>
-</when>
-</conditional>
-	
-
-<conditional name="shortUse5">
-	<param name="shortSelect5" type="select" label="Do you have a fifth short libary" > 
-		<option value="no">No</option>		
-		<option value="yes">Yes</option>
-
-	</param>
-	<when value="yes">
-	<param name="short_select5" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
-		
-		<option value="separate">separate</option>
-		<option value="interleaved">interleaved</option>
-		
-	</param>
-    <conditional name="short5">
-        <param name="libtype" type="select" label="Short5 Library Type">
-            <option value="-shortPaired5">Paired</option>
-            <option value="-short5">Unpaired</option>
-        </param>
-        <when value="-shortPaired5">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-        <when value="-short5">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-    </conditional>
-</when>
-</conditional>
-
-<conditional name="shortUseLong">
-	<param name="shortSelectLong" type="select" label="Do you have a long short libary" > 
-		<option value="no">No</option>		
-		<option value="yes">Yes</option>
-
-	</param>
-	<when value="yes">
-	<param name="short_selectlong" type="select" label="Read 2 separate files for paired reads or the file contains paired reads that are interleaved (default)" >
-		
-		<option value="separate">separate</option>
-		<option value="interleaved">interleaved</option>
-		
-	</param>
-
-    <conditional name="long">
-        <param name="libtype" type="select" label="Long Library Type">
-            <option value="-longPaired">Paired</option>
-            <option value="-long">Unpaired</option>
-        </param>
-        <when value="-longPaired">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-        <when value="-long">
-            <repeat name="files" title="Files">
-                <conditional name="filetype">
-                    <param name='select' type='select' label='File Type'>
-                        <option value='-fastq'>Fastq</option>
-                        <option value='-fasta'>Fasta</option>
-                    </param>
-                    <when value="-fasta">
-                        <param name="file" type="data" format="fasta" label="File"/>
-                    </when>
-                    <when value="-fastq">
-                        <param name="file" type="data" format="fastq" label="File"/>
-                    </when>
-                </conditional>
-            </repeat>
-        </when>
-    </conditional>
-</when>
-</conditional>
+    			<conditional name="long">
+				<param name="libtype" type="select" label="Long Library Type">
+					<option value="-longPaired">Paired</option>
+					<option value="-long">Unpaired</option>
+        			</param>
+        			<when value="-longPaired">
+					<repeat name="files" title="Files">
+						<conditional name="filetype">
+							<param name='select' type='select' label='File Type'>
+								<option value='-fastq'>Fastq</option>
+								<option value='-fasta'>Fasta</option>
+							</param>
+							<when value="-fasta">
+								<param name="file" type="data" format="fasta" label="File"/>
+							</when>
+							<when value="-fastq">
+								<param name="file" type="data" format="fastq" label="File"/>
+							</when>
+						</conditional>
+					</repeat>
+				</when>
+				<when value="-long">
+					<repeat name="files" title="Files">
+						<conditional name="filetype">
+							<param name='select' type='select' label='File Type'>
+								<option value='-fastq'>Fastq</option>
+								<option value='-fasta'>Fasta</option>
+							</param>
+						<when value="-fasta">
+							<param name="file" type="data" format="fasta" label="File"/>
+					</when>
+					<when value="-fastq">
+						<param name="file" type="data" format="fastq" label="File"/>
+					</when>
+						</conditional>
+					</repeat>
+				</when>
+		    </conditional>
+		</when>
+	</conditional>
 </inputs>
 <outputs>
     <data name="output" format="txt"/>
 </outputs>
+
+<stdio>
+	<exit_code range="1:" level="fatal" description="Velveth error"/>
+</stdio>
 
 <help>
 

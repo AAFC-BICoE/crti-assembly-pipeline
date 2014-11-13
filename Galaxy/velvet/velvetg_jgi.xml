@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <tool id="velvetg_jgi" name="velvetg" version="1.0.0">
 <description>Assemble preprocessed reads</description>
 <requirements>
@@ -369,24 +370,13 @@ velvetg $velvetg_outfile.extra_files_path
     <param name="exportFiltered" type="boolean" truevalue="yes" falsevalue="no" checked="false" label="[-exportFiltered] export the long nodes which were eliminated by the coverage filters" />
 </inputs>
 
+	<stdio>
+		<exit_code range="1:" level="fatal" description="Velvetg error"/>
+	</stdio>
+
+
 <outputs>
-<!--	<data format="txt" name="report">
-	 <discover_datasets pattern="__designation_and_ext__" directory="subdir" visible="true" />
-	</data> -->
     <data name="velvetg_outfile" format="txt" />
-	
-       <!--<discover_datasets pattern="*" directory="apps" visible="true" /> 
-    </data> -->
-<!--    <data name="velvetg_log_file" format="txt" label="Log" /> -->
-<!--    <data name="contigs_outfile" format="fasta" label='Contigs' /> -->
-<!--    <data name="stats_outfile" format="tabular" label='Contig Stats' />
-    <data name="pregraph_outfile" format="txt" label="PreGraph" />
-    <data name='unused_reads_outfile' format='fasta' label='Unused Reads'>
-        <filter>unused_reads is True</filter>
-    </data>
-    <data name='amos_outfile' format='txt' label='Amos Assembly'>
-        <filter>amos_file is True</filter>
-    </data> -->
 </outputs>
 
 <help>

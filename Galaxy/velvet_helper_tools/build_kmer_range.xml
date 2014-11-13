@@ -1,4 +1,5 @@
-<tool id="build_kmer_range" name="Build_Kmer_Range" version="1.0.0">
+<?xml version="1.0"?>
+<tool id="BuildKmerRange" name="Build Kmer Range" version="1.0.0">
 
 	<requirements>
   		<requirement type="package" version="5.18.1">perl</requirement>
@@ -40,6 +41,11 @@
 	<outputs>
 		<data format="kmer_range" name="output"/>
 	</outputs>
+
+	<stdio>
+		<exit_code range="1:" level="fatal" description="Build Kmer Range error"/>
+	</stdio>
+
 	<help>
 		Enter the velvetk best kmer output file. Then select whether you want to enter the kmer range as an offset from the best kmer or as a range.
 		Performs error checking to ensure that the range does not go out of bounds.

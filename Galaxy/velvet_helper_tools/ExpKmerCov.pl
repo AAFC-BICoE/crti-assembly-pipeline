@@ -11,10 +11,14 @@ use List::Util qw(sum);
 # AND: est. genome size or contigs file
 # Output: exp_cov values for each input kmer.
 
+
+
+# Now it only accepts the fastq files for input instead of read lengths and num reads.
+# Update by Jacob Jablonski.
+
+
 my $options = {};
 GetOptions ($options,
-    'read_length|l=i@',
-    'num_reads|n=i@',
     'reads_file|f=s@',
     'kmer_range|r=s@',
     'kmer_list|k=s@',
@@ -22,13 +26,6 @@ GetOptions ($options,
     'contig_file|f=s',
     'file|f=s@'
     );
-
-
-
-
-
-
-
 
 
 
@@ -60,14 +57,11 @@ sub get_read_count
                 my $y;
                 for($y = 0; $y < length($r); $y ++)
                 {
-
                         if (substr($r,$y-1,1) eq "-"   )
                         {
                                 last;
                         }
-
                 }
-
                 my $str = substr($r,0, $y-1);
 
                 my $o = `grep -c ^$str $_[$i] `;
@@ -78,16 +72,6 @@ sub get_read_count
         }
         return @array;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
