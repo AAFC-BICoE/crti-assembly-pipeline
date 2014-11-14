@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <tool_dependency>
     <package name="perl" version="5.18.1">
         <install version="1.0">
