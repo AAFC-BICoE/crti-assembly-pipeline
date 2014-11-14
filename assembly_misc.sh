@@ -2,9 +2,38 @@
 # Bash and R
 
 get_qsub_script() {
-    [ -e qsub_script.sh ] || svn export http://biodiversity/svn/source/AssemblyPipeline/qsub_script.sh
+    [ -e qsub_script.sh ] || svn export http://svn.biodiversity.agr.gc.ca/repo/source/AssemblyPipeline/qsub_script.sh
     sed -i 's/#$ -pe .*//' qsub_script.sh
 }
+
+run_qsub() {
+    nprocs=$1
+    qsub_holdid=$2
+    cmd=$3
+    jobname="run_qsub"
+    [ ! -z $4 ] && jobname=$4
+    get_qsub_script
+    qsub_cmd="qsub -N $jobname -pe smp $nprocs -hold_jid $qsub_holdid qsub_script.sh \"$cmd\""
+    >&2 echo ${qsub_cmd}
+    qsub_out=`eval ${qsub_cmd}`
+    >&2 echo ${qsub_out}
+    qsub_jobid=`echo $qsub_out | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    echo ${qsub_jobid}
+} 
+
+# Given arbitrary number of input jobids, submit a single dummy job that holds on them all.
+qsub_dummy_hold() {
+    hold_str=""
+    for jobid in "$@"; do
+        hold_str="${hold_str} -hold_jid $jobid"
+    done
+    qsub_cmd="qsub -N qsub_dummy -pe smp 1 $hold_str qsub_script.sh \"ls\""
+    >&2 echo ${qsub_cmd}
+    qsub_out=`eval ${qsub_cmd}`
+    >&2 echo ${qsub_out}
+    qsub_jobid=`echo $qsub_out | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    echo ${qsub_jobid}     
+} 
 
 # bug 4094
 run_spades_PE() {
@@ -251,7 +280,7 @@ run_cufflinks() {
     >&2 echo ${qsub_cufflinks_cmd}
     qsub_cufflinks_out=`eval ${qsub_cufflinks_cmd}`
     >&2 echo ${qsub_cufflinks_out}
-    qsub_cufflinks_jobid=`echo $qsub_tophat_out} | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    qsub_cufflinks_jobid=`echo $qsub_cufflinks_out} | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
     echo ${qsub_cufflinks_jobid}
 }
 
@@ -316,6 +345,139 @@ run_bowtie2_all_lib() {
     index_bam_jid=`index_bam ${bamfile_sort} ${sort_bam_jid}`
     insert_hist_jid=`insert_histogram ${bamfile_sort} ${insert_hist_prefix} ${index_bam_jid}`
 }
+
+run_interpro() {
+    maker_proteins_fasta=$1 # usually maker2/<genome_name>.all.maker.proteins.fasta
+    out_prefix=$2
+    qsub_holdid=1
+    [ ! -z $3 ] && qsub_holdid=$3
+    get_qsub_script
+    IPSDIR=interproscan-42.0
+    mkdir $IPSDIR
+    interpro_cmd="/isilon/biodiversity/pipelines/interproscan-5/interproscan.sh -b ${out_prefix} -f TSV,XML,GFF3,HTML -goterms -iprlookup -pa -i ${maker_proteins_fasta} --seqtype p"
+    qsub_interpro_cmd="qsub -N interpro -pe orte 1 -hold_jid $qsub_holdid qsub_script.sh \"${interpro_cmd}\""
+    >&2 echo $qsub_interpro_cmd
+    qsub_interpro_out=`eval ${qsub_interpro_cmd}`
+    >&2 echo $qsub_interpro_out
+    qsub_interpro_jobid=`echo $qsub_interpro_out | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    echo ${qsub_interpro_jobid}
+}
+
+# Needed to get bowtie aligned reads .bam file into format usable by GATK toolkit.
+add_readgroups() {
+    bamfile=$1
+    qsub_holdid=$1
+    [ ! -z $2 ] && qsub_holdid=$2
+    get_qsub_script
+    bamfile_short="${bamfile%.*}"
+    outfile="${bamfile_short}.addRG.bam"
+    addrg_cmd="java -jar /opt/bio/picard-tools/AddOrReplaceReadGroups.jar I=$bamfile O=$outfile LB=LB PL=illumina PU=PU SM=SM"
+    qsub_addrg_cmd="qsub -N addrg -pe smp 1 -hold_jid ${qsub_holdid} qsub_script.sh \"${addrg_cmd}\""
+    >&2 echo ${qsub_addrg_cmd}
+    qsub_addrg_out=`eval ${qsub_addrg_cmd}`
+    >&2 echo ${qsub_addrg_out}
+    qsub_addrg_jobid=`echo ${qsub_addrg_out} | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    echo ${qsub_addrg_jobid}
+}
+
+# index bam between func above and func below.
+
+run_depthcov() {
+    bamfile=$1
+    ref_genome=$2
+    qsub_holdid=1
+    [ ! -z $3 ] && qsub_holdid=$3
+    depthcov_cmd="java -jar /opt/bio/GenomeAnalysisTK/GenomeAnalysisTK.jar -T DepthOfCoverage -I $bamfile -R ${ref_genome}"
+    jobname="depthcov"
+    jobid=`run_qsub 1 $qsub_holdid "$depthcov_cmd" $jobname`
+    echo $jobid
+}
+
+# Note - need to be a bit careful about paired-end reads
+# See 'Trimming paired-end reads' section of docs: https://cutadapt.readthedocs.org/en/latest/guide.html#basic-usage
+# Forward and reverse adapter strings should be different.
+run_cutadapt() {
+    reads_file_in=$1
+    reads_file_out=$2
+    adapt_str=$3
+    qsub_holdid=1
+    [ ! -z $4 ] && qsub_holdid=$4
+    cutadapt_cmd="/home/AAFC-AAC/cullisj/software/pyenv/versions/2.7.6/bin/cutadapt -a ${adapt_str} -o ${reads_file_out} ${reads_file_in}"
+    jobname="cutadapt"
+    jobid=`run_qsub 1 $qsub_holdid "$cutadapt_cmd" $jobname`
+    echo $jobid
+}
+
+run_fastqc()
+{
+    reads=$1
+    qsub_holdid=1
+    [ ! -z $2 ] && qsub_holdid=$2
+    fastqc_cmd="/opt/bio/FastQC/fastqc $reads"
+    jobname="fastqc"
+    jobid=`run_qsub 1 $qsub_holdid "$fastqc_cmd" $jobname`
+    echo $jobid
+}
+
+# Note: reads in must be unzipped reads
+run_fastx_trimmer()
+{
+    reads_in=$1
+    reads_out=$2
+    first_base=$3
+    last_base=$4
+    qsub_holdid=1
+    [ ! -z $5 ] && qsub_holdid=$5
+    fastx_trimmer_cmd="/opt/bio/fastx/bin/fastx_trimmer -Q 33 -i $reads_in -o $reads_out -f $first_base -l $last_base"
+    jobname="fastx_trimmer"
+    jobid=`run_qsub 1 $qsub_holdid "$fastx_trimmer_cmd" $jobname`
+    echo $jobid
+}
+
+# Note - reads must be gunzipped before running potrim.
+run_potrim() {
+    reads_r1=$1
+    reads_r2=$2
+    outname=$3
+    qsub_holdid=1
+    [ ! -z $4 ] && qsub_holdid=$4
+    potrim_cmd="perl /opt/bio/popoolation/basic-pipeline/trim-fastq.pl --fastq-type sanger --input1 $reads_r1 --input2 $reads_r2 --quality-threshold 20 --min-length 50 --output $outname.trim"
+    jobname="potrim"
+    jobid=`run_qsub 1 $qsub_holdid "$potrim_cmd" $jobname`
+    echo $jobid
+}
+
+
+run_gunzip() {
+    gzipped_in=$1
+    gunzipped_out=$2
+    qsub_holdid=1
+    [ ! -z $3 ] && qsub_holdid=$3
+    gunzip_cmd="/home/AAFC-AAC/cullisj/scripts/gunzip_keep.sh $gzipped_in $gunzipped_out"
+    jobname="gunzip"
+    jobid=`run_qsub 1 $qsub_holdid "$gunzip_cmd" $jobname`
+    echo $jobid
+}
+
+# tar/zip a dir. first param is dirname.
+# must pass zip program (e.g. 'gzip', 'bzip2'. 
+# thrid param "del" will delete the original dir, "keep" to keep
+# optional fourth param is a qsub jobid to hold on.
+zip_dir () {
+    dir="${1%/}"
+    zipbin=$2
+    delstr=""
+    [ $3 = "del" ] && delstr=" --remove-files "
+    qsub_holdid=1
+    [ ! -z $4 ] && qsub_holdid=$4
+    zipext="gz"
+    [ $zipbin = "bzip2" ] && zext="bz2"
+    tarzip_cmd="tar -cf $dir.tar.$zipext --use-compress-prog=$zipbin $dir/ $delstr"
+    jobname="tar$zipbin"
+    jobid=`run_qsub 1 $qsub_holdid "$tarzip_cmd" $jobname`
+    echo $jobid
+}
+    
 
 # Convert cuff GTF to GFF + release renaming steps.
     
