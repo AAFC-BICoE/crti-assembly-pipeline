@@ -18,7 +18,7 @@ $kmer
 $kmerBoolean
 
 
-<!-- STUFF GOES HEREEEE -->
+
 
 <!--$contigs_outfile.id -->
 $velvetg_outfile.id
