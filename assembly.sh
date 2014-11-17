@@ -125,7 +125,7 @@ dir_setup()
     ln -s $reads_R1_in $raw_velvet_dir/
     ln -s $reads_R2_in $raw_velvet_dir/
     # mkdir -p $trim_velvet_dir
-    svn export http://biodiversity/svn/source/AssemblyPipeline/ExpKmerCov.pl
+    svn export http://svn.biodiversity.agr.gc.ca/repo/source/AssemblyPipeline/ExpKmerCov.pl
 }
 
 run_fastqc()

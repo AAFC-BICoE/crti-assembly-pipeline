@@ -1,7 +1,7 @@
 usage() { echo "Usage: $0 [ -a <assembly script args> -f <function> ]" 1>&2; exit 1; }
 
 qsub_script="assembly_qsub.sh"
-[ -s $qsub_script ] || svn export http://biodiversity/svn/source/AssemblyPipeline/${qsub_script}
+[ -s $qsub_script ] || svn export http://svn.biodiversity.agr.gc.ca/repo/source/AssemblyPipeline/${qsub_script}
 assembly_script="assembly.sh"
 
 assembly_script_args=
