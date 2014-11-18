@@ -447,6 +447,34 @@ run_potrim() {
     echo $jobid
 }
 
+run_read_subsample() {
+    reads_r1=$1
+    reads_r2=$2
+    frac=$3 # fraction to keep - between 0 and 1.
+    qsub_holdid=1
+    [ ! -z $4 ] && qsub_holdid=$4
+    reads_out1="${reads_r1}.s$frac.fq"
+    reads_out2="${reads_r2}.s$frac.fq"
+    qsub_holdid=1
+    sample_cmd="read_sample.py $frac $reads_r1 $reads_r2 $reads_out1 $reads_out2"
+    jobname="read_sample"
+    jobid=`run_qsub 1 $qsub_holdid "$sample_cmd" $jobname`
+    echo $jobid
+}
+
+# This function runs only one reads file, although an arbitrary list of reads
+# files could be provided, possibly as a file listing instead so the number of args
+# is always known.
+run_read_stats() {
+    reads=$1
+    stats_file=$2
+    qsub_holdid=1
+    [ ! -z $3 ] && qsub_holdid=$3
+    stats_cmd="read_stats.py --reads $reads --stats_file $stats_file --stats_header"
+    jobname="read_stats"
+    jobid=`run_qsub 1 $qsub_holdid "$stats_cmd" $jobname`
+    echo $jobid
+}    
 
 run_gunzip() {
     gzipped_in=$1
