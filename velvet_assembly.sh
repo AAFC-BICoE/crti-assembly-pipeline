@@ -8,7 +8,7 @@ readlen=${insert_length}
 velvetk_cov=30
 velvetk_path="velvetk.pl"
 kmer_start=65
-kmer_end=129
+kmer_end=127
 kmer_step=4
 kmer_rad= # Only used if we're using the best kmer from velvetk
 velveth_bin="velveth_127"
@@ -36,18 +36,19 @@ while getopts "c:f:i:k:" opt; do
     esac
 done
 
+velvet_dir="velvet"
+
 [[ ! -z $config_file && -s $config_file ]] && source $config_file
 
 reads_R1=`pwd`/`basename $reads_R1_in`
 reads_R2=`pwd`/`basename $reads_R2_in`
-velvet_dir="velvet"
 velvetk_outfile="$velvet_dir/velvetk_best_kmer.txt"
 
 get_numreads_fname()
 {
     reads_fq=$1
     reads_base_fq=`basename $reads_fq`
-    reads_base="${reads_base_fq%%.*}"
+    reads_base="${reads_base_fq%.*}"
     numreads_fname="${reads_base}_numreads.txt"
     echo $numreads_fname
 }
@@ -88,7 +89,7 @@ dir_setup()
     mkdir $velvet_dir
     ln -s $reads_R1_in $velvet_dir/
     ln -s $reads_R2_in $velvet_dir/
-    svn export http://svn.biodiversity.agr.gc.ca/repo/source/AssemblyPipeline/ExpKmerCov.pl
+    svn export -q http://svn.biodiversity.agr.gc.ca/repo/source/AssemblyPipeline/ExpKmerCov.pl
 }
 
 read_counts()
@@ -119,9 +120,9 @@ read_counts()
 
 run_read_counts()
 {
-    echo "Read counts for file $reads_R1:"
+    >&2 echo "Read counts for file $reads_R1:"
     read_counts $reads_R1 $numreads_R1_file
-    echo "Read counts for file $reads_R2:"
+    >&2 echo "Read counts for file $reads_R2:"
     read_counts $reads_R2 $numreads_R2_file
 }
 
@@ -131,7 +132,7 @@ run_velvetk()
     R1=$reads_R1
     R2=$reads_R2
     best_kmer=`$velvetk_path --size $est_genome_size --cov $velvetk_cov --best $R1 $R2`
-    echo $best_kmer
+    >&2 echo $best_kmer
     echo "$best_kmer" >$velvetk_outfile
 }
 
@@ -149,7 +150,7 @@ run_velveth()
         fq_type=" -fastq.gz "
     fi
     vh_cmd="$velveth_bin velvet $kmer_range -shortPaired -separate $fq_type $R1 $R2"
-    echo $vh_cmd
+    >&2 echo $vh_cmd
     eval $vh_cmd
 }
 
@@ -177,8 +178,8 @@ run_velvetg()
     fi
     if [ ! -z $kmer ]; then
         cd $velvet_dir
-        velvetg_cmd="$velvetg_bin velvet_$kmer -amos_file yes -cov_cutoff auto -exp_cov $exp_cov -unused_reads yes -scaffolding yes -ins_length $insert_length $velvetg_params"
-        echo "$velvetg_cmd"
+        velvetg_cmd="$velvetg_bin velvet_$kmer -very_clean yes -amos_file no -cov_cutoff auto -exp_cov $exp_cov -unused_reads yes -scaffolding yes -ins_length $insert_length $velvetg_params"
+        >&2 echo "$velvetg_cmd"
         eval $velvetg_cmd
         cd ..
     fi
@@ -227,7 +228,7 @@ combine_assembly_stats()
 run_setup()
 {
     dir_setup
-    read_counts
+    run_read_counts
 }
 
 # view fastqc results
@@ -248,10 +249,3 @@ velvetkh()
 if [ ! -z `echo $func | awk '{print $1;}'` ]; then
     eval "$func";
 fi
-    
-    
-    
-    
-    
-    
-    
