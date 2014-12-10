@@ -8,9 +8,8 @@
  </requirements>
 	<command> 
 		fastx_trimmer
-		#if $Qselect :
-			-Q $quality
-		#end if
+		-Q 33
+
 		-f $first
 		
 		#if $lastSelect :
@@ -20,9 +19,7 @@
 		-i $input -o '$output'
         </command>
 	<inputs>
-		<param name="Qselect" type="boolean" label="Use a minimum base score ?" />
-		<param name="quality" type="integer" value="33" label="Minimum quality"/>
-		<param format="fasta,fastq,fastqsanger" name="input" type="data" label="Library to clip" />
+		<param format="fastqsanger" name="input" type="data" label="Library to clip" />
 		<param name="first" size="4" type="integer" value="1">
 			<label>First base to keep</label>
 		</param>
