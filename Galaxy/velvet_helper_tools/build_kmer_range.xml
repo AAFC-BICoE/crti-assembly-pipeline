@@ -39,7 +39,7 @@
 
 	</inputs>
 	<outputs>
-		<data format="kmer_range" name="output"/>
+		<data format="csv" name="output"/>
 	</outputs>
 
 	<stdio>

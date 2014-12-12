@@ -57,7 +57,7 @@ sub get_read_count
                 my $y;
                 for($y = 0; $y < length($r); $y ++)
                 {
-                        if (substr($r,$y-1,1) eq "-"   )
+                        if (substr($r,$y-1,1) eq ":"   )
                         {
                                 last;
                         }

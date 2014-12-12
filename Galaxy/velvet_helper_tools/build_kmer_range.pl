@@ -77,20 +77,36 @@ if ($end_kmer % 2 == 0)
 {
 	$end_kmer = $end_kmer - 1;
 }
-if ($start_kmer <= 0)
-{
-	
-	die " The first kmer $start_kmer is less then or equal to 0";
-}
+#if ($start_kmer <= 0)
+#{
+#	
+#	die " The first kmer $start_kmer is less then or equal to 0";
+#}
 
 if ($end_kmer >= $args[2])
 {
-	die " The last kmer out of bounds";
+	#die " The last kmer out of bounds";
+	
+	$end_kmer = $args[2];
+	
+	if ($end_kmer % 2 == 0)
+	{
+		$end_kmer = $end_kmer - 1;
+	}
+	
 }
 
+chomp $start_kmer;
 
 print $start_kmer;
 print ",";
+
+chomp $end_kmer;
+
 print $end_kmer;
 print ",";
+
+
+chomp $step_size;
+
 print $step_size;
