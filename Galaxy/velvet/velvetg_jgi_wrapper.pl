@@ -89,7 +89,7 @@ if ($kmerBool eq "true" )
 	{
 	
 	    $velveth_path = $velveth_path . "_" . $kmer ;
-	
+	    print "AJLKDFS";
 	}
 
 	-d $velvetg_path or mkdir($velvetg_path) or die("Unable to create output folder, $velvetg_path: $!\n");
@@ -123,6 +123,7 @@ if ($kmerBool eq "true" )
 	{
 		$ARGV[0] = "velvetg245";
 	}
+	print "THE COMMAND @ARGV";
 	open (VELVETG, "@ARGV|") or die("Unable to run velvetg\n");
 	#open (OUT, ">$velvetg_outfile") or die("Unable to open outfile, $velvetg_outfile: $!\n");
 
@@ -330,7 +331,7 @@ if ($kmerBool eq "true" )
 		chomp $outputID;
 		chomp $kmers[$i];
 		chomp $extension;
-		my $loc = $outpath . "/primary_" . "$outputID" . "_contigsKmer$kmers[$i]" . "_visible_" . "$extension"      ;
+		my $loc = $outpath . "/primary_" . "$outputID" . "_contigs Kmer $kmers[$i]" . "_visible_" . "$extension"      ;
 		
 		# $outpath ."/primary_".$outid."_$data"."_visible_$intype";
 #		open ( OUT , ">$loc");
@@ -350,6 +351,7 @@ if ($kmerBool eq "true" )
 		}
 
 		close O;
+		close FH;
 
 
 		$loc = $outpath . "/primary_" . "$outputID" . "_statsKmer$kmers[$i]" . "_visible_txt"      ;
@@ -368,7 +370,7 @@ if ($kmerBool eq "true" )
 		}
 
 		close O;
-
+		close FH;
 
 		$loc = $outpath . "/primary_" . "$outputID" . "_PreGraphKmer$kmers[$i]" . "_visible_txt";
 		chomp $velvetg_path;
@@ -384,7 +386,8 @@ if ($kmerBool eq "true" )
 			print O $line, "\n";
 		}
 
-		close O;	
+		close O;
+		close FH;	
 	
 		print OUT "\ngetParam: ",  getParam("-amos_file", @ARGV); 
 		
@@ -404,7 +407,8 @@ if ($kmerBool eq "true" )
 				print O $line, "\n";
 			}
 	
-			close O;	
+			close O;
+			close FH;	
 		}
 		
 		print OUT "getParam: ",  getParam("-unused_reads", @ARGV); 
@@ -426,6 +430,7 @@ if ($kmerBool eq "true" )
 			}
 	
 			close O;	
+			close FH;
 		}
 		
 		

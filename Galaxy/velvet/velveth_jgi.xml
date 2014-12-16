@@ -61,17 +61,6 @@
 			$i.filetype.file
 		#end for
 		
-	#end if	
-		
-	
-	
-	
-	#if $reuse_Seq:
-		-reuse_Sequences
-	#end if
-
-	#if $reuse_binary :
-		-reuse_binary
 	#end if
 
 	#if $noHash  :
@@ -87,9 +76,6 @@
 
 </command>
 <inputs>
-	
-	<param name="reuse_Seq" type="boolean" label="Reuse Sequences"/>
-	<param name="reuse_binary" type="boolean" label="Reuse Binary"/>  
 	<param name="noHash" type="boolean" label="Just prepare Sequences file don't read hashs or make a Roadmaps file (default off)"/>
 	<param name="create_binary" type="boolean" label="Create a binary CnyUnifiedSeq file (default off)" />
 	

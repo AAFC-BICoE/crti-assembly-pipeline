@@ -25,7 +25,8 @@ my $new_file_path = shift @ARGV;
 
 #die ("USER ERROR: Hash length (kmer) must be odd!\n") unless $kmer % 2;
 my $tot_reads=0;
-`mkdir $outdir`;
+print `mkdir $outdir`;
+#rint `mkdir $outdir/kmer`;
 #my $command = "mkdir $ARGV[1]" . "/kmer";
 #print `$command`;
 $ARGV[1] = $ARGV[1] ."/kmer";

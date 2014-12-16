@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tool_dependency>
 	<package name="perl" version="5.18.1" >
-			<repository name="package_perl" prior_installation_required="True"/>
+			<repository name="package_perl_5_18" prior_installation_required="True" owner="jacob"/>
 		</package>
 	<package name="velvet" version="1.2.10">
 		<install version="1.0">
