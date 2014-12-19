@@ -140,20 +140,20 @@ velvetg $velvetg_outfile.extra_files_path
 
 #end if
 
-#if $max_branch_length_condition.max_branch_length_select == "yes":
+#if $max_branch_length_select:
 
 -max_branch_length $max_branch_length
 
 #end if
 
 
-#if $max_divergence_condition.max_divergence_length_select == "yes":
+#if $max_divergence_length_select:
 
 -max_divergence $max_divergence
 
 #end if
 
-#if $max_gap_count_condition.max_gap_count_select == "yes":
+#if $max_gap_count_select:
 
 -max_gap_count $max_gap_count 
 
@@ -164,13 +164,13 @@ velvetg $velvetg_outfile.extra_files_path
 #end if
 
 
-#if $long_mult_cutoff_condition.long_mult_cutoff_select == "yes" :
+#if $long_mult_cutoff_select :
 
 -long_mult_cutoff $long_mult_cutoff
 
 #end if
 
-#if $min_pair_count_condition.min_pair_count_select =="yes":
+#if $min_pair_count_select:
 
 -min_pair_count $min_pair_count
 
@@ -223,14 +223,8 @@ velvetg $velvetg_outfile.extra_files_path
 	<param name="insLenSDSelect5" type="boolean" value="false" label="Do you want to enter a length standard deviation (bp) of short library for the fifth data set?"/>
 	<param name="ins_length_sd5" type="text" value='auto' label="[ins_length_sd] Insert length standard deviation (bp) of short library; requires above" help="blank=default of 10% of corresponding length; auto=infer; or supply value (integer) " />
 
-
-
 	<param name="insLenSelectLong" type="boolean" value="false" label="Do you want to enter an expected distance between two paired end reads for the long data set?"/>
 	<param name="ins_lengthLong" type="text" value='auto' label="[-ins_length] Insert length (bp) of short library" help="auto=infer; or supply value (integer)" />
-
-
-
-
 	<conditional name="exp_cov_input">
 		<param name="exp_selection" type="select">
 			<option value="Manual" > Manual </option>
@@ -247,118 +241,36 @@ velvetg $velvetg_outfile.extra_files_path
 	</conditional>
 		
 		
+	<param name="cov_cutoff_boolean" type="boolean" value="false" label="Enter the coverage cutoff to remove low coverage nodes after tour bus or allow the system to infer it ?" />
+	<param name="cov_cutoff" type="text" value='-1' label="[-cov_cutoff] Removal of low coverage nodes AFTER tour bus" help="auto=infer cutoff; or specify cutoff (real number)" />
+        <param name="long_cov_cutoff_select" type="boolean" value="false" label="Remove nodes with low long-read coverage after tour bus ? "/>
+	<param name="long_cov_cutoff" type="float" value='-1' label="[-long_cov_cutoff] Removal of low long-read coverage nodes AFTER tour bus" help="Specify cutoff (real number)" />
+        <param name="max_coverage_select" type="boolean" value="false" label="Remove high coverage nodes after tour bus ? "/>
+        <param name='max_coverage' type='float' value='-1' label="[-max_coverage] Exclude highly covered data from your assembly (e.g. plasmid, mitochondrial, and chloroplast sequences)" help='-1 for default: no removal' />
+        <param name="min_contig_lgth_select" type="boolean" value="false" label="Set the minimum contigs length exported to contigs.fa (default:hash length * 2) ? "/>
+	<param name="min_contig_lgth" type="integer" value='-1' label="Minimum contig length" />
 
-	<conditional name="cov_cutoff_condition">
-		<param name="cov_cutoff_select" type="select" label="Enter the coverage cutoff to remove low coverage nodes after tour bus or allow the system to infer it ? ">
-			<option value="no">No</option>
-			<option value="yes">Yes</option>
-		</param>
-		<when value="yes">
-			<param name="cov_cutoff" type="text" value='-1' label="[-cov_cutoff] Removal of low coverage nodes AFTER tour bus" help="auto=infer cutoff; or specify cutoff (real number)" />
-	   	</when>	
-	</conditional>	
-
-
-
-	<conditional name="long_cov_cutoff_condition">
-                <param name="long_cov_cutoff_select" type="select" label="Remove nodes with low long-read coverage after tour bus ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-    			<param name="long_cov_cutoff" type="float" value='-1' label="[-long_cov_cutoff] Removal of low long-read coverage nodes AFTER tour bus" help="Specify cutoff (real number)" />
-		</when>
-	</conditional>
-
-	<conditional name="max_coverage_condition">
-                <param name="max_coverage_select" type="select" label="Remove high coverage nodes after tour bus ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-   			 <param name='max_coverage' type='float' value='-1' label="[-max_coverage] Exclude highly covered data from your assembly (e.g. plasmid, mitochondrial, and chloroplast sequences)" help='-1 for default: no removal' />
-		</when>
-	</conditional>
-
-
-
-	<conditional name="min_contig_lgth_condition">
-                <param name="min_contig_lgth_select" type="select" label="Set the minimum contigs length exported to contigs.fa (default:hash length * 2) ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-			<param name="min_contig_lgth" type="integer" value='-1' label="Minimum contig length" />
-		</when>
-	</conditional>
 
 
     <param name="scaffolding" type="boolean" checked='true' label="Scaffolding" truevalue='yes' falsevalue='no'/>
 
     <!-- Tour Bus Parameters -->
-    
-	<conditional name="max_branch_length_condition">
-		<param name="max_branch_length_select" type="select" label="Set the maximum length in the base pair of bubble (default 100) ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-    			<param name="max_branch_length" type="integer" value='100' label="Maximum branch length" help="Default recommended"/>
-    		</when>
-	</conditional>
-
-
-	<conditional name="max_divergence_condition">
-                <param name="max_divergence_length_select" type="select" label="Set the maximum divergence rate between two branches in bubble? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-                	<param name="max_divergence" type="float" value='0.20' label="Maximum divergence rate" help="Default recommended"/>
-		</when>
-        </conditional>
-
-   
-
-	<conditional name="max_gap_count_condition">
-                <param name="max_gap_count_select" type="select" label="Set maximum number of gaps allowed in the alignment of two branches of a bubble (default: 3) ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-                	    <param name="max_gap_count" type="integer" value='3' label="Maximum gap count" help="Default recommended"/>
-		</when>
-        </conditional>
-
-
-
+    	<param name="max_branch_length_select" type="boolean" value="false" label="Set the maximum length in the base pair of bubble (default 100) ? "/>
+    	<param name="max_branch_length" type="integer" value='100' label="Maximum branch length" help="Default recommended"/>
+    	<param name="max_divergence_length_select" type="boolean" label="Set the maximum divergence rate between two branches in bubble? "/>
+    	<param name="max_divergence" type="float" value='0.20' label="Maximum divergence rate" help="Default recommended"/>
+        <param name="max_gap_count_select" type="boolean" value="false" label="Set maximum number of gaps allowed in the alignment of two branches of a bubble (default: 3) ? "/>     
+        <param name="max_gap_count" type="integer" value='3' label="Maximum gap count" help="Default recommended"/>
 
 
     <!-- Rock Band Parameters -->
 
-	<conditional name="long_mult_cutoff_condition">
-                <param name="long_mult_cutoff_select" type="select" label="Set the minimum number of reads required to merge contigs (default 2) ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-                	    <param name='long_mult_cutoff' type="integer" value='2' label="Minimum long read connection cutoff"/>
-		</when>
-        </conditional>
-
-	
-
+        <param name="long_mult_cutoff_select" type="boolean" value="false" label="Set the minimum number of reads required to merge contigs (default 2) ? "/>
+        <param name='long_mult_cutoff' type="integer" value='2' label="Minimum long read connection cutoff"/>
     <!-- Pebble Parameters -->
 
-	<conditional name="min_pair_count_condition">
-                <param name="min_pair_count_select" type="select" label="Set the mimum paired end connections to justify the scaffolding of two long contigs(default: 5) ? ">
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                </param>
-                <when value="yes">
-		    <param name="min_pair_count" type="integer" value='5' label="Minimum Read-Pair Validation"/>
-		</when> 
-        </conditional>
+        <param name="min_pair_count_select" type="boolean" value="false" label="Set the mimum paired end connections to justify the scaffolding of two long contigs(default: 5) ? "/>
+	<param name="min_pair_count" type="integer" value='5' label="Minimum Read-Pair Validation"/>
 
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tool_dependency>
 	<package name="perl" version="5.18.1" >
-			<repository name="package_perl_5_18" prior_installation_required="True" owner="jacob"/>
+			<repository name="package_perl_5_18" changeset_revision="32d6fb2a9c84"  prior_installation_required="True" owner="jacob" toolshed="http://onottar669810x:9009"/>
 		</package>
 	<package name="velvet" version="1.2.10">
 		<install version="1.0">
