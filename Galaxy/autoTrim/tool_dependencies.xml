@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tool_dependency>
+	<package name="perl" version="5.18.1" >
+			<repository name="package_perl_5_18" prior_installation_required="True" owner="jacob"/>
+	</package>
+	<package name="fastx_trimmer" version="0.0.13.2" >
+			<repository name="fastx_trimmer" prior_installation_required="True" owner="jacob"/>
+	</package>
+</tool_dependency>

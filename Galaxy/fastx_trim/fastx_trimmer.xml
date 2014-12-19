@@ -12,21 +12,28 @@
 
 		-f $first
 		
-		#if $lastSelect :
-			-l $last
+		#if $lastCond.lastSelect == "Yes" :
+			-l $lastCond.last
 		#end if
 		
 		-i $input -o '$output'
         </command>
 	<inputs>
 		<param format="fastqsanger" name="input" type="data" label="Library to clip" />
-		<param name="first" size="4" type="integer" value="1">
+		<param name="first" type="text" value="1">
 			<label>First base to keep</label>
 		</param>
-		<param name="lastSelect" type="boolean" label="Enter a last base to keep? (By default it will keep the rest of the sequence)" />
-		<param name="last" size="4" type="integer" value="21">
-			<label>Last base to keep</label>
-		</param>
+		<conditional name="lastCond" value="Yes" >
+			<param name="lastSelect" type="select" value="Yes" label="Enter a last base to keep? (By default it will keep the rest of the sequence)" >
+				<option value="Yes">Yes</option>
+				<option value="No">No</option>
+			</param> 
+			<when value="Yes">
+				<param name="last" type="text" value="21">
+					<label>Last base to keep</label>
+				</param>
+			</when>
+		</conditional>
 	</inputs>
 	<stdio>
 		<exit_code range="1:" level="fatal" description="Fastx Trimmer Error"/>

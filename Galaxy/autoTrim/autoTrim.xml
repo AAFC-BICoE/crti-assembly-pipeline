@@ -1,0 +1,26 @@
+<tool id="auto_trimmer" name="Auto Trimmer" version="1.0.0" >
+	<description>to fix length automatically</description>
+	<requirements>
+		  <requirement type="package" version="5.18.1">perl</requirement>
+		  <requirement type="package" version="0.0.13.2">fastx_trimmer</requirement>	
+	</requirements>
+	<command interpreter="perl">
+		autoTrim.pl $fastqc.extra_files_path $output $input $quality $cat
+	</command>
+	<inputs>
+		
+		<param name="fastqc" type="data" format="txt" label="DATA"/>
+		<param format="fasta,fastq,fastqsanger" name="input" type="data" label="Library to clip" />
+		<param name="quality" type="integer" value='33' />
+		
+	</inputs>
+	<outputs>		
+		<data name="output" format="fastq"/>
+		<data name="cat" format="txt"/>
+	</outputs>
+
+	<help>
+		**What it does**
+	</help>
+
+</tool>
