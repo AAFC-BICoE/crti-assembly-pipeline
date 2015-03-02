@@ -2,6 +2,16 @@ SCRIPT=`readlink -f $BASH_SOURCE`
 SCRIPTDIR=`dirname $SCRIPT`
 source $SCRIPTDIR/qsub_utils.sh
 
+run_quast() {
+    assembly_fasta=$1
+    qsub_holdid=1
+    [ ! -z $2 ] && qsub_holdid=$2
+    quast_cmd="quast.py $assembly_fasta"
+    jobname="quast.py"
+    jobid=`run_qsub 1 $qsub_holdid "$quast_cmd" $jobname`
+    echo $jobid
+}
+
 # R function to get n50 score
 # block-comment-out
 : << 'END'

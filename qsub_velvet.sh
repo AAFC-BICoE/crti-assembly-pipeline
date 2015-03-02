@@ -44,7 +44,7 @@ run_auto_velvet_assembly() {
     est_genome_size=$6
     qsub_holdid=1
     [ ! -z $7 ] && qsub_holdid=$7
-    num_kmers=20
+    num_kmers=25
     reads_prefix="@M01696"
     
     write_velvet_config $config_prefix.cfg \

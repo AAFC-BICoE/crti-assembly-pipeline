@@ -154,6 +154,23 @@ run_bowtie_tophat_cufflinks()
     cufflinks_jid=`run_cufflinks ${prefix}_tophat/accepted_hits.bam ${prefix}_cufflinks ${tophat_jid}`
 }
 
+# From bug 4255
+run_mpileup() {
+    ref_genome=$1
+    bamfile=$2
+    outfile=$3
+    qsub_holdid=1
+    [ ! -z $4 ] && qsub_holdid=$4
+    
+    mpileup_cmd="samtools mpileup -Q0 -f ${ref_genome} $bamfile >$outfile"
+    qsub_mpileup_cmd="qsub -N mpileup -pe orte 1 -hold_jid ${qsub_holdid} qsub_script.sh \"{mpileup_cmd}\""
+    >&2 echo ${qsub_mpileup_cmd}
+    qsub_mpileup_out=`eval ${qsub_mpileup_cmd}`
+    >&2 echo ${qsub_mpileup_out}
+    qsub_mpileup_jobid=`echo $qsub_index_bam_out | perl -ne 'if (/Your job ([0-9]+)/) { print $1 }'`
+    echo ${qsub_mpileup_jobid}
+}
+
 # Additional bowtie-alignment funcs added in context of bug 4260
 run_bowtie2_lib() {
     reads_R1=$1
