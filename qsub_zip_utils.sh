@@ -75,12 +75,12 @@ run_pbzip2() {
     echo $jobid
 }
 
-#run_gzip() {
-#    infile=$1
-#    qsub_holdid=1
-#    [ ! -z $2 ] && qsub_holdid=$2
-#    gzip_cmd="gzip $infile"
-#    jobname="gzip"
-#    jobid=`run_qsub 1 $qsub_holdid "$gzip_cmd" $jobname`
-#    echo $jobid
-#}
+run_gzip() {
+    infile=$1
+    qsub_holdid=1
+    [ ! -z $2 ] && qsub_holdid=$2
+    gzip_cmd="gzip $infile"
+    jobname="gzip"
+    jobid=`run_qsub 1 $qsub_holdid "$gzip_cmd" $jobname`
+    echo $jobid
+}
