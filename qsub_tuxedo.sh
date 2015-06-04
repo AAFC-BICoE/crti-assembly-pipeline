@@ -6,6 +6,7 @@ run_bowtie2_build() {
     genome=$1
     qsub_holdid=1
     [ ! -z $2 ] && qsub_holdid=$2
+    get_qsub_script
     bowtie2_build_cmd="bowtie2-build $genome $genome"
     qsub_bowtie2_build_cmd="qsub -N bowtie2_build -pe orte 1 -hold_jid ${qsub_holdid} qsub_script.sh \"${bowtie2_build_cmd}\""
     >&2 echo $qsub_bowtie2_build_cmd
