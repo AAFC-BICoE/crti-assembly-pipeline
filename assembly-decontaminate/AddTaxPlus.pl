@@ -5,6 +5,11 @@ use Getopt::Long;
 use Text::CSV;
 use Bio::LITE::Taxonomy::NCBI;
 
+# Note: must first binarize the gi .dmp file prior to running this script, e.g.:
+#use Bio::LITE::Taxonomy::NCBI::Gi2taxid qw/new_dict/;
+#new_dict (in => "/isilon/biodiversity/reference/ncbi_taxonomy/gi_taxid_nucl.dmp",
+#          out => "./gi_taxid_prot.bin");
+
 my $options = {};
 GetOptions($options, 
     'blast_tsv|b=s',
